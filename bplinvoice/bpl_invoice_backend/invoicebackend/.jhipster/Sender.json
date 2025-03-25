@@ -1,0 +1,56 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "originTelecomNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "iqama",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Sender",
+  "relationships": [
+    {
+      "otherEntityName": "wayBill",
+      "otherEntityRelationshipName": "sender",
+      "relationshipName": "wayBill",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "originFacility",
+      "otherEntityRelationshipName": "sender",
+      "relationshipName": "originFacility",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "wayBill",
+      "otherEntityRelationshipName": "sender",
+      "relationshipName": "wayBill",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "originFacility",
+      "otherEntityRelationshipName": "sender",
+      "relationshipName": "originFacility",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

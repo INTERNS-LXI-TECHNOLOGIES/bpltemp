@@ -1,0 +1,106 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "boxLimit",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "estimatedReadyDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "currencyUom",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "estimatedShipDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "referenceNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "billNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estimatedArrivalDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "latestCancelDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "WayBill",
+  "relationships": [
+    {
+      "otherEntityName": "shipmentDetails",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "shipmentDetails",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "sender",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "sender",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "receiver",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "receiver",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "contactInfo",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "contactInfo",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "sender",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "sender",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "receiver",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "receiver",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "contactInfo",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "contactInfo",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

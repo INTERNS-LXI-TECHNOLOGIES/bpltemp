@@ -1,0 +1,45 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "shipmentType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "opfac",
+      "fieldType": "String"
+    }
+  ],
+  "name": "ShipmentDetails",
+  "relationships": [
+    {
+      "otherEntityName": "deliveryAgent",
+      "otherEntityRelationshipName": "shipmentDetails",
+      "relationshipName": "deliveryAgent",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "wayBill",
+      "otherEntityRelationshipName": "shipmentDetails",
+      "relationshipName": "wayBill",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "deliveryAgent",
+      "otherEntityRelationshipName": "shipmentDetails",
+      "relationshipName": "deliveryAgent",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

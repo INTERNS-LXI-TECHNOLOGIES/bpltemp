@@ -1,0 +1,52 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "destinationTelecomNumber",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Receiver",
+  "relationships": [
+    {
+      "otherEntityName": "wayBill",
+      "otherEntityRelationshipName": "receiver",
+      "relationshipName": "wayBill",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "destinationFacility",
+      "otherEntityRelationshipName": "receiver",
+      "relationshipName": "destinationFacility",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "wayBill",
+      "otherEntityRelationshipName": "receiver",
+      "relationshipName": "wayBill",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "destinationFacility",
+      "otherEntityRelationshipName": "receiver",
+      "relationshipName": "destinationFacility",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,38 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    }
+  ],
+  "name": "OriginFacility",
+  "relationships": [
+    {
+      "otherEntityName": "sender",
+      "otherEntityRelationshipName": "originFacility",
+      "relationshipName": "sender",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "sender",
+      "otherEntityRelationshipName": "originFacility",
+      "relationshipName": "sender",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}
