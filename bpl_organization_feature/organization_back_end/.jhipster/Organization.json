@@ -1,0 +1,37 @@
+{
+  "annotations": {
+    "changelogDate": "20250325102747"
+  },
+  "fields": [
+    {
+      "fieldName": "externalId",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "organizationType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "organizationGroup",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "parentOrganization",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Organization",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "no"
+}
