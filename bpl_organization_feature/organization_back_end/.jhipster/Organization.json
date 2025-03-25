@@ -2,6 +2,7 @@
   "annotations": {
     "changelogDate": "20250325102747"
   },
+  "applications": "*",
   "fields": [
     {
       "fieldName": "externalId",
@@ -29,9 +30,6 @@
     }
   ],
   "name": "Organization",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

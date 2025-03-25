@@ -1,0 +1,8 @@
+entity Organization {
+    externalId Integer,
+    name String,
+    description String,
+    organizationType String,
+    organizationGroup String,
+    parentOrganization String
+}
