@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void  main() {
+void main() {
   runApp(LogisticsApp());
 }
 
@@ -14,88 +14,135 @@ class LogisticsApp extends StatelessWidget {
   }
 }
 
-class LogisticsDashboard extends StatelessWidget {
+class LogisticsDashboard extends StatefulWidget {
+  @override
+  _LogisticsDashboardState createState() => _LogisticsDashboardState();
+}
+
+class _LogisticsDashboardState extends State<LogisticsDashboard> {
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController externalIdController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
+  String? selectedOrgType;
+  String? selectedOrgGroup;
+  String? selectedParentOrg;
+
+  List<String> orgTypes = ['Type A', 'Type B', 'Type C'];
+  List<String> orgGroups = ['Group X', 'Group Y', 'Group Z'];
+  List<String> parentOrgs = ['Parent 1', 'Parent 2', 'Parent 3'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BPL Cargo Logistics'),
+        title: Text('BPL Cargo Logistics Dashboard'),
         backgroundColor: Colors.blue[900],
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text('B & P Logistics', style: TextStyle(color: Colors.white, fontSize: 20)),
-            ),
-            ...['Home', 'Setup', 'Booking', 'Invoice', 'People', 'Company', 'Job', 'Status', 'Tracking', 'Clearance', 'Receipts', 'Payments', 'Accounts', 'Reports', 'Contact Us']
-                .map((title) => ListTile(title: Text(title), onTap: () {}))
-                .toList(),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(8.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.all(8.0),
-              color: Colors.blue[100],
-              child: Text('Dashboard', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ),
+            Text('Organization Details', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              children: ['Organizations', 'Addresses', 'Telephone', 'Units of Measure', 'Shipment Type', 'Agent Type', 'Facility', 'Shipment Box', 'Shipment Method', 'Facility Type', 'Facility Group', 'Users', 'Geo Tracking']
-                  .map((title) => ElevatedButton(onPressed: () {}, child: Text(title)))
-                  .toList(),
-            ),
-            SizedBox(height: 20),
-            Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Organization', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    TextField(decoration: InputDecoration(labelText: 'ID')),
-                    TextField(decoration: InputDecoration(labelText: 'Name')),
-                    TextField(decoration: InputDecoration(labelText: 'Description')),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(onPressed: () {}, child: Text('Save')),
-                        SizedBox(width: 10),
-                        OutlinedButton(onPressed: () {}, child: Text('Cancel')),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: ['ID', 'External ID', 'Name', 'Description', 'Admin', 'Organization Type', 'Organization Group', 'Parent Organization', 'Actions']
-                    .map((title) => DataColumn(label: Text(title)))
-                    .toList(),
-                rows: List.generate(
-                  10,
-                  (index) => DataRow(
-                    cells: List.generate(
-                      9,
-                      (i) => DataCell(Text('Sample Data')),
-                    ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      _buildTextField(idController, 'ID'),
+                      _buildTextField(externalIdController, 'External ID'),
+                    ],
                   ),
                 ),
-              ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    children: [
+                      _buildTextField(nameController, 'Name'),
+                      _buildTextField(descriptionController, 'Description'),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    children: [
+                      _buildDropdown('Organization Type', selectedOrgType, orgTypes, (value) {
+                        setState(() {
+                          selectedOrgType = value;
+                        });
+                      }),
+                      _buildDropdown('Organization Group', selectedOrgGroup, orgGroups, (value) {
+                        setState(() {
+                          selectedOrgGroup = value;
+                        });
+                      }),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: _buildDropdown('Parent Organization', selectedParentOrg, parentOrgs, (value) {
+                    setState(() {
+                      selectedParentOrg = value;
+                    });
+                  }),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Save'),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  child: Text('Cancel'),
+                ),
+              ],
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown(String label, String? value, List<String> items, Function(String?) onChanged) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(),
+        ),
+        value: value,
+        items: items.map((item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: onChanged,
       ),
     );
   }

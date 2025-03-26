@@ -1,0 +1,20 @@
+{
+  "annotations": {
+    "changelogDate": "20250326064716"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "ParentOrganization",
+  "relationships": [],
+  "searchEngine": "no"
+}

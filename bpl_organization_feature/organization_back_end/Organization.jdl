@@ -1,8 +1,18 @@
 entity Organization {
-    externalId Integer,
-    name String,
+    id Long,
+    externalId String,
+    name String required,
     description String,
     organizationType String,
-    organizationGroup String,
-    parentOrganization String
+    organizationGroup String
 }
+
+entity ParentOrganization {
+    id Long,
+    name String required
+}
+
+relationship OneToOne {
+    Organization{parentOrganization} to ParentOrganization
+}
+

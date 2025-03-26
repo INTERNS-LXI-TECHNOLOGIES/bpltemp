@@ -11,6 +11,11 @@ const routes: Routes = [
     data: { pageTitle: 'organizationBackEndApp.organization.home.title' },
     loadChildren: () => import('./organization/organization.routes'),
   },
+  {
+    path: 'parent-organization',
+    data: { pageTitle: 'organizationBackEndApp.parentOrganization.home.title' },
+    loadChildren: () => import('./parent-organization/parent-organization.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

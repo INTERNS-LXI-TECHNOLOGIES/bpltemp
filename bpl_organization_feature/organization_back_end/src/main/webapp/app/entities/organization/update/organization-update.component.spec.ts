@@ -4,6 +4,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, from, of } from 'rxjs';
 
+import { IParentOrganization } from 'app/entities/parent-organization/parent-organization.model';
+import { ParentOrganizationService } from 'app/entities/parent-organization/service/parent-organization.service';
 import { OrganizationService } from '../service/organization.service';
 import { IOrganization } from '../organization.model';
 import { OrganizationFormService } from './organization-form.service';
@@ -16,6 +18,7 @@ describe('Organization Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let organizationFormService: OrganizationFormService;
   let organizationService: OrganizationService;
+  let parentOrganizationService: ParentOrganizationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,17 +41,42 @@ describe('Organization Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     organizationFormService = TestBed.inject(OrganizationFormService);
     organizationService = TestBed.inject(OrganizationService);
+    parentOrganizationService = TestBed.inject(ParentOrganizationService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call parentOrganization query and add missing value', () => {
       const organization: IOrganization = { id: 21219 };
+      const parentOrganization: IParentOrganization = { id: 4781 };
+      organization.parentOrganization = parentOrganization;
+
+      const parentOrganizationCollection: IParentOrganization[] = [{ id: 4781 }];
+      jest.spyOn(parentOrganizationService, 'query').mockReturnValue(of(new HttpResponse({ body: parentOrganizationCollection })));
+      const expectedCollection: IParentOrganization[] = [parentOrganization, ...parentOrganizationCollection];
+      jest.spyOn(parentOrganizationService, 'addParentOrganizationToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ organization });
       comp.ngOnInit();
 
+      expect(parentOrganizationService.query).toHaveBeenCalled();
+      expect(parentOrganizationService.addParentOrganizationToCollectionIfMissing).toHaveBeenCalledWith(
+        parentOrganizationCollection,
+        parentOrganization,
+      );
+      expect(comp.parentOrganizationsCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const organization: IOrganization = { id: 21219 };
+      const parentOrganization: IParentOrganization = { id: 4781 };
+      organization.parentOrganization = parentOrganization;
+
+      activatedRoute.data = of({ organization });
+      comp.ngOnInit();
+
+      expect(comp.parentOrganizationsCollection).toContainEqual(parentOrganization);
       expect(comp.organization).toEqual(organization);
     });
   });
@@ -118,6 +146,18 @@ describe('Organization Management Update Component', () => {
       expect(organizationService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareParentOrganization', () => {
+      it('Should forward to parentOrganizationService', () => {
+        const entity = { id: 4781 };
+        const entity2 = { id: 22935 };
+        jest.spyOn(parentOrganizationService, 'compareParentOrganization');
+        comp.compareParentOrganization(entity, entity2);
+        expect(parentOrganizationService.compareParentOrganization).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

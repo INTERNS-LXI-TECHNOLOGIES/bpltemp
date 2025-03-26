@@ -2,26 +2,27 @@ import { IOrganization, NewOrganization } from './organization.model';
 
 export const sampleWithRequiredData: IOrganization = {
   id: 20534,
+  name: 'flawed mockingly',
 };
 
 export const sampleWithPartialData: IOrganization = {
-  id: 1150,
-  description: 'volunteer',
-  organizationType: 'as if minor',
-  organizationGroup: 'upright',
+  id: 4752,
+  name: 'afore yippee toothpick',
+  organizationType: 'pointed',
+  organizationGroup: 'above physical though',
 };
 
 export const sampleWithFullData: IOrganization = {
   id: 12562,
-  externalId: 761,
-  name: 'within bonnet minus',
-  description: 'than',
-  organizationType: 'by why yuck',
-  organizationGroup: 'independence upon',
-  parentOrganization: 'astride offensively',
+  externalId: 'coarse',
+  name: 'bonnet minus hm',
+  description: 'incidentally fooey once',
+  organizationType: 'tentacle',
+  organizationGroup: 'upon only',
 };
 
 export const sampleWithNewData: NewOrganization = {
+  name: 'negative coolly and',
   id: null,
 };
 

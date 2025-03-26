@@ -44,7 +44,9 @@ export class OrganizationFormService {
         },
       ),
       externalId: new FormControl(organizationRawValue.externalId),
-      name: new FormControl(organizationRawValue.name),
+      name: new FormControl(organizationRawValue.name, {
+        validators: [Validators.required],
+      }),
       description: new FormControl(organizationRawValue.description),
       organizationType: new FormControl(organizationRawValue.organizationType),
       organizationGroup: new FormControl(organizationRawValue.organizationGroup),

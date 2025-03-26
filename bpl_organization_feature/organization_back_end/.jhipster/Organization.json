@@ -1,16 +1,21 @@
 {
   "annotations": {
-    "changelogDate": "20250325102747"
+    "changelogDate": "20250326064715"
   },
   "applications": "*",
   "fields": [
     {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
       "fieldName": "externalId",
-      "fieldType": "Integer"
+      "fieldType": "String"
     },
     {
       "fieldName": "name",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "description",
@@ -23,13 +28,16 @@
     {
       "fieldName": "organizationGroup",
       "fieldType": "String"
-    },
-    {
-      "fieldName": "parentOrganization",
-      "fieldType": "String"
     }
   ],
   "name": "Organization",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "parentOrganization",
+      "relationshipName": "parentOrganization",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    }
+  ],
   "searchEngine": "no"
 }
