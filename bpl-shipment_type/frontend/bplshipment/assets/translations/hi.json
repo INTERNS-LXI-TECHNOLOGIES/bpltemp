@@ -1,0 +1,14 @@
+{
+    "dashboard": "डैशबोर्ड",
+    "shipment_type": "शिपमेंट प्रकार",
+    "id": "आईडी",
+    "lookup_name": "खोज नाम",
+    "name": "नाम",
+    "description": "विवरण",
+    "parent_type": "मूल प्रकार",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "search": "खोज",
+    "notifications": "सूचनाएं",
+    "language": "भाषा"
+  }

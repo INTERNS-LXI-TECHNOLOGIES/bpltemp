@@ -1,0 +1,14 @@
+{
+    "dashboard": "Tableau de bord",
+    "shipment_type": "Type d'expédition",
+    "id": "ID",
+    "lookup_name": "Nom de recherche",
+    "name": "Nom",
+    "description": "Description",
+    "parent_type": "Type de parent",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "search": "Recherche",
+    "notifications": "Notifications",
+    "language": "Langue"
+  }

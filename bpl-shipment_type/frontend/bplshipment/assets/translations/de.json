@@ -1,0 +1,14 @@
+{
+    "dashboard": "Armaturenbrett",
+    "shipment_type": "Versandart",
+    "id": "ID",
+    "lookup_name": "Nachschlagename",
+    "name": "Name",
+    "description": "Beschreibung",
+    "parent_type": "Elterntyp",
+    "save": "Speichern",
+    "cancel": "Stornieren",
+    "search": "Suche",
+    "notifications": "Benachrichtigungen",
+    "language": "Sprache"
+  }

@@ -1,0 +1,14 @@
+{
+    "dashboard": "Dashboard",
+    "shipment_type": "Shipment Type",
+    "id": "ID",
+    "lookup_name": "Lookup Name",
+    "name": "Name",
+    "description": "Description",
+    "parent_type": "Parent Type",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "notifications": "Notifications",
+    "language": "Language"
+  }
