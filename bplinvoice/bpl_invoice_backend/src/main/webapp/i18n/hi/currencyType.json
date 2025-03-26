@@ -1,0 +1,25 @@
+{
+  "invoicebackendApp": {
+    "currencyType": {
+      "home": {
+        "title": "CurrencyTypes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "नया Currency Type बनाएँ",
+        "createOrEditLabel": "Currency Type बनाएँ या संपादित करें",
+        "notFound": "No Currency Types found"
+      },
+      "created": "एक नया Currency Type [identifier: {{ param }}] तैयार है",
+      "updated": "एक Currency Type [identifier: {{ param }}] का अद्यतन हुआ है",
+      "deleted": "Currency Type [identifier: {{ param }}] हटा दिया है",
+      "delete": {
+        "question": "Currency Type [id: {{ id }}] हटाने की पुष्टि करें"
+      },
+      "detail": {
+        "title": "Currency Type"
+      },
+      "id": "ID",
+      "name": "Name",
+      "wayBill": "Way Bill"
+    }
+  }
+}

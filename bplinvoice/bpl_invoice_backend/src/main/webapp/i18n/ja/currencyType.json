@@ -1,0 +1,25 @@
+{
+  "invoicebackendApp": {
+    "currencyType": {
+      "home": {
+        "title": "CurrencyTypes",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Currency Type の作成",
+        "createOrEditLabel": "Currency Typeの作成または編集",
+        "notFound": "Currency Types が見つかりません。"
+      },
+      "created": "新しい Currency Type がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Currency Type が更新されました。",
+      "deleted": "ID {{ param }} の Currency Type が削除されました。",
+      "delete": {
+        "question": "Currency Type {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Currency Type"
+      },
+      "id": "ID",
+      "name": "Name",
+      "wayBill": "Way Bill"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "invoicebackendApp": {
+    "wayBill": {
+      "home": {
+        "title": "Way Bills",
+        "refreshListLabel": "Liste aktualisieren",
+        "createLabel": "Way Bill erstellen",
+        "createOrEditLabel": "Way Bill erstellen oder bearbeiten",
+        "notFound": "Keine Way Bills gefunden"
+      },
+      "created": "Way Bill erstellt mit ID {{ param }}",
+      "updated": "Way Bill aktualisiert mit ID {{ param }}",
+      "deleted": "Way Bill gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Way Bill {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Way Bill"
+      },
+      "id": "ID",
+      "boxLimit": "Box Limit",
+      "shipmentType": "Shipment Type",
+      "opfac": "Opfac",
+      "deliveryAgent": "Delivery Agent",
+      "estimatedReadyDate": "Estimated Ready Date",
+      "currencyUom": "Currency Uom",
+      "estimatedShipDate": "Estimated Ship Date",
+      "status": "Status",
+      "referenceNumber": "Reference Number",
+      "currencyType": "Currency Type"
+    }
+  }
+}

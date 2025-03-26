@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (wayBill(); as wayBillRef) {
+      <div>
+        <h2 data-cy="wayBillDetailsHeading"><span jhiTranslate="invoicebackendApp.wayBill.detail.title">Way Bill</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ wayBillRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.boxLimit">Box Limit</span></dt>
+          <dd>
+            <span>{{ wayBillRef.boxLimit }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.shipmentType">Shipment Type</span></dt>
+          <dd>
+            <span>{{ wayBillRef.shipmentType }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.opfac">Opfac</span></dt>
+          <dd>
+            <span>{{ wayBillRef.opfac }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.deliveryAgent">Delivery Agent</span></dt>
+          <dd>
+            <span>{{ wayBillRef.deliveryAgent }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.estimatedReadyDate">Estimated Ready Date</span></dt>
+          <dd>
+            <span>{{ wayBillRef.estimatedReadyDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.currencyUom">Currency Uom</span></dt>
+          <dd>
+            <span>{{ wayBillRef.currencyUom }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.estimatedShipDate">Estimated Ship Date</span></dt>
+          <dd>
+            <span>{{ wayBillRef.estimatedShipDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.status">Status</span></dt>
+          <dd>
+            <span>{{ wayBillRef.status }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.referenceNumber">Reference Number</span></dt>
+          <dd>
+            <span>{{ wayBillRef.referenceNumber }}</span>
+          </dd>
+          <dt><span jhiTranslate="invoicebackendApp.wayBill.currencyType">Currency Type</span></dt>
+          <dd>
+            @if (wayBill()!.currencyType) {
+              <div>
+                <a [routerLink]="['/currency-type', wayBill()!.currencyType?.id, 'view']">{{ wayBillRef.currencyType?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/way-bill', wayBillRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

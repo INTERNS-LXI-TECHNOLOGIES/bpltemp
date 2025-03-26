@@ -1,0 +1,33 @@
+{
+  "invoicebackendApp": {
+    "wayBill": {
+      "home": {
+        "title": "WayBills",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "नया Way Bill बनाएँ",
+        "createOrEditLabel": "Way Bill बनाएँ या संपादित करें",
+        "notFound": "No Way Bills found"
+      },
+      "created": "एक नया Way Bill [identifier: {{ param }}] तैयार है",
+      "updated": "एक Way Bill [identifier: {{ param }}] का अद्यतन हुआ है",
+      "deleted": "Way Bill [identifier: {{ param }}] हटा दिया है",
+      "delete": {
+        "question": "Way Bill [id: {{ id }}] हटाने की पुष्टि करें"
+      },
+      "detail": {
+        "title": "Way Bill"
+      },
+      "id": "ID",
+      "boxLimit": "Box Limit",
+      "shipmentType": "Shipment Type",
+      "opfac": "Opfac",
+      "deliveryAgent": "Delivery Agent",
+      "estimatedReadyDate": "Estimated Ready Date",
+      "currencyUom": "Currency Uom",
+      "estimatedShipDate": "Estimated Ship Date",
+      "status": "Status",
+      "referenceNumber": "Reference Number",
+      "currencyType": "Currency Type"
+    }
+  }
+}

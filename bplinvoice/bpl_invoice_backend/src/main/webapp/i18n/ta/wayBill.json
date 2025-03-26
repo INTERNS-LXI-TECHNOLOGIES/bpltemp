@@ -1,0 +1,33 @@
+{
+  "invoicebackendApp": {
+    "wayBill": {
+      "home": {
+        "title": "Way Bills",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Way Bill-ஐ உருவாக்கு",
+        "createOrEditLabel": "Way Bill -ஐ மாற்று (அ) உருவாக்கு",
+        "notFound": "No Way Bills found"
+      },
+      "created": "Way Bill புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
+      "updated": "Way Bill மாற்றப்பட்டது, அடையாளம்  {{ param }}",
+      "deleted": "A Way Bill நீக்கப்பட்டது, அடையாளம {{ param }}",
+      "delete": {
+        "question": "நீக்குவதற்கு உறுதி செய் Way Bill {{ id }}?"
+      },
+      "detail": {
+        "title": "Way Bill"
+      },
+      "id": "ID",
+      "boxLimit": "Box Limit",
+      "shipmentType": "Shipment Type",
+      "opfac": "Opfac",
+      "deliveryAgent": "Delivery Agent",
+      "estimatedReadyDate": "Estimated Ready Date",
+      "currencyUom": "Currency Uom",
+      "estimatedShipDate": "Estimated Ship Date",
+      "status": "Status",
+      "referenceNumber": "Reference Number",
+      "currencyType": "Currency Type"
+    }
+  }
+}

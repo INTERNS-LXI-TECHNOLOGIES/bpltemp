@@ -1,0 +1,25 @@
+{
+  "invoicebackendApp": {
+    "currencyType": {
+      "home": {
+        "title": "Currency Types",
+        "refreshListLabel": "Liste aktualisieren",
+        "createLabel": "Currency Type erstellen",
+        "createOrEditLabel": "Currency Type erstellen oder bearbeiten",
+        "notFound": "Keine Currency Types gefunden"
+      },
+      "created": "Currency Type erstellt mit ID {{ param }}",
+      "updated": "Currency Type aktualisiert mit ID {{ param }}",
+      "deleted": "Currency Type gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Currency Type {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Currency Type"
+      },
+      "id": "ID",
+      "name": "Name",
+      "wayBill": "Way Bill"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "invoicebackendApp": {
+    "wayBill": {
+      "home": {
+        "title": "WayBills",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Way Bill の作成",
+        "createOrEditLabel": "Way Billの作成または編集",
+        "notFound": "Way Bills が見つかりません。"
+      },
+      "created": "新しい Way Bill がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Way Bill が更新されました。",
+      "deleted": "ID {{ param }} の Way Bill が削除されました。",
+      "delete": {
+        "question": "Way Bill {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Way Bill"
+      },
+      "id": "ID",
+      "boxLimit": "Box Limit",
+      "shipmentType": "Shipment Type",
+      "opfac": "Opfac",
+      "deliveryAgent": "Delivery Agent",
+      "estimatedReadyDate": "Estimated Ready Date",
+      "currencyUom": "Currency Uom",
+      "estimatedShipDate": "Estimated Ship Date",
+      "status": "Status",
+      "referenceNumber": "Reference Number",
+      "currencyType": "Currency Type"
+    }
+  }
+}

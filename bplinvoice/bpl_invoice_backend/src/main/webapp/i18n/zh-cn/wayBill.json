@@ -1,0 +1,33 @@
+{
+  "invoicebackendApp": {
+    "wayBill": {
+      "home": {
+        "title": "Way Bills",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "创建新 Way Bill",
+        "createOrEditLabel": "创建或编辑 Way Bill",
+        "notFound": "No Way Bills found"
+      },
+      "created": "Way Bill {{ param }} 创建成功",
+      "updated": "Way Bill {{ param }} 更新成功",
+      "deleted": "Way Bill {{ param }} 删除成功",
+      "delete": {
+        "question": "你确定要删除 Way Bill {{ id }} 吗？"
+      },
+      "detail": {
+        "title": "Way Bill"
+      },
+      "id": "ID",
+      "boxLimit": "Box Limit",
+      "shipmentType": "Shipment Type",
+      "opfac": "Opfac",
+      "deliveryAgent": "Delivery Agent",
+      "estimatedReadyDate": "Estimated Ready Date",
+      "currencyUom": "Currency Uom",
+      "estimatedShipDate": "Estimated Ship Date",
+      "status": "Status",
+      "referenceNumber": "Reference Number",
+      "currencyType": "Currency Type"
+    }
+  }
+}

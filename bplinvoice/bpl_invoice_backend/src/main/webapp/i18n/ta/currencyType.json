@@ -1,0 +1,25 @@
+{
+  "invoicebackendApp": {
+    "currencyType": {
+      "home": {
+        "title": "Currency Types",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Currency Type-ஐ உருவாக்கு",
+        "createOrEditLabel": "Currency Type -ஐ மாற்று (அ) உருவாக்கு",
+        "notFound": "No Currency Types found"
+      },
+      "created": "Currency Type புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
+      "updated": "Currency Type மாற்றப்பட்டது, அடையாளம்  {{ param }}",
+      "deleted": "A Currency Type நீக்கப்பட்டது, அடையாளம {{ param }}",
+      "delete": {
+        "question": "நீக்குவதற்கு உறுதி செய் Currency Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Currency Type"
+      },
+      "id": "ID",
+      "name": "Name",
+      "wayBill": "Way Bill"
+    }
+  }
+}

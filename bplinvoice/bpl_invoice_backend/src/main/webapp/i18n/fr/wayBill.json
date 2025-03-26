@@ -1,0 +1,33 @@
+{
+  "invoicebackendApp": {
+    "wayBill": {
+      "home": {
+        "title": "WayBills",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Way Bill",
+        "createOrEditLabel": "Créer ou éditer un Way Bill",
+        "notFound": "Aucun Way Bill trouvé"
+      },
+      "created": "Un nouveau Way Bill a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Way Bill avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Way Bill avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Way Bill {{ id }} ?"
+      },
+      "detail": {
+        "title": "Way Bill"
+      },
+      "id": "ID",
+      "boxLimit": "Box Limit",
+      "shipmentType": "Shipment Type",
+      "opfac": "Opfac",
+      "deliveryAgent": "Delivery Agent",
+      "estimatedReadyDate": "Estimated Ready Date",
+      "currencyUom": "Currency Uom",
+      "estimatedShipDate": "Estimated Ship Date",
+      "status": "Status",
+      "referenceNumber": "Reference Number",
+      "currencyType": "Currency Type"
+    }
+  }
+}

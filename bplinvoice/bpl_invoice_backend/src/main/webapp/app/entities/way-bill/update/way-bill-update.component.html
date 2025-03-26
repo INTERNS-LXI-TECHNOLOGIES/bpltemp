@@ -1,0 +1,152 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-way-bill-heading" data-cy="WayBillCreateUpdateHeading" jhiTranslate="invoicebackendApp.wayBill.home.createOrEditLabel">
+        Create or edit a Way Bill
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="invoicebackendApp.wayBill.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_boxLimit" jhiTranslate="invoicebackendApp.wayBill.boxLimit">Box Limit</label>
+          <input type="number" class="form-control" name="boxLimit" id="field_boxLimit" data-cy="boxLimit" formControlName="boxLimit" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_shipmentType" jhiTranslate="invoicebackendApp.wayBill.shipmentType">Shipment Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="shipmentType"
+            id="field_shipmentType"
+            data-cy="shipmentType"
+            formControlName="shipmentType"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_opfac" jhiTranslate="invoicebackendApp.wayBill.opfac">Opfac</label>
+          <input type="text" class="form-control" name="opfac" id="field_opfac" data-cy="opfac" formControlName="opfac" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_deliveryAgent" jhiTranslate="invoicebackendApp.wayBill.deliveryAgent">Delivery Agent</label>
+          <input
+            type="text"
+            class="form-control"
+            name="deliveryAgent"
+            id="field_deliveryAgent"
+            data-cy="deliveryAgent"
+            formControlName="deliveryAgent"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estimatedReadyDate" jhiTranslate="invoicebackendApp.wayBill.estimatedReadyDate"
+            >Estimated Ready Date</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_estimatedReadyDate"
+              data-cy="estimatedReadyDate"
+              type="datetime-local"
+              class="form-control"
+              name="estimatedReadyDate"
+              formControlName="estimatedReadyDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_currencyUom" jhiTranslate="invoicebackendApp.wayBill.currencyUom">Currency Uom</label>
+          <input
+            type="text"
+            class="form-control"
+            name="currencyUom"
+            id="field_currencyUom"
+            data-cy="currencyUom"
+            formControlName="currencyUom"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estimatedShipDate" jhiTranslate="invoicebackendApp.wayBill.estimatedShipDate"
+            >Estimated Ship Date</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_estimatedShipDate"
+              data-cy="estimatedShipDate"
+              type="datetime-local"
+              class="form-control"
+              name="estimatedShipDate"
+              formControlName="estimatedShipDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_status" jhiTranslate="invoicebackendApp.wayBill.status">Status</label>
+          <input type="text" class="form-control" name="status" id="field_status" data-cy="status" formControlName="status" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_referenceNumber" jhiTranslate="invoicebackendApp.wayBill.referenceNumber"
+            >Reference Number</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="referenceNumber"
+            id="field_referenceNumber"
+            data-cy="referenceNumber"
+            formControlName="referenceNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_currencyType" jhiTranslate="invoicebackendApp.wayBill.currencyType">Currency Type</label>
+          <select
+            class="form-control"
+            id="field_currencyType"
+            data-cy="currencyType"
+            name="currencyType"
+            formControlName="currencyType"
+            [compareWith]="compareCurrencyType"
+          >
+            <option [ngValue]="null"></option>
+            @for (currencyTypeOption of currencyTypesCollection; track $index) {
+              <option [ngValue]="currencyTypeOption">{{ currencyTypeOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
