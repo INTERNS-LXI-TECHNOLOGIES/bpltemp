@@ -1,0 +1,13 @@
+{
+  "title": "BPL Cargo Logistics Dashboard",
+  "organization_details": "Organization Details",
+  "id": "ID",
+  "external_id": "External ID",
+  "name": "Name",
+  "description": "Description",
+  "organization_type": "Organization Type",
+  "organization_group": "Organization Group",
+  "parent_organization": "Parent Organization",
+  "save": "Save",
+  "cancel": "Cancel"
+}

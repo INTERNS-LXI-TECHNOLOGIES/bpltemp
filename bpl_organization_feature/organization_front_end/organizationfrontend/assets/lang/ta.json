@@ -1,0 +1,13 @@
+{
+  "title": "பி.பி.எல் கார்கோ லாஜிஸ்டிக்ஸ் டாஷ்போர்ட்",
+  "organization_details": "நிறுவன விவரங்கள்",
+  "id": "ஐடி",
+  "external_id": "வெளியக ஐடி",
+  "name": "பெயர்",
+  "description": "விளக்கம்",
+  "organization_type": "நிறுவன வகை",
+  "organization_group": "நிறுவன குழு",
+  "parent_organization": "முதன்மை நிறுவனம்",
+  "save": "சேமிக்க",
+  "cancel": "ரத்து செய்யவும்"
+}

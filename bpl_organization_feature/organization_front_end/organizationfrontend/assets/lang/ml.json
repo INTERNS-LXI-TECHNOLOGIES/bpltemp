@@ -1,0 +1,13 @@
+{
+  "title": "ബി.പി.എൽ കാർഗോ ലോജിസ്റ്റിക്‌സ് ഡാഷ്ബോർഡ്",
+  "organization_details": "സംഘടനാ വിശദാംശങ്ങൾ",
+  "id": "ഐഡി",
+  "external_id": "ബാഹ്യ ഐഡി",
+  "name": "പേര്",
+  "description": "വിവരണം",
+  "organization_type": "സംഘടനാ തരം",
+  "organization_group": "സംഘടനാ ഗ്രൂപ്പ്",
+  "parent_organization": "മൂലസംഘടനം",
+  "save": "സംരക്ഷിക്കുക",
+  "cancel": "റദ്ദാക്കുക"
+}

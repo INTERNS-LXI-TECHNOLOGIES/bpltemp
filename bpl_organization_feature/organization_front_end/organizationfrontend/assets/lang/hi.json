@@ -1,0 +1,13 @@
+{
+  "title": "बीपीएल कार्गो लॉजिस्टिक्स डैशबोर्ड",
+  "organization_details": "संगठन विवरण",
+  "id": "आईडी",
+  "external_id": "बाहरी आईडी",
+  "name": "नाम",
+  "description": "विवरण",
+  "organization_type": "संगठन प्रकार",
+  "organization_group": "संगठन समूह",
+  "parent_organization": "मूल संगठन",
+  "save": "सहेजें",
+  "cancel": "रद्द करें"
+}
