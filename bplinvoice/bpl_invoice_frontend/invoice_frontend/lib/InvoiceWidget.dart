@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:openapi/openapi.dart';
+import 'localization/app_localizations.dart';
 
 class InvoiceWidget extends StatefulWidget {
   const InvoiceWidget({super.key});
@@ -17,8 +19,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     8,
     (index) => FocusNode(),
   );
+  final _formKey = GlobalKey<FormState>();
 
-  // Currency dropdown variables
   final List<String> currencies = [
     'SAUDI_RIYAL',
     'USD',
@@ -31,14 +33,11 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   ];
   String? selectedCurrency = 'SAUDI_RIYAL';
 
-  // Status dropdown variables
-  final List<String> statusOptions = [
-    'Status Positive',
-    'Status Negative'
-  ];
+  final List<String> statusOptions = ['Status Positive', 'Status Negative'];
   String? selectedStatus = 'Status Positive';
 
   Locale _currentLocale = const Locale('en');
+  Map<String, String> validationErrors = {};
 
   @override
   void dispose() {
@@ -55,6 +54,52 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     setState(() {
       _currentLocale = locale;
     });
+  }
+
+  bool _validateForm() {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    setState(() {
+      if (!isValid) {
+        validationErrors.clear();
+      }
+    });
+    return isValid;
+  }
+
+  String? _validateField(String value, String fieldName) {
+    if (value.isEmpty) {
+      final errorMessage = AppLocalizations.of(context).getValidationMessage('required', fieldName);
+      setState(() {
+        validationErrors[fieldName] = errorMessage;
+      });
+      return errorMessage;
+    }
+
+    switch (fieldName) {
+      case 'boxLimit':
+        if (int.tryParse(value) == null) {
+          final errorMessage = AppLocalizations.of(context).getValidationMessage('number', fieldName);
+          setState(() {
+            validationErrors[fieldName] = errorMessage;
+          });
+          return errorMessage;
+        }
+        break;
+      case 'referenceNumber':
+        if (value.length < 3) {
+          final errorMessage = AppLocalizations.of(context).getValidationMessage('minLength', fieldName);
+          setState(() {
+            validationErrors[fieldName] = errorMessage;
+          });
+          return errorMessage;
+        }
+        break;
+    }
+
+    setState(() {
+      validationErrors.remove(fieldName);
+    });
+    return null;
   }
 
   @override
@@ -131,12 +176,15 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _buildTopActionBar(context, theme),
-                          const SizedBox(height: 16),
-                          _buildFormSection(context, theme, colorScheme),
-                        ],
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            _buildTopActionBar(context, theme),
+                            const SizedBox(height: 16),
+                            _buildFormSection(context, theme, colorScheme),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -250,21 +298,39 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 Expanded(
                   child: Column(
                     children: [
-                      _buildFormField(AppLocalizations.of(context).id, 
-                          controller: _controllers[0]),
+                      _buildFormField(
+                        AppLocalizations.of(context).id, 
+                        controller: _controllers[0],
+                        fieldName: 'id',
+                      ),
                       const SizedBox(height: 16),
-                      _buildFormField(AppLocalizations.of(context).boxLimit,
-                          controller: _controllers[1],
-                          keyboardType: TextInputType.number),
+                      _buildFormField(
+                        AppLocalizations.of(context).boxLimit,
+                        controller: _controllers[1],
+                        keyboardType: TextInputType.number,
+                        fieldName: 'boxLimit',
+                      ),
                       const SizedBox(height: 16),
-                      _buildFormField(AppLocalizations.of(context).shipmentType,
-                          controller: _controllers[2], suffixIcon: Icons.search),
+                      _buildFormField(
+                        AppLocalizations.of(context).shipmentType,
+                        controller: _controllers[2],
+                        suffixIcon: Icons.search,
+                        fieldName: 'shipmentType',
+                      ),
                       const SizedBox(height: 16),
-                      _buildFormField(AppLocalizations.of(context).opfac,
-                          controller: _controllers[3], suffixIcon: Icons.search),
+                      _buildFormField(
+                        AppLocalizations.of(context).opfac,
+                        controller: _controllers[3],
+                        suffixIcon: Icons.search,
+                        fieldName: 'opfac',
+                      ),
                       const SizedBox(height: 16),
-                      _buildFormField(AppLocalizations.of(context).deliveryAgent,
-                          controller: _controllers[4], suffixIcon: Icons.search),
+                      _buildFormField(
+                        AppLocalizations.of(context).deliveryAgent,
+                        controller: _controllers[4],
+                        suffixIcon: Icons.search,
+                        fieldName: 'deliveryAgent',
+                      ),
                     ],
                   ),
                 ),
@@ -272,20 +338,29 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 Expanded(
                   child: Column(
                     children: [
-                      _buildFormField(AppLocalizations.of(context).estimatedReadyDate,
-                          controller: _controllers[5],
-                          suffixIcon: Icons.calendar_today),
+                      _buildFormField(
+                        AppLocalizations.of(context).estimatedReadyDate,
+                        controller: _controllers[5],
+                        suffixIcon: Icons.calendar_today,
+                        fieldName: 'estimatedReadyDate',
+                      ),
                       const SizedBox(height: 16),
                       _buildCurrencyDropdown(context),
                       const SizedBox(height: 16),
-                      _buildFormField(AppLocalizations.of(context).estimatedShipDate,
-                          controller: _controllers[6],
-                          suffixIcon: Icons.calendar_today),
+                      _buildFormField(
+                        AppLocalizations.of(context).estimatedShipDate,
+                        controller: _controllers[6],
+                        suffixIcon: Icons.calendar_today,
+                        fieldName: 'estimatedShipDate',
+                      ),
                       const SizedBox(height: 16),
                       _buildStatusDropdown(context),
                       const SizedBox(height: 16),
-                      _buildFormField(AppLocalizations.of(context).referenceNumber,
-                          controller: _controllers[7]),
+                      _buildFormField(
+                        AppLocalizations.of(context).referenceNumber,
+                        controller: _controllers[7],
+                        fieldName: 'referenceNumber',
+                      ),
                     ],
                   ),
                 ),
@@ -296,7 +371,14 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 OutlinedButton(
-                  onPressed: () {print('cancel button');},
+                  onPressed: () {
+                    _formKey.currentState?.reset();
+                    setState(() {
+                      validationErrors.clear();
+                      selectedCurrency = 'SAUDI_RIYAL';
+                      selectedStatus = 'Status Positive';
+                    });
+                  },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.grey[700],
                     backgroundColor: Colors.grey[200],
@@ -310,7 +392,97 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton(
-                  onPressed: () {print('submit button');},
+                  onPressed: () async {
+                    final jwtToken = Openapi.jwt;
+                    if (jwtToken == null || jwtToken.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(AppLocalizations.of(context).authTokenMissing),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+
+                    if (!_validateForm()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(AppLocalizations.of(context).formValidationError),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+
+                    try {
+                      final currencyIdMap = {
+                        'SAUDI_RIYAL': 1,
+                        'USD': 2,
+                        'EUR': 3,
+                        'GBP': 4,
+                        'INR': 5,
+                        'AED': 6,
+                        'JPY': 7,
+                        'CNY': 8,
+                      };
+
+                      final currencyId = currencyIdMap[selectedCurrency];
+                      if (currencyId == null) {
+                        throw Exception('Invalid currency selected');
+                      }
+
+                      final currencyType = CurrencyTypeBuilder()
+                        ..name = selectedCurrency
+                        ..id = currencyId;
+
+                      final wayBillBuilder = WayBillBuilder()
+                        ..boxLimit = int.tryParse(_controllers[1].text)
+                         ..shipmentType = _controllers[2].text
+                        ..opfac = _controllers[3].text
+                          ..deliveryAgent = _controllers[4].text
+                        ..estimatedReadyDate = DateTime.parse(_controllers[5].text)
+                          ..currencyUom = selectedCurrency
+                        ..estimatedShipDate = DateTime.parse(_controllers[6].text)
+                         ..status = selectedStatus
+                         ..referenceNumber = _controllers[7].text
+                         ..currencyType = currencyType;
+
+                      final response = await Openapi().getWayBillResourceApi().createWayBill(wayBill: wayBillBuilder.build(),
+                            headers: {'Authorization': 'Bearer $jwtToken'}
+                          );
+
+                      _formKey.currentState?.reset();
+                      setState(() {
+                        validationErrors.clear();
+                        selectedCurrency = 'SAUDI_RIYAL';
+                        selectedStatus = 'Status Positive';
+                        for (var controller in _controllers) {
+                          controller.clear();
+                        }
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(AppLocalizations.of(context).formSubmissionSuccess),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } on FormatException catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${AppLocalizations.of(context).submissionFailed}: Invalid date format'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${AppLocalizations.of(context).submissionFailed}: ${e.toString()}'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[700],
                     foregroundColor: Colors.white,
@@ -330,11 +502,14 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     );
   }
 
-  Widget _buildFormField(String label,
-      {required TextEditingController controller,
-      TextInputType? keyboardType,
-      String? hintText,
-      IconData? suffixIcon}) {
+  Widget _buildFormField(
+    String label, {
+    required TextEditingController controller,
+    required String fieldName,
+    TextInputType? keyboardType,
+    String? hintText,
+    IconData? suffixIcon,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -349,6 +524,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          validator: (value) => _validateField(value ?? '', fieldName),
           decoration: InputDecoration(
             hintText: hintText,
             filled: true,
@@ -363,6 +539,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
             ),
+            errorText: validationErrors[fieldName],
+            errorStyle: const TextStyle(color: Colors.red),
             suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
           ),
         ),
@@ -384,6 +562,12 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           value: selectedCurrency,
+          validator: (value) {
+            if (value == null) {
+              return AppLocalizations.of(context).getValidationMessage('required', 'currency');
+            }
+            return null;
+          },
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -397,6 +581,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
             ),
+            errorStyle: const TextStyle(color: Colors.red),
           ),
           items: currencies.map((String value) {
             return DropdownMenuItem<String>(
@@ -428,6 +613,12 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           value: selectedStatus,
+          validator: (value) {
+            if (value == null) {
+              return AppLocalizations.of(context).getValidationMessage('required', 'status');
+            }
+            return null;
+          },
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -441,6 +632,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
             ),
+            errorStyle: const TextStyle(color: Colors.red),
           ),
           items: statusOptions.map((String value) {
             return DropdownMenuItem<String>(
@@ -464,144 +656,4 @@ class _ActionItem {
   final String label;
 
   _ActionItem(this.icon, this.label);
-}
-
-class AppLocalizations {
-  final Locale locale;
-
-  AppLocalizations(this.locale);
-
-  static AppLocalizations of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
-  }
-
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
-
-  static final Map<String, Map<String, String>> _localizedValues = {
-    'en': {
-      'wayBill': 'Way Bill',
-      'invDetails': 'Inv. Details',
-      'shipItems': 'Ship Items',
-      'shipBoxes': 'Ship Boxes',
-      'cargo': 'Cargo',
-      'printInvoice': 'Print Invoice',
-      'customsInvoice': 'Customs Invoice',
-      'switchInvoice': 'Switch to another invoice',
-      'id': 'Id',
-      'boxLimit': 'Box Limit',
-      'shipmentType': 'Shipment Type',
-      'opfac': 'OPFAC',
-      'deliveryAgent': 'Delivery Agent',
-      'estimatedReadyDate': 'Estimated Ready Date',
-      'estimatedShipDate': 'Estimated Ship Date',
-      'referenceNumber': 'Reference Number',
-      'currencyUom': 'Currency UoM',
-      'status': 'Status',
-      'cancel': 'Cancel',
-      'save': 'Save',
-    },
-    'ar': {
-      'wayBill': 'فاتورة الطريق',
-      'invDetails': 'تفاصيل الفاتورة',
-      'shipItems': 'شحن العناصر',
-      'shipBoxes': 'صناديق الشحن',
-      'cargo': 'البضائع',
-      'printInvoice': 'طباعة الفاتورة',
-      'customsInvoice': 'فاتورة الجمارك',
-      'switchInvoice': 'التبديل إلى فاتورة أخرى',
-      'id': 'هوية',
-      'boxLimit': 'حد الصندوق',
-      'shipmentType': 'نوع الشحنة',
-      'opfac': 'OPFAC',
-      'deliveryAgent': 'وكيل التوصيل',
-      'estimatedReadyDate': 'تاريخ الجاهزية المتوقع',
-      'estimatedShipDate': 'تاريخ الشحن المتوقع',
-      'referenceNumber': 'الرقم المرجعي',
-      'currencyUom': 'وحدة العملة',
-      'status': 'حالة',
-      'cancel': 'إلغاء',
-      'save': 'حفظ',
-    },
-    'de': {
-    'wayBill': 'Frachtbrief',
-    'invDetails': 'Rechnungsdetails',
-    'shipItems': 'Artikel versenden',
-    'shipBoxes': 'Kisten versenden',
-    'cargo': 'Fracht',
-    'printInvoice': 'Rechnung drucken',
-    'customsInvoice': 'Zollrechnung',
-    'switchInvoice': 'Zu einer anderen Rechnung wechseln',
-    'id': 'ID',
-    'boxLimit': 'Kistenlimit',
-    'shipmentType': 'Versandart',
-    'opfac': 'OPFAC',
-    'deliveryAgent': 'Zustellagent',
-    'estimatedReadyDate': 'Voraussichtliches Fertigstellungsdatum',
-    'estimatedShipDate': 'Voraussichtliches Versanddatum',
-    'referenceNumber': 'Referenznummer',
-    'currencyUom': 'Währungseinheit',
-    'status': 'Status',
-    'cancel': 'Abbrechen',
-    'save': 'Speichern',
-  },
-    'ml': {
-    'wayBill': 'വേ ബിൽ',
-    'invDetails': 'ഇൻവോയ്സ് വിവരങ്ങൾ',
-    'shipItems': 'സാധനങ്ങൾ അയയ്ക്കുക',
-    'shipBoxes': 'പെട്ടികൾ അയയ്ക്കുക',
-    'cargo': 'കാർഗോ',
-    'printInvoice': 'ഇൻവോയ്സ് പ്രിന്റ് ചെയ്യുക',
-    'customsInvoice': 'കസ്റ്റംസ് ഇൻവോയ്സ്',
-    'switchInvoice': 'മറ്റൊരു ഇൻവോയ്സിലേക്ക് മാറുക',
-    'id': 'ഐഡി',
-    'boxLimit': 'പെട്ടി ലിമിറ്റ്',
-    'shipmentType': 'ഷിപ്പ്മെന്റ് തരം',
-    'opfac': 'OPFAC',
-    'deliveryAgent': 'ഡെലിവറി ഏജന്റ്',
-    'estimatedReadyDate': 'എസ്റ്റിമേറ്റഡ് റെഡി തീയതി',
-    'estimatedShipDate': 'എസ്റ്റിമേറ്റഡ് ഷിപ്പ് തീയതി',
-    'referenceNumber': 'റഫറൻസ് നമ്പർ',
-    'currencyUom': 'കറൻസി യൂണിറ്റ്',
-    'status': 'സ്റ്റാറ്റസ്',
-    'cancel': 'റദ്ദാക്കുക',
-    'save': 'സേവ്',
-  },
-  };
-
-  String get wayBill => _localizedValues[locale.languageCode]!['wayBill']!;
-  String get invDetails => _localizedValues[locale.languageCode]!['invDetails']!;
-  String get shipItems => _localizedValues[locale.languageCode]!['shipItems']!;
-  String get shipBoxes => _localizedValues[locale.languageCode]!['shipBoxes']!;
-  String get cargo => _localizedValues[locale.languageCode]!['cargo']!;
-  String get printInvoice => _localizedValues[locale.languageCode]!['printInvoice']!;
-  String get customsInvoice => _localizedValues[locale.languageCode]!['customsInvoice']!;
-  String get switchInvoice => _localizedValues[locale.languageCode]!['switchInvoice']!;
-  String get id => _localizedValues[locale.languageCode]!['id']!;
-  String get boxLimit => _localizedValues[locale.languageCode]!['boxLimit']!;
-  String get shipmentType => _localizedValues[locale.languageCode]!['shipmentType']!;
-  String get opfac => _localizedValues[locale.languageCode]!['opfac']!;
-  String get deliveryAgent => _localizedValues[locale.languageCode]!['deliveryAgent']!;
-  String get estimatedReadyDate => _localizedValues[locale.languageCode]!['estimatedReadyDate']!;
-  String get estimatedShipDate => _localizedValues[locale.languageCode]!['estimatedShipDate']!;
-  String get referenceNumber => _localizedValues[locale.languageCode]!['referenceNumber']!;
-  String get currencyUom => _localizedValues[locale.languageCode]!['currencyUom']!;
-  String get status => _localizedValues[locale.languageCode]!['status']!;
-  String get cancel => _localizedValues[locale.languageCode]!['cancel']!;
-  String get save => _localizedValues[locale.languageCode]!['save']!;
-}
-
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
-  const _AppLocalizationsDelegate();
-
-@override
-bool isSupported(Locale locale) => ['en', 'ar', 'de', 'ml'].contains(locale.languageCode);
-
-  @override
-  Future<AppLocalizations> load(Locale locale) async {
-    return AppLocalizations(locale);
-  }
-
-  @override
-  bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
