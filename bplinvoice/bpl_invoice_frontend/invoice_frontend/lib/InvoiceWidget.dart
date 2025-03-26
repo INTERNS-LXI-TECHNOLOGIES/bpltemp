@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class InvoiceWidget extends StatefulWidget {
   const InvoiceWidget({super.key});
@@ -9,11 +10,11 @@ class InvoiceWidget extends StatefulWidget {
 
 class _InvoiceWidgetState extends State<InvoiceWidget> {
   final List<TextEditingController> _controllers = List.generate(
-    8, // Reduced since we're replacing two with dropdowns
+    8,
     (index) => TextEditingController(),
   );
   final List<FocusNode> _focusNodes = List.generate(
-    8, // Reduced since we're replacing two with dropdowns
+    8,
     (index) => FocusNode(),
   );
 
@@ -37,6 +38,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   ];
   String? selectedStatus = 'Status Positive';
 
+  Locale _currentLocale = const Locale('en');
+
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -48,52 +51,112 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     super.dispose();
   }
 
+  void _changeLanguage(Locale locale) {
+    setState(() {
+      _currentLocale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: colorScheme.primary,
-          title: const Text(
-            'Way Bill',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          elevation: 2,
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildTopActionBar(context, theme),
-                  const SizedBox(height: 16),
-                  _buildFormSection(context, theme, colorScheme),
-                ],
+    return MaterialApp(
+      locale: _currentLocale,
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
+        Locale('de'),
+        Locale('ml'),
+      ],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: Builder(
+        builder: (context) {
+          return Directionality(
+            textDirection: _currentLocale.languageCode == 'ar' 
+                ? TextDirection.rtl 
+                : TextDirection.ltr,
+            child: GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: colorScheme.primary,
+                  title: Text(
+                    AppLocalizations.of(context).wayBill,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  elevation: 2,
+                  actions: [
+                    DropdownButton<Locale>(
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.language, color: Colors.white),
+                      value: _currentLocale,
+                      items: const [
+                        DropdownMenuItem(
+                          value: Locale('en'),
+                          child: Text('EN'),
+                        ),
+                        DropdownMenuItem(
+                          value: Locale('ar'),
+                          child: Text('AR'),
+                        ),
+                        DropdownMenuItem(
+                          value: Locale('de'),
+                          child: Text('DE'),
+                        ),
+                        DropdownMenuItem(
+                          value: Locale('ml'),
+                          child: Text('ML'),
+                        ),
+                      ],
+                      onChanged: (Locale? value) {
+                        if (value != null) {
+                          _changeLanguage(value);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                body: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _buildTopActionBar(context, theme),
+                          const SizedBox(height: 16),
+                          _buildFormSection(context, theme, colorScheme),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
   Widget _buildTopActionBar(BuildContext context, ThemeData theme) {
     final actionItems = [
-      _ActionItem(Icons.local_shipping, 'Inv. Details'),
-      _ActionItem(Icons.inventory_2, 'Ship Items'),
-      _ActionItem(Icons.inventory, 'Ship Boxes'),
-      _ActionItem(Icons.view_in_ar, 'Cargo'),
-      _ActionItem(Icons.print, 'Print Invoice'),
-      _ActionItem(Icons.receipt_long, 'Customs Invoice'),
+      _ActionItem(Icons.local_shipping, AppLocalizations.of(context).invDetails),
+      _ActionItem(Icons.inventory_2, AppLocalizations.of(context).shipItems),
+      _ActionItem(Icons.inventory, AppLocalizations.of(context).shipBoxes),
+      _ActionItem(Icons.view_in_ar, AppLocalizations.of(context).cargo),
+      _ActionItem(Icons.print, AppLocalizations.of(context).printInvoice),
+      _ActionItem(Icons.receipt_long, AppLocalizations.of(context).customsInvoice),
     ];
 
     return Card(
@@ -125,7 +188,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 ElevatedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.arrow_drop_down, size: 20),
-                  label: const Text('Switch to another invoice'),
+                  label: Text(AppLocalizations.of(context).switchInvoice),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[700],
                     foregroundColor: Colors.white,
@@ -187,19 +250,20 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 Expanded(
                   child: Column(
                     children: [
-                      _buildFormField('Id', controller: _controllers[0]),
+                      _buildFormField(AppLocalizations.of(context).id, 
+                          controller: _controllers[0]),
                       const SizedBox(height: 16),
-                      _buildFormField('Box Limit',
+                      _buildFormField(AppLocalizations.of(context).boxLimit,
                           controller: _controllers[1],
                           keyboardType: TextInputType.number),
                       const SizedBox(height: 16),
-                      _buildFormField('Shipment Type',
+                      _buildFormField(AppLocalizations.of(context).shipmentType,
                           controller: _controllers[2], suffixIcon: Icons.search),
                       const SizedBox(height: 16),
-                      _buildFormField('OPFAC',
+                      _buildFormField(AppLocalizations.of(context).opfac,
                           controller: _controllers[3], suffixIcon: Icons.search),
                       const SizedBox(height: 16),
-                      _buildFormField('Delivery Agent',
+                      _buildFormField(AppLocalizations.of(context).deliveryAgent,
                           controller: _controllers[4], suffixIcon: Icons.search),
                     ],
                   ),
@@ -208,19 +272,19 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 Expanded(
                   child: Column(
                     children: [
-                      _buildFormField('Estimated Ready Date',
+                      _buildFormField(AppLocalizations.of(context).estimatedReadyDate,
                           controller: _controllers[5],
                           suffixIcon: Icons.calendar_today),
                       const SizedBox(height: 16),
-                      _buildCurrencyDropdown(),
+                      _buildCurrencyDropdown(context),
                       const SizedBox(height: 16),
-                      _buildFormField('Estimated Ship Date',
+                      _buildFormField(AppLocalizations.of(context).estimatedShipDate,
                           controller: _controllers[6],
                           suffixIcon: Icons.calendar_today),
                       const SizedBox(height: 16),
-                      _buildStatusDropdown(),
+                      _buildStatusDropdown(context),
                       const SizedBox(height: 16),
-                      _buildFormField('Reference Number',
+                      _buildFormField(AppLocalizations.of(context).referenceNumber,
                           controller: _controllers[7]),
                     ],
                   ),
@@ -242,7 +306,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Cancel'),
+                  child: Text(AppLocalizations.of(context).cancel),
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton(
@@ -256,7 +320,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Save'),
+                  child: Text(AppLocalizations.of(context).save),
                 ),
               ],
             ),
@@ -306,12 +370,12 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     );
   }
 
-  Widget _buildCurrencyDropdown() {
+  Widget _buildCurrencyDropdown(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Currency UoM',
+          AppLocalizations.of(context).currencyUom,
           style: TextStyle(
             color: Colors.grey[600],
             fontSize: 14,
@@ -350,12 +414,12 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     );
   }
 
-  Widget _buildStatusDropdown() {
+  Widget _buildStatusDropdown(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Status',
+          AppLocalizations.of(context).status,
           style: TextStyle(
             color: Colors.grey[600],
             fontSize: 14,
@@ -400,4 +464,144 @@ class _ActionItem {
   final String label;
 
   _ActionItem(this.icon, this.label);
+}
+
+class AppLocalizations {
+  final Locale locale;
+
+  AppLocalizations(this.locale);
+
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
+  }
+
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
+
+  static final Map<String, Map<String, String>> _localizedValues = {
+    'en': {
+      'wayBill': 'Way Bill',
+      'invDetails': 'Inv. Details',
+      'shipItems': 'Ship Items',
+      'shipBoxes': 'Ship Boxes',
+      'cargo': 'Cargo',
+      'printInvoice': 'Print Invoice',
+      'customsInvoice': 'Customs Invoice',
+      'switchInvoice': 'Switch to another invoice',
+      'id': 'Id',
+      'boxLimit': 'Box Limit',
+      'shipmentType': 'Shipment Type',
+      'opfac': 'OPFAC',
+      'deliveryAgent': 'Delivery Agent',
+      'estimatedReadyDate': 'Estimated Ready Date',
+      'estimatedShipDate': 'Estimated Ship Date',
+      'referenceNumber': 'Reference Number',
+      'currencyUom': 'Currency UoM',
+      'status': 'Status',
+      'cancel': 'Cancel',
+      'save': 'Save',
+    },
+    'ar': {
+      'wayBill': 'فاتورة الطريق',
+      'invDetails': 'تفاصيل الفاتورة',
+      'shipItems': 'شحن العناصر',
+      'shipBoxes': 'صناديق الشحن',
+      'cargo': 'البضائع',
+      'printInvoice': 'طباعة الفاتورة',
+      'customsInvoice': 'فاتورة الجمارك',
+      'switchInvoice': 'التبديل إلى فاتورة أخرى',
+      'id': 'هوية',
+      'boxLimit': 'حد الصندوق',
+      'shipmentType': 'نوع الشحنة',
+      'opfac': 'OPFAC',
+      'deliveryAgent': 'وكيل التوصيل',
+      'estimatedReadyDate': 'تاريخ الجاهزية المتوقع',
+      'estimatedShipDate': 'تاريخ الشحن المتوقع',
+      'referenceNumber': 'الرقم المرجعي',
+      'currencyUom': 'وحدة العملة',
+      'status': 'حالة',
+      'cancel': 'إلغاء',
+      'save': 'حفظ',
+    },
+    'de': {
+    'wayBill': 'Frachtbrief',
+    'invDetails': 'Rechnungsdetails',
+    'shipItems': 'Artikel versenden',
+    'shipBoxes': 'Kisten versenden',
+    'cargo': 'Fracht',
+    'printInvoice': 'Rechnung drucken',
+    'customsInvoice': 'Zollrechnung',
+    'switchInvoice': 'Zu einer anderen Rechnung wechseln',
+    'id': 'ID',
+    'boxLimit': 'Kistenlimit',
+    'shipmentType': 'Versandart',
+    'opfac': 'OPFAC',
+    'deliveryAgent': 'Zustellagent',
+    'estimatedReadyDate': 'Voraussichtliches Fertigstellungsdatum',
+    'estimatedShipDate': 'Voraussichtliches Versanddatum',
+    'referenceNumber': 'Referenznummer',
+    'currencyUom': 'Währungseinheit',
+    'status': 'Status',
+    'cancel': 'Abbrechen',
+    'save': 'Speichern',
+  },
+    'ml': {
+    'wayBill': 'വേ ബിൽ',
+    'invDetails': 'ഇൻവോയ്സ് വിവരങ്ങൾ',
+    'shipItems': 'സാധനങ്ങൾ അയയ്ക്കുക',
+    'shipBoxes': 'പെട്ടികൾ അയയ്ക്കുക',
+    'cargo': 'കാർഗോ',
+    'printInvoice': 'ഇൻവോയ്സ് പ്രിന്റ് ചെയ്യുക',
+    'customsInvoice': 'കസ്റ്റംസ് ഇൻവോയ്സ്',
+    'switchInvoice': 'മറ്റൊരു ഇൻവോയ്സിലേക്ക് മാറുക',
+    'id': 'ഐഡി',
+    'boxLimit': 'പെട്ടി ലിമിറ്റ്',
+    'shipmentType': 'ഷിപ്പ്മെന്റ് തരം',
+    'opfac': 'OPFAC',
+    'deliveryAgent': 'ഡെലിവറി ഏജന്റ്',
+    'estimatedReadyDate': 'എസ്റ്റിമേറ്റഡ് റെഡി തീയതി',
+    'estimatedShipDate': 'എസ്റ്റിമേറ്റഡ് ഷിപ്പ് തീയതി',
+    'referenceNumber': 'റഫറൻസ് നമ്പർ',
+    'currencyUom': 'കറൻസി യൂണിറ്റ്',
+    'status': 'സ്റ്റാറ്റസ്',
+    'cancel': 'റദ്ദാക്കുക',
+    'save': 'സേവ്',
+  },
+  };
+
+  String get wayBill => _localizedValues[locale.languageCode]!['wayBill']!;
+  String get invDetails => _localizedValues[locale.languageCode]!['invDetails']!;
+  String get shipItems => _localizedValues[locale.languageCode]!['shipItems']!;
+  String get shipBoxes => _localizedValues[locale.languageCode]!['shipBoxes']!;
+  String get cargo => _localizedValues[locale.languageCode]!['cargo']!;
+  String get printInvoice => _localizedValues[locale.languageCode]!['printInvoice']!;
+  String get customsInvoice => _localizedValues[locale.languageCode]!['customsInvoice']!;
+  String get switchInvoice => _localizedValues[locale.languageCode]!['switchInvoice']!;
+  String get id => _localizedValues[locale.languageCode]!['id']!;
+  String get boxLimit => _localizedValues[locale.languageCode]!['boxLimit']!;
+  String get shipmentType => _localizedValues[locale.languageCode]!['shipmentType']!;
+  String get opfac => _localizedValues[locale.languageCode]!['opfac']!;
+  String get deliveryAgent => _localizedValues[locale.languageCode]!['deliveryAgent']!;
+  String get estimatedReadyDate => _localizedValues[locale.languageCode]!['estimatedReadyDate']!;
+  String get estimatedShipDate => _localizedValues[locale.languageCode]!['estimatedShipDate']!;
+  String get referenceNumber => _localizedValues[locale.languageCode]!['referenceNumber']!;
+  String get currencyUom => _localizedValues[locale.languageCode]!['currencyUom']!;
+  String get status => _localizedValues[locale.languageCode]!['status']!;
+  String get cancel => _localizedValues[locale.languageCode]!['cancel']!;
+  String get save => _localizedValues[locale.languageCode]!['save']!;
+}
+
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+
+@override
+bool isSupported(Locale locale) => ['en', 'ar', 'de', 'ml'].contains(locale.languageCode);
+
+  @override
+  Future<AppLocalizations> load(Locale locale) async {
+    return AppLocalizations(locale);
+  }
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
