@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:openapi/openapi.dart';
 
 void main() {
   runApp(LogisticsApp());
@@ -17,6 +18,7 @@ class LogisticsApp extends StatelessWidget {
 class LogisticsDashboard extends StatefulWidget {
   @override
   _LogisticsDashboardState createState() => _LogisticsDashboardState();
+  
 }
 
 class _LogisticsDashboardState extends State<LogisticsDashboard> {
@@ -25,6 +27,8 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
+  
+Openapi openapi = Openapi();
   String? selectedOrgType;
   String? selectedOrgGroup;
   String? selectedParentOrg;
