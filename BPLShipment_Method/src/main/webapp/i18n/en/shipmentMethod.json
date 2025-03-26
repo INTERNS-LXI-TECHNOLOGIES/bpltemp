@@ -1,0 +1,26 @@
+{
+  "bplshipmentmethodApp": {
+    "shipmentMethod": {
+      "home": {
+        "title": "Shipment Methods",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Shipment Method",
+        "createOrEditLabel": "Create or edit a Shipment Method",
+        "notFound": "No Shipment Methods found"
+      },
+      "created": "A new Shipment Method is created with identifier {{ param }}",
+      "updated": "A Shipment Method is updated with identifier {{ param }}",
+      "deleted": "A Shipment Method is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Shipment Method {{ id }}?"
+      },
+      "detail": {
+        "title": "Shipment Method"
+      },
+      "id": "Id",
+      "name": "Name",
+      "description": "Description",
+      "parentType": "Parent Type"
+    }
+  }
+}

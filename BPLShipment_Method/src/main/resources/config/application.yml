@@ -43,7 +43,7 @@ management:
           - liquibase
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: when-authorized
       roles: 'ROLE_ADMIN'
       probes:
         enabled: true
@@ -94,7 +94,7 @@ spring:
     name: bplshipmentmethod
   docker:
     compose:
-      enabled: true
+      enabled: false
       lifecycle-management: start-only
       file: src/main/docker/services.yml
   profiles:
