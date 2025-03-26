@@ -1,0 +1,14 @@
+entity Person {
+    id Long primary key,
+    name String required,
+    location String,
+    mailId String required
+}
+
+relationship OneToOne {
+    Contact to Person
+}
+
+dto Person with mapstruct
+service Person with serviceClass
+paginate Person with pagination

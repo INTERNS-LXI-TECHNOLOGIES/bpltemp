@@ -1,0 +1,11 @@
+entity Contact {
+    id Long primary key,
+    phoneNumber String required,
+    countryCode String required,
+    contactNumber String required,
+    name String required
+}
+
+dto Contact with mapstruct
+service Contact with serviceClass
+paginate Contact with pagination
