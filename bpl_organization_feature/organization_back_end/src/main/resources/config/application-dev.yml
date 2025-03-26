@@ -34,7 +34,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/organizationBackEnd?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root
-    password:
+    password: sreeja
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -49,8 +49,8 @@ spring:
   mail:
     host: localhost
     port: 25
-    username:
-    password:
+    username: root
+    password: sreeja
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:

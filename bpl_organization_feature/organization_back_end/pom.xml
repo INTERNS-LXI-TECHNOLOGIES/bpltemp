@@ -38,7 +38,7 @@
         <spring-boot.version>${project.parent.version}</spring-boot.version>
         <archunit-junit5.version>1.3.0</archunit-junit5.version>
         <checkstyle.version>10.21.0</checkstyle.version>
-        <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
+       <!-- <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>-->
         <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
         <git-commit-id-maven-plugin.version>9.0.1</git-commit-id-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
@@ -697,11 +697,11 @@
                         </includeOnlyProperties>
                     </configuration>
                 </plugin>
-                <plugin>
+              <!--  <plugin>
                     <groupId>net.nicoulaj.maven.plugins</groupId>
                     <artifactId>checksum-maven-plugin</artifactId>
                     <version>${checksum-maven-plugin.version}</version>
-                </plugin>
+                </plugin> -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
@@ -1053,7 +1053,7 @@
             </properties>
             <build>
                 <plugins>
-                    <plugin>
+                  <!--  <plugin>
                         <groupId>net.nicoulaj.maven.plugins</groupId>
                         <artifactId>checksum-maven-plugin</artifactId>
                         <executions>
@@ -1104,8 +1104,8 @@
                             <includeRelativePath>true</includeRelativePath>
                             <quiet>true</quiet>
                         </configuration>
-                    </plugin>
-                    <plugin>
+                    </plugin> -->
+                    <!-- <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
@@ -1129,7 +1129,7 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin> -->
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
