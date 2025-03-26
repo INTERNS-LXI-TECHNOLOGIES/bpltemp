@@ -1,0 +1,19 @@
+entity WayBill {
+    boxLimit Integer,
+    shipmentType String,
+    opfac String,
+    deliveryAgent String,
+    estimatedReadyDate Instant,
+    currencyUom String,
+    estimatedShipDate Instant,
+    status String,
+    referenceNumber String
+}
+
+entity CurrencyType {
+    name String
+}
+
+relationship OneToOne {
+    WayBill to CurrencyType
+}

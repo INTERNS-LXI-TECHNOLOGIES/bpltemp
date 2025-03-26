@@ -1,0 +1,52 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "boxLimit",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "shipmentType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "opfac",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "deliveryAgent",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estimatedReadyDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "currencyUom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estimatedShipDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "referenceNumber",
+      "fieldType": "String"
+    }
+  ],
+  "name": "WayBill",
+  "relationships": [
+    {
+      "otherEntityName": "currencyType",
+      "otherEntityRelationshipName": "wayBill",
+      "relationshipName": "currencyType",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    }
+  ]
+}

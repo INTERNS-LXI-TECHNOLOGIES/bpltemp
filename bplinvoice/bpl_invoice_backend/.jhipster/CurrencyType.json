@@ -1,0 +1,20 @@
+{
+  "annotations": {},
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "name": "CurrencyType",
+  "relationships": [
+    {
+      "otherEntityName": "wayBill",
+      "otherEntityRelationshipName": "currencyType",
+      "relationshipName": "wayBill",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    }
+  ]
+}
