@@ -1,0 +1,18 @@
+entity ShipmentMethod {
+    id Long,
+    name String required maxlength(100),
+    description String maxlength(255)
+}
+
+entity FacilityType {
+    id Long,
+    name String required maxlength(100)
+}
+
+relationship ManyToOne {
+    ShipmentMethod{parentType(name)} to FacilityType
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate ShipmentMethod with infinite-scroll
