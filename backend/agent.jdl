@@ -1,0 +1,19 @@
+entity AgentType {
+    id Long,
+    name String required,
+    description String
+}
+
+entity Organisation {
+    id Long,
+    name String required
+}
+
+relationship OneToMany {
+    AgentType{organisation} to Organisation
+}
+
+paginate * with pagination
+dto * with mapstruct
+service all with serviceImpl
+filter *

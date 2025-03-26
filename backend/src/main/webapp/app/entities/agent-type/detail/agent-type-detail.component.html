@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (agentType(); as agentTypeRef) {
+      <div>
+        <h2 data-cy="agentTypeDetailsHeading"><span jhiTranslate="agentTypeApp.agentType.detail.title">Agent Type</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="agentTypeApp.agentType.id">Id</span></dt>
+          <dd>
+            <span>{{ agentTypeRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="agentTypeApp.agentType.name">Name</span></dt>
+          <dd>
+            <span>{{ agentTypeRef.name }}</span>
+          </dd>
+          <dt><span jhiTranslate="agentTypeApp.agentType.description">Description</span></dt>
+          <dd>
+            <span>{{ agentTypeRef.description }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/agent-type', agentTypeRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
