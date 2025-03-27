@@ -1,14 +1,20 @@
 {
-    "dashboard": "डैशबोर्ड",
-    "shipment_type": "शिपमेंट प्रकार",
-    "id": "आईडी",
-    "lookup_name": "खोज नाम",
-    "name": "नाम",
-    "description": "विवरण",
-    "parent_type": "मूल प्रकार",
-    "save": "सहेजें",
-    "cancel": "रद्द करें",
-    "search": "खोज",
-    "notifications": "सूचनाएं",
-    "language": "भाषा"
-  }
+  "dashboard": "डैशबोर्ड",
+  "shipment_type": "शिपमेंट प्रकार",
+  "id": "आईडी",
+  "lookup_name": "खोज नाम",
+  "name": "नाम",
+  "description": "विवरण",
+  "parent_type": "मूल प्रकार",
+  "save": "सहेजें",
+  "cancel": "रद्द करें",
+  "search": "खोज",
+  "notifications": "सूचनाएं",
+  "language": "भाषा",
+  "field_required": "यह फ़ील्ड आवश्यक है",
+  "no_number_start": "संख्या से शुरू नहीं हो सकता",
+  "start_with_letter": "अक्षर से शुरू होना चाहिए",
+  "form_valid": "फॉर्म वैध है, सहेजा जा रहा है...",
+  "no_alphabets": "आईडी में अक्षर नहीं हो सकते",
+  "numbers_only": "केवल संख्याएँ अनुमत हैं"
+}

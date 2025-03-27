@@ -1,14 +1,20 @@
 {
-    "dashboard": "Tableau de bord",
-    "shipment_type": "Type d'expédition",
-    "id": "ID",
-    "lookup_name": "Nom de recherche",
-    "name": "Nom",
-    "description": "Description",
-    "parent_type": "Type de parent",
-    "save": "Sauvegarder",
-    "cancel": "Annuler",
-    "search": "Recherche",
-    "notifications": "Notifications",
-    "language": "Langue"
-  }
+  "dashboard": "Tableau de bord",
+  "shipment_type": "Type d'expédition",
+  "id": "ID",
+  "lookup_name": "Nom de recherche",
+  "name": "Nom",
+  "description": "Description",
+  "parent_type": "Type de parent",
+  "save": "Sauvegarder",
+  "cancel": "Annuler",
+  "search": "Recherche",
+  "notifications": "Notifications",
+  "language": "Langue",
+  "field_required": "Ce champ est obligatoire",
+  "no_number_start": "Ne peut pas commencer par un chiffre",
+  "start_with_letter": "Doit commencer par une lettre",
+  "form_valid": "Formulaire valide, enregistrement en cours...",
+  "no_alphabets": "L'ID ne peut pas contenir de lettres",
+  "numbers_only": "Seuls les chiffres sont autorisés"
+}

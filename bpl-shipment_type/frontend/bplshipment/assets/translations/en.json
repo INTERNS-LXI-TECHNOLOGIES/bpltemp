@@ -1,14 +1,20 @@
 {
-    "dashboard": "Dashboard",
-    "shipment_type": "Shipment Type",
-    "id": "ID",
-    "lookup_name": "Lookup Name",
-    "name": "Name",
-    "description": "Description",
-    "parent_type": "Parent Type",
-    "save": "Save",
-    "cancel": "Cancel",
-    "search": "Search",
-    "notifications": "Notifications",
-    "language": "Language"
-  }
+  "dashboard": "Dashboard",
+  "shipment_type": "Shipment Type",
+  "id": "ID",
+  "lookup_name": "Lookup Name",
+  "name": "Name",
+  "description": "Description",
+  "parent_type": "Parent Type",
+  "save": "Save",
+  "cancel": "Cancel",
+  "search": "Search",
+  "notifications": "Notifications",
+  "language": "Language",
+  "field_required": "This field is required",
+  "no_number_start": "Cannot start with a number",
+  "start_with_letter": "Must start with a letter",
+  "form_valid": "Form is valid, saving...",
+  "no_alphabets": "ID cannot contain letters",
+  "numbers_only": "Only numbers are allowed"
+}

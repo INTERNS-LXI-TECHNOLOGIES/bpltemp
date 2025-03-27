@@ -3,19 +3,24 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 class AppTranslations {
-  late Map<String, dynamic> _localizedStrings;
+  Map<String, dynamic>? _localizedStrings;
 
   static AppTranslations? of(BuildContext context) {
     return Localizations.of<AppTranslations>(context, AppTranslations);
   }
 
   Future<void> load(Locale locale) async {
-    String jsonString = await rootBundle.loadString('assets/translations/${locale.languageCode}.json');
-    _localizedStrings = json.decode(jsonString);
+    try {
+      String jsonString = await rootBundle
+          .loadString('assets/translations/${locale.languageCode}.json');
+      _localizedStrings = json.decode(jsonString);
+    } catch (e) {
+      _localizedStrings = {}; // Fallback to empty map
+    }
   }
 
   String translate(String key) {
-    return _localizedStrings[key] ?? key;
+    return _localizedStrings?[key] ?? key;
   }
 
   static const LocalizationsDelegate<AppTranslations> delegate = _AppTranslationsDelegate();

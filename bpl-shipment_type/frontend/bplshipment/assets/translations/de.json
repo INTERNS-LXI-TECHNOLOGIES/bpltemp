@@ -1,14 +1,20 @@
 {
-    "dashboard": "Armaturenbrett",
-    "shipment_type": "Versandart",
-    "id": "ID",
-    "lookup_name": "Nachschlagename",
-    "name": "Name",
-    "description": "Beschreibung",
-    "parent_type": "Elterntyp",
-    "save": "Speichern",
-    "cancel": "Stornieren",
-    "search": "Suche",
-    "notifications": "Benachrichtigungen",
-    "language": "Sprache"
-  }
+  "dashboard": "Armaturenbrett",
+  "shipment_type": "Versandart",
+  "id": "ID",
+  "lookup_name": "Nachschlagename",
+  "name": "Name",
+  "description": "Beschreibung",
+  "parent_type": "Elterntyp",
+  "save": "Speichern",
+  "cancel": "Stornieren",
+  "search": "Suche",
+  "notifications": "Benachrichtigungen",
+  "language": "Sprache",
+  "field_required": "Dieses Feld ist erforderlich",
+  "no_number_start": "Darf nicht mit einer Zahl beginnen",
+  "start_with_letter": "Muss mit einem Buchstaben beginnen",
+  "form_valid": "Formular ist gültig, wird gespeichert...",
+  "no_alphabets": "ID darf keine Buchstaben enthalten",
+  "numbers_only": "Nur Zahlen sind erlaubt"
+}
