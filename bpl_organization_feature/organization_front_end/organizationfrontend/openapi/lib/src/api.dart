@@ -20,6 +20,8 @@ import 'package:openapi/src/api/user_resource_api.dart';
 class Openapi {
   static const String basePath = r'http://localhost:8080';
 
+  static String jwt = '';
+
   final Dio dio;
   final Serializers serializers;
 

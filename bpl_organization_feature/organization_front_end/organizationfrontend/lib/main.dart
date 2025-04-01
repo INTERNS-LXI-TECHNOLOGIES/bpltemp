@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:organizationfrontend/localization/app_localizations.dart';
 import 'package:organizationfrontend/widget/logistics_dashboard.dart';
+import 'package:organizationfrontend/widget/login_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,7 +49,8 @@ class _MyAppState extends State<MyApp> {
         }
         return _locale;
       },
-      home: LogisticsDashboard(setLocale: _setLocale),
+      home: LoginWidget(setLocale: _setLocale), // Pass _setLocale
+
     );
   }
 }

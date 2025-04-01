@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:openapi/openapi.dart';
 import 'package:organizationfrontend/localization/app_localizations.dart';
 
 
@@ -41,6 +44,81 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
       _selectedLocale = locale;
       widget.setLocale(locale);  
     });
+  }
+
+
+  bool _validateInput(){
+
+    if (idController.text.isEmpty || 
+        externalIdController.text.isEmpty || 
+        nameController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        selectedOrgType == null ) {
+     
+           print("please fill all the fields");
+
+           return false;
+    }
+    
+    return true;
+
+  }
+
+
+  Future<void> _saveData() async {
+
+    final api = Openapi();
+    var token = Openapi.jwt;
+    if (token == null) {
+      print("Token is null");
+      return;
+    }
+    
+    if (!_validateInput()) {
+      return;
+    } 
+
+    final organization = OrganizationBuilder()
+      ..id = int.parse(idController.text)
+      ..externalId = externalIdController.text
+      ..name = nameController.text
+      ..description = descriptionController.text
+      ..organizationType = selectedOrgType
+      ..organizationGroup = selectedOrgGroup;
+      
+    
+    
+
+    final data = {
+      'id': idController.text,
+      'external_id': externalIdController.text,
+      'name': nameController.text,
+      'description': descriptionController.text,
+      'organization_type': selectedOrgType,
+      'organization_group': selectedOrgGroup,
+      'parent_organization': selectedParentOrg,
+    };
+
+    
+
+      try {
+        
+          final responce = await api.getOrganizationResourceApi().createOrganization(
+          organization: organization.build(),
+          headers: {'Authorization': 'Bearer ${Openapi.jwt}'},);
+
+          if (responce.statusCode == 200 || responce.statusCode == 201) {
+            print("Success: Organization created successfully!");
+          }
+          else {
+            print("Error: ${responce.statusCode} - ${responce.data}");
+          }
+      }
+
+
+      catch (e) {
+        print("Error: $e");
+      }
   }
 
 
@@ -130,10 +208,7 @@ class _LogisticsDashboardState extends State<LogisticsDashboard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-
-
-                  },
+                  onPressed: _saveData,
                   child: Text(localization.translate('save')),
                 ),
                 SizedBox(width: 20),
