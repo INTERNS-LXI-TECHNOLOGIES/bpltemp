@@ -68,32 +68,26 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
 
   String? _validateField(String value, String fieldName) {
     if (value.isEmpty) {
-      final errorMessage = AppLocalizations.of(context).getValidationMessage('required', fieldName);
       setState(() {
-        validationErrors[fieldName] = errorMessage;
+        validationErrors[fieldName] = 'This field is required';
       });
-      return errorMessage;
+      return 'This field is required';
     }
 
-    switch (fieldName) {
-      case 'boxLimit':
-        if (int.tryParse(value) == null) {
-          final errorMessage = AppLocalizations.of(context).getValidationMessage('number', fieldName);
-          setState(() {
-            validationErrors[fieldName] = errorMessage;
-          });
-          return errorMessage;
-        }
-        break;
-      case 'referenceNumber':
-        if (value.length < 3) {
-          final errorMessage = AppLocalizations.of(context).getValidationMessage('minLength', fieldName);
-          setState(() {
-            validationErrors[fieldName] = errorMessage;
-          });
-          return errorMessage;
-        }
-        break;
+    if(fieldName == 'id'){
+      if(value.isEmpty) return 'ID is required';
+      if(value.length<3) return 'Must be at least 3 characters';
+      if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$').hasMatch(value)){
+        return'ID must contain at least one number and one capital letter, and only alphanumeric characters';
+      }
+    }
+
+    if(fieldName == 'referenceNumber'){
+      if (value.isEmpty) return 'Reference number is required';
+      if (value.length < 5) return 'Must be at least 5 characters';
+      if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{5,}$').hasMatch(value)) {
+        return 'Must be 5+ chars with at least one capital letter and one number';
+      }
     }
 
     setState(() {
@@ -564,7 +558,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
           value: selectedCurrency,
           validator: (value) {
             if (value == null) {
-              return AppLocalizations.of(context).getValidationMessage('required', 'currency');
+              return 'Currency is required';
             }
             return null;
           },
@@ -615,7 +609,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
           value: selectedStatus,
           validator: (value) {
             if (value == null) {
-              return AppLocalizations.of(context).getValidationMessage('required', 'status');
+              return 'Status is required';
             }
             return null;
           },
