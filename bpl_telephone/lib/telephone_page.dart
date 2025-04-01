@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TelephonePage extends StatefulWidget {
+
+  const TelephonePage({super.key});
   @override
   _TelephonePageState createState() => _TelephonePageState();
 }

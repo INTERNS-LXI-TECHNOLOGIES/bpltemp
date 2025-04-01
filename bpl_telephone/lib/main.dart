@@ -1,3 +1,4 @@
+import 'package:bpl_telephone/login.dart';
 import 'package:flutter/material.dart';
 import 'telephone_page.dart';
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TelephonePage(),
+      home: LoginWidget(),
     );
   }
 }
