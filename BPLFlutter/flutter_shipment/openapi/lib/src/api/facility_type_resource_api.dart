@@ -13,7 +13,6 @@ import 'package:openapi/src/api_util.dart';
 import 'package:openapi/src/model/facility_type_dto.dart';
 
 class FacilityTypeResourceApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -21,10 +20,10 @@ class FacilityTypeResourceApi {
   const FacilityTypeResourceApi(this._dio, this._serializers);
 
   /// createFacilityType
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [facilityTypeDTO] 
+  /// * [facilityTypeDTO]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -34,7 +33,7 @@ class FacilityTypeResourceApi {
   ///
   /// Returns a [Future] containing a [Response] with a [FacilityTypeDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<FacilityTypeDTO>> createFacilityType({ 
+  Future<Response<FacilityTypeDTO>> createFacilityType({
     required FacilityTypeDTO facilityTypeDTO,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -62,10 +61,9 @@ class FacilityTypeResourceApi {
     try {
       const _type = FullType(FacilityTypeDTO);
       _bodyData = _serializers.serialize(facilityTypeDTO, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -88,11 +86,12 @@ class FacilityTypeResourceApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(FacilityTypeDTO),
-      ) as FacilityTypeDTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(FacilityTypeDTO),
+            ) as FacilityTypeDTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -116,10 +115,10 @@ class FacilityTypeResourceApi {
   }
 
   /// deleteFacilityType
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [id] 
+  /// * [id]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -129,7 +128,7 @@ class FacilityTypeResourceApi {
   ///
   /// Returns a [Future]
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> deleteFacilityType({ 
+  Future<Response<void>> deleteFacilityType({
     required int id,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -138,7 +137,8 @@ class FacilityTypeResourceApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}', encodeQueryParameter(_serializers, id, const FullType(int)).toString());
+    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}',
+        encodeQueryParameter(_serializers, id, const FullType(int)).toString());
     final _options = Options(
       method: r'DELETE',
       headers: <String, dynamic>{
@@ -163,7 +163,7 @@ class FacilityTypeResourceApi {
   }
 
   /// getAllFacilityTypes
-  /// 
+  ///
   ///
   /// Parameters:
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
@@ -175,7 +175,7 @@ class FacilityTypeResourceApi {
   ///
   /// Returns a [Future] containing a [Response] with a [BuiltList<FacilityTypeDTO>] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<BuiltList<FacilityTypeDTO>>> getAllFacilityTypes({ 
+  Future<Response<BuiltList<FacilityTypeDTO>>> getAllFacilityTypes({
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -208,11 +208,13 @@ class FacilityTypeResourceApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(BuiltList, [FullType(FacilityTypeDTO)]),
-      ) as BuiltList<FacilityTypeDTO>;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType:
+                  const FullType(BuiltList, [FullType(FacilityTypeDTO)]),
+            ) as BuiltList<FacilityTypeDTO>;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -236,10 +238,10 @@ class FacilityTypeResourceApi {
   }
 
   /// getFacilityType
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [id] 
+  /// * [id]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -249,7 +251,7 @@ class FacilityTypeResourceApi {
   ///
   /// Returns a [Future] containing a [Response] with a [FacilityTypeDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<FacilityTypeDTO>> getFacilityType({ 
+  Future<Response<FacilityTypeDTO>> getFacilityType({
     required int id,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -258,7 +260,8 @@ class FacilityTypeResourceApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}', encodeQueryParameter(_serializers, id, const FullType(int)).toString());
+    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}',
+        encodeQueryParameter(_serializers, id, const FullType(int)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -283,11 +286,12 @@ class FacilityTypeResourceApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(FacilityTypeDTO),
-      ) as FacilityTypeDTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(FacilityTypeDTO),
+            ) as FacilityTypeDTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -311,11 +315,11 @@ class FacilityTypeResourceApi {
   }
 
   /// partialUpdateFacilityType
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [id] 
-  /// * [facilityTypeDTO] 
+  /// * [id]
+  /// * [facilityTypeDTO]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -325,7 +329,7 @@ class FacilityTypeResourceApi {
   ///
   /// Returns a [Future] containing a [Response] with a [FacilityTypeDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<FacilityTypeDTO>> partialUpdateFacilityType({ 
+  Future<Response<FacilityTypeDTO>> partialUpdateFacilityType({
     required int id,
     required FacilityTypeDTO facilityTypeDTO,
     CancelToken? cancelToken,
@@ -335,7 +339,8 @@ class FacilityTypeResourceApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}', encodeQueryParameter(_serializers, id, const FullType(int)).toString());
+    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}',
+        encodeQueryParameter(_serializers, id, const FullType(int)).toString());
     final _options = Options(
       method: r'PATCH',
       headers: <String, dynamic>{
@@ -354,10 +359,9 @@ class FacilityTypeResourceApi {
     try {
       const _type = FullType(FacilityTypeDTO);
       _bodyData = _serializers.serialize(facilityTypeDTO, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -380,11 +384,12 @@ class FacilityTypeResourceApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(FacilityTypeDTO),
-      ) as FacilityTypeDTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(FacilityTypeDTO),
+            ) as FacilityTypeDTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -408,11 +413,11 @@ class FacilityTypeResourceApi {
   }
 
   /// updateFacilityType
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [id] 
-  /// * [facilityTypeDTO] 
+  /// * [id]
+  /// * [facilityTypeDTO]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -422,7 +427,7 @@ class FacilityTypeResourceApi {
   ///
   /// Returns a [Future] containing a [Response] with a [FacilityTypeDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<FacilityTypeDTO>> updateFacilityType({ 
+  Future<Response<FacilityTypeDTO>> updateFacilityType({
     required int id,
     required FacilityTypeDTO facilityTypeDTO,
     CancelToken? cancelToken,
@@ -432,7 +437,8 @@ class FacilityTypeResourceApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}', encodeQueryParameter(_serializers, id, const FullType(int)).toString());
+    final _path = r'/api/facility-types/{id}'.replaceAll('{' r'id' '}',
+        encodeQueryParameter(_serializers, id, const FullType(int)).toString());
     final _options = Options(
       method: r'PUT',
       headers: <String, dynamic>{
@@ -451,10 +457,9 @@ class FacilityTypeResourceApi {
     try {
       const _type = FullType(FacilityTypeDTO);
       _bodyData = _serializers.serialize(facilityTypeDTO, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -477,11 +482,12 @@ class FacilityTypeResourceApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(FacilityTypeDTO),
-      ) as FacilityTypeDTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(FacilityTypeDTO),
+            ) as FacilityTypeDTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -503,5 +509,4 @@ class FacilityTypeResourceApi {
       extra: _response.extra,
     );
   }
-
 }
