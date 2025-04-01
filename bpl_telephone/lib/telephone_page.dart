@@ -10,10 +10,27 @@ class _TelephonePageState extends State<TelephonePage> {
   final TextEditingController areaCodeController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController connectPersonController = TextEditingController();
 
   String selectedCountryCode = '+1';
   List<String> countryCodes = ['+1', '+91', '+44', '+81', '+61'];
+
+  String? selectedPerson;
+  List<String> contactPersons = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchContactPersons();
+  }
+
+  Future<void> fetchContactPersons() async {
+    // Simulating a backend API call
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      contactPersons = ['John Doe', 'Jane Smith', 'Michael Brown', 'Emily Davis'];
+      selectedPerson = contactPersons.isNotEmpty ? contactPersons[0] : null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,25 +75,42 @@ class _TelephonePageState extends State<TelephonePage> {
               SizedBox(height: 10),
               buildInputField(nameController, 'Name', Icons.person),
               SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: buildInputField(connectPersonController, 'Connect a Person', Icons.group),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.search, size: 28, color: Colors.blueAccent),
-                    onPressed: () {
-                      // Implement search functionality here
+              
+              // Dropdown for Contact Person
+              FutureBuilder(
+                future: Future.value(contactPersons),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  }
+                  return DropdownButtonFormField<String>(
+                    value: selectedPerson,
+                    decoration: InputDecoration(
+                      labelText: 'Connect a Person',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedPerson = newValue;
+                      });
                     },
-                  ),
-                ],
+                    items: contactPersons.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  );
+                },
               ),
+
               SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
                     // Handle form submission here
+                    print("Selected Person: $selectedPerson");
                   },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 14),
