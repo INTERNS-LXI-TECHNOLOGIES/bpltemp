@@ -39,6 +39,22 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   Locale _currentLocale = const Locale('en');
   Map<String, String> validationErrors = {};
 
+  final openapiInstance = Openapi();
+
+  String? _selectedUomForId;
+  List<String> _similarIds = [];
+  bool _isLoadingIds = false;
+  final Map<String, List<String>> _detailsTakenBasedonCurrencyUom = {
+    'SAUDI_RIYAL': [],
+    'USD': [],
+    'EUR': [],
+    'GBP': [],
+    'INR': [],
+    'AED': [],
+    'JPY': [],
+    'CNY': [],
+  };
+
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -74,19 +90,19 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
       return 'This field is required';
     }
 
-    if(fieldName == 'id'){
-      if(value.isEmpty) return 'ID is required';
-      if(value.length<3) return 'Must be at least 3 characters';
-      if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$').hasMatch(value)){
-        return'ID must contain at least one number and one capital letter, and only alphanumeric characters';
+    if (fieldName == 'id') {
+      if (value.isEmpty) return AppLocalizations.of(context).idRequired;
+      if (value.length < 3) return AppLocalizations.of(context).idMinLength;
+      if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$').hasMatch(value)) {
+        return AppLocalizations.of(context).idFormat;
       }
     }
 
-    if(fieldName == 'referenceNumber'){
-      if (value.isEmpty) return 'Reference number is required';
-      if (value.length < 5) return 'Must be at least 5 characters';
+    if (fieldName == 'referenceNumber') {
+      if (value.isEmpty) return AppLocalizations.of(context).refNumberRequired;
+      if (value.length < 5) return AppLocalizations.of(context).refNumberMinLength;
       if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{5,}$').hasMatch(value)) {
-        return 'Must be 5+ chars with at least one capital letter and one number';
+        return AppLocalizations.of(context).refNumberFormat;
       }
     }
 
@@ -95,6 +111,68 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     });
     return null;
   }
+
+Future<void> _findTheSimilarIdToUom() async {
+  if (_selectedUomForId == null) return;
+
+  setState(() {
+    _isLoadingIds = true;
+    _similarIds = [];
+  });
+
+  try {
+    final jwtToken = openapiInstance.jwt;
+    if (jwtToken.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).authTokenMissing),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check if we already have data for this currency
+    if (_detailsTakenBasedonCurrencyUom[_selectedUomForId]!.isNotEmpty) {
+      setState(() {
+        _similarIds = _detailsTakenBasedonCurrencyUom[_selectedUomForId]!;
+      });
+      return;
+    }
+
+    // Fetch all way bills and filter by currency
+    final response = await openapiInstance.getWayBillResourceApi().getAllWayBills(
+      headers: {'Authorization': 'Bearer $jwtToken'}
+    );
+
+    // Process the response and filter by currency
+    final wayBills = response.data;
+    final filteredWayBills = wayBills?.where((wayBill) => 
+      wayBill.currencyUom == _selectedUomForId
+    ).toList() ?? [];
+
+    // Extract IDs from filtered way bills
+    final ids = filteredWayBills.map((wayBill) => wayBill.id.toString()).toList();
+
+    // Update our stored data
+    setState(() {
+      _detailsTakenBasedonCurrencyUom[_selectedUomForId!] = ids;
+      _similarIds = ids;
+    });
+
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Failed to fetch IDs: ${e.toString()}'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  } finally {
+    setState(() {
+      _isLoadingIds = false;
+    });
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -371,6 +449,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                       validationErrors.clear();
                       selectedCurrency = 'SAUDI_RIYAL';
                       selectedStatus = 'Status Positive';
+                      _selectedUomForId = null;
+                      _similarIds = [];
                     });
                   },
                   style: OutlinedButton.styleFrom(
@@ -387,8 +467,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: () async {
-                    final jwtToken = Openapi.jwt;
-                    if (jwtToken == null || jwtToken.isEmpty) {
+                    final jwtToken = openapiInstance.jwt; 
+                    if (jwtToken.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(AppLocalizations.of(context).authTokenMissing),
@@ -441,7 +521,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                          ..referenceNumber = _controllers[7].text
                          ..currencyType = currencyType;
 
-                      final response = await Openapi().getWayBillResourceApi().createWayBill(wayBill: wayBillBuilder.build(),
+                      final response = await openapiInstance.getWayBillResourceApi().createWayBill(wayBill: wayBillBuilder.build(),
                             headers: {'Authorization': 'Bearer $jwtToken'}
                           );
 
@@ -450,6 +530,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                         validationErrors.clear();
                         selectedCurrency = 'SAUDI_RIYAL';
                         selectedStatus = 'Status Positive';
+                        _selectedUomForId = null;
+                        _similarIds = [];
                         for (var controller in _controllers) {
                           controller.clear();
                         }
@@ -504,6 +586,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     String? hintText,
     IconData? suffixIcon,
   }) {
+    final isIdField = fieldName == 'id';
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -515,16 +599,46 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
           ),
         ),
         const SizedBox(height: 8),
+        if (isIdField)
+          _buildIdFieldWithDropdown(controller, fieldName)
+        else
+          TextFormField(
+            controller: controller,
+            keyboardType: keyboardType,
+            validator: (value) => _validateField(value ?? '', fieldName),
+            decoration: InputDecoration(
+              hintText: hintText,
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              errorText: validationErrors[fieldName],
+              errorStyle: const TextStyle(color: Colors.red),
+              suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildIdFieldWithDropdown(TextEditingController controller, String fieldName) {
+    return Stack(
+      children: [
         TextFormField(
           controller: controller,
-          keyboardType: keyboardType,
           validator: (value) => _validateField(value ?? '', fieldName),
           decoration: InputDecoration(
-            hintText: hintText,
             filled: true,
             fillColor: Colors.white,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -535,9 +649,45 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
             ),
             errorText: validationErrors[fieldName],
             errorStyle: const TextStyle(color: Colors.red),
-            suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
           ),
+          onTap: () {
+            if (_selectedUomForId != null) {
+              _findTheSimilarIdToUom();
+            }
+          },
         ),
+        if (_similarIds.isNotEmpty)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: DropdownButtonFormField<String>(
+                value: controller.text.isNotEmpty ? controller.text : null,
+                items: _similarIds.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                },
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+        if (_isLoadingIds)
+          const Positioned(
+            right: 8,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -586,6 +736,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
           onChanged: (String? newValue) {
             setState(() {
               selectedCurrency = newValue;
+              _selectedUomForId = newValue;
+              _similarIds = []; 
             });
           },
         ),

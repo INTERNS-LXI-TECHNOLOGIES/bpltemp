@@ -43,6 +43,12 @@ class AppLocalizations {
       'formSubmissionSuccess': 'Form submitted successfully!',
       'authTokenMissing': 'Authentication token is missing. Please log in again.',
       'submissionFailed': 'Submission failed',
+      'validation.idRequired': 'ID is required',
+      'validation.idMinLength': 'ID must be at least 3 characters',
+      'validation.idFormat': 'ID must contain at least one capital letter and one number',
+      'validation.refNumberRequired': 'Reference number is required',
+      'validation.refNumberMinLength': 'Reference number must be at least 5 characters',
+      'validation.refNumberFormat': 'Reference number must contain at least one capital letter and one number',
     },
     'ar': {
       'wayBill': 'فاتورة الطريق',
@@ -74,6 +80,12 @@ class AppLocalizations {
       'formSubmissionSuccess': 'تم إرسال النموذج بنجاح!',
       'authTokenMissing': 'رمز المصادقة مفقود. يرجى تسجيل الدخول مرة أخرى.',
       'submissionFailed': 'فشل الإرسال',
+      'validation.idRequired': 'معرف مطلوب',
+      'validation.idMinLength': 'يجب أن يتكون المعرف من 3 أحرف على الأقل',
+      'validation.idFormat': 'يجب أن يحتوي المعرف على حرف كبير واحد على الأقل ورقم واحد',
+      'validation.refNumberRequired': 'الرقم المرجعي مطلوب',
+      'validation.refNumberMinLength': 'يجب أن يتكون الرقم المرجعي من 5 أحرف على الأقل',
+      'validation.refNumberFormat': 'يجب أن يحتوي الرقم المرجعي على حرف كبير واحد على الأقل ورقم واحد',
     },
     'de': {
       'wayBill': 'Frachtbrief',
@@ -105,6 +117,13 @@ class AppLocalizations {
       'formSubmissionSuccess': 'Formular erfolgreich übermittelt!',
       'authTokenMissing': 'Authentifizierungstoken fehlt. Bitte melden Sie sich erneut an.',
       'submissionFailed': 'Übermittlung fehlgeschlagen',
+      'validation.idRequired': 'ID ist erforderlich',
+      'validation.idMinLength': 'Die ID muss mindestens 3 Zeichen lang sein',
+      'validation.idFormat': 'Die ID muss mindestens einen Großbuchstaben und eine Zahl enthalten',
+      'validation.refNumberRequired': 'Referenznummer ist erforderlich',
+      'validation.refNumberMinLength': 'Die Referenznummer muss mindestens 5 Zeichen lang sein',
+      'validation.refNumberFormat': 'Die Referenznummer muss mindestens einen Großbuchstaben und eine Zahl enthalten',
+      
     },
     'ml': {
       'wayBill': 'വേ ബിൽ',
@@ -136,6 +155,12 @@ class AppLocalizations {
       'formSubmissionSuccess': 'ഫോം വിജയകരമായി സമർപ്പിച്ചു!',
       'authTokenMissing': 'ഓതെന്റിക്കേഷൻ ടോക്കൺ കാണുന്നില്ല. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക.',
       'submissionFailed': 'സമർപ്പണം പരാജയപ്പെട്ടു',
+      'validation.idRequired': 'ഐഡി ആവശ്യമാണ്',
+      'validation.idMinLength': 'ഐഡി കുറഞ്ഞത് 3 അക്ഷരങ്ങൾ ആയിരിക്കണം',
+      'validation.idFormat': 'ഐഡിയിൽ കുറഞ്ഞത് ഒരു വലിയക്ഷരവും ഒരു നമ്പറും അടങ്ങിയിരിക്കണം',
+      'validation.refNumberRequired': 'റഫറൻസ് നമ്പർ ആവശ്യമാണ്',
+      'validation.refNumberMinLength': 'റഫറൻസ് നമ്പർ കുറഞ്ഞത് 5 അക്ഷരങ്ങൾ ആയിരിക്കണം',
+      'validation.refNumberFormat': 'റഫറൻസ് നമ്പറിൽ കുറഞ്ഞത് ഒരു വലിയക്ഷരവും ഒരു നമ്പറും അടങ്ങിയിരിക്കണം',
     },
   };
 
@@ -164,6 +189,12 @@ class AppLocalizations {
   String get formSubmissionSuccess => _localizedValues[locale.languageCode]!['formSubmissionSuccess']!;
   String get authTokenMissing => _localizedValues[locale.languageCode]!['authTokenMissing']!;
   String get submissionFailed => _localizedValues[locale.languageCode]!['submissionFailed']!;
+  String get idRequired => _localizedValues[locale.languageCode]!['validation.idRequired']!;
+  String get idMinLength => _localizedValues[locale.languageCode]!['validation.idMinLength']!;
+  String get idFormat => _localizedValues[locale.languageCode]!['validation.idFormat']!;
+  String get refNumberRequired => _localizedValues[locale.languageCode]!['validation.refNumberRequired']!;
+  String get refNumberMinLength => _localizedValues[locale.languageCode]!['validation.refNumberMinLength']!;
+  String get refNumberFormat => _localizedValues[locale.languageCode]!['validation.refNumberFormat']!;
 
   String getValidationMessage(String errorType, String fieldName) {
     final fieldLabel = _getFieldLabel(fieldName);

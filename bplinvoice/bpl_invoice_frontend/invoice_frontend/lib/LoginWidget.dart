@@ -27,18 +27,20 @@ Future<void> _login() async{
     ..password = _passwordController.text;
     LoginVM loginVM = loginVMBuilder.build();
 
-    final response =await Openapi()
+    final openapiInstance = Openapi();
+    final response =await openapiInstance
     .getAuthenticateControllerApi().authorize(loginVM: loginVM);
 
     if(response.statusCode == 200){
-      Openapi.jwt = response.data?.idToken;
+      openapiInstance.jwt = response.data?.idToken ?? "";
 
-      final accountResponse = await Openapi().getAccountResourceApi().getAccount(headers: {'Authorization': 'Bearer ${Openapi.jwt}'});
+      final accountResponse = await openapiInstance.getAccountResourceApi().getAccount(
+        headers: {'Authorization': 'Bearer ${openapiInstance.jwt}'},);
       if(accountResponse.statusCode == 200){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const InvoiceWidget()) 
     );
     print('Login successful');
-    print('Bearer Toke: ${Openapi.jwt}');
+    print('Bearer Toke: ${openapiInstance.jwt}');
         } else {
           _showErrorDialog('Failed to fetch account details.');
         }

@@ -11,9 +11,9 @@ entity WayBill {
 }
 
 entity CurrencyType {
-    name String
+    name String 
 }
 
-relationship OneToOne {
-    WayBill to CurrencyType
+relationship OneToMany {
+    CurrencyType to WayBill { wayBills }
 }
