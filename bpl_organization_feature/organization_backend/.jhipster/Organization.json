@@ -1,0 +1,25 @@
+{
+  "annotations": {
+    "changelogDate": "20250402094218"
+  },
+  "fields": [
+    {
+      "fieldName": "externalId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Organization",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "no"
+}
