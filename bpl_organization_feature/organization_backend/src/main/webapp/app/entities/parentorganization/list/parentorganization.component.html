@@ -1,0 +1,100 @@
+<div>
+  <h2 id="page-heading" data-cy="ParentorganizationHeading">
+    <span jhiTranslate="organizationBackendApp.parentorganization.home.title">Parentorganizations</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="organizationBackendApp.parentorganization.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-parentorganization"
+        [routerLink]="['/parentorganization/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="organizationBackendApp.parentorganization.home.createLabel">Create a new Parentorganization</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (parentorganizations().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="organizationBackendApp.parentorganization.home.notFound">No Parentorganizations found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span jhiTranslate="organizationBackendApp.parentorganization.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span jhiTranslate="organizationBackendApp.parentorganization.description">Description</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (parentorganization of parentorganizations(); track trackId(parentorganization)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/parentorganization', parentorganization.id, 'view']">{{ parentorganization.id }}</a>
+              </td>
+              <td>{{ parentorganization.name }}</td>
+              <td>{{ parentorganization.description }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/parentorganization', parentorganization.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/parentorganization', parentorganization.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(parentorganization)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

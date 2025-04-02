@@ -1,0 +1,25 @@
+{
+  "organizationBackendApp": {
+    "parentorganization": {
+      "home": {
+        "title": "Parentorganizations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Parentorganization",
+        "createOrEditLabel": "Create or edit a Parentorganization",
+        "notFound": "No Parentorganizations found"
+      },
+      "created": "A new Parentorganization is created with identifier {{ param }}",
+      "updated": "A Parentorganization is updated with identifier {{ param }}",
+      "deleted": "A Parentorganization is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Parentorganization {{ id }}?"
+      },
+      "detail": {
+        "title": "Parentorganization"
+      },
+      "id": "ID",
+      "name": "Name",
+      "description": "Description"
+    }
+  }
+}

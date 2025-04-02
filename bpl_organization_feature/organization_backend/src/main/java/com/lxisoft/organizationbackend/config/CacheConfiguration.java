@@ -51,6 +51,7 @@ public class CacheConfiguration {
             createCache(cm, com.lxisoft.organizationbackend.domain.Authority.class.getName());
             createCache(cm, com.lxisoft.organizationbackend.domain.User.class.getName() + ".authorities");
             createCache(cm, com.lxisoft.organizationbackend.domain.Organization.class.getName());
+            createCache(cm, com.lxisoft.organizationbackend.domain.Parentorganization.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

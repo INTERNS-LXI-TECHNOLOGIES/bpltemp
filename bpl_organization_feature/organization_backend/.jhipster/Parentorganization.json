@@ -1,13 +1,9 @@
 {
   "annotations": {
-    "changelogDate": "20250402094218"
+    "changelogDate": "20250402095101"
   },
   "applications": ["organizationBackend"],
   "fields": [
-    {
-      "fieldName": "externalId",
-      "fieldType": "String"
-    },
     {
       "fieldName": "name",
       "fieldType": "String"
@@ -17,7 +13,7 @@
       "fieldType": "String"
     }
   ],
-  "name": "Organization",
+  "name": "Parentorganization",
   "relationships": [],
   "searchEngine": "no"
 }

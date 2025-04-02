@@ -268,7 +268,7 @@ class OrganizationResourceIT {
         Organization partialUpdatedOrganization = new Organization();
         partialUpdatedOrganization.setId(organization.getId());
 
-        partialUpdatedOrganization.externalId(UPDATED_EXTERNAL_ID).name(UPDATED_NAME);
+        partialUpdatedOrganization.externalId(UPDATED_EXTERNAL_ID);
 
         restOrganizationMockMvc
             .perform(

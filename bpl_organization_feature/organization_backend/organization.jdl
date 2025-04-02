@@ -1,0 +1,43 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName organizationBackend
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework angular
+    clientTheme darkly
+    clientThemeVariant dark
+    creationTimestamp 1743586405815
+    databaseType sql
+    devDatabaseType mysql
+    enableHibernateCache true
+    enableTranslation true
+    jhipsterVersion "8.8.0"
+    jwtSecretKey "MjQxNWIyN2U2YjRmNTU1ZGRlMmNmNTM2NWQ3MjE0M2FmOTZmNmQ5YmU0ZjI0ZDA2NjYwMjA2YWIzMWIwODc2MDI0NDA3Yjg4NmI1YTMxMjVkYTAzYmM3ZDE5Mzg1NWJhYTA3MjgwZjVmZmM3NTY4ZTE2MGYzM2Y0ODVmYWE0Y2Y="
+    languages [en]
+    microfrontends []
+    nativeLanguage en
+    packageName com.lxisoft.organizationbackend
+    prodDatabaseType mysql
+    reactive false
+    testFrameworks []
+    withAdminUi true
+  }
+
+  entities Organization, Parentorganization
+}
+
+@ChangelogDate("20250402094218")
+entity Organization {
+  externalId String
+  name String
+  description String
+}
+@ChangelogDate("20250402095101")
+entity Parentorganization {
+  name String
+  description String
+}
+
+search Organization, Parentorganization with no
