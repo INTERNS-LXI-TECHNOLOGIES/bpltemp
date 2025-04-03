@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:openapi/openapi.dart';
-import 'localization/app_localizations.dart';
+import 'package:invoice_frontend/localization/app_localizations.dart';
 
 class InvoiceWidget extends StatefulWidget {
-  const InvoiceWidget({super.key});
+  final String token;
+  
+  const InvoiceWidget({super.key, required this.token});
 
   @override
   State<InvoiceWidget> createState() => _InvoiceWidgetState();
@@ -39,9 +40,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   Locale _currentLocale = const Locale('en');
   Map<String, String> validationErrors = {};
 
-  final openapiInstance = Openapi();
+  late Openapi openapiInstance;
 
-  String? _selectedUomForId;
   List<String> _similarIds = [];
   bool _isLoadingIds = false;
   final Map<String, List<String>> _detailsTakenBasedonCurrencyUom = {
@@ -54,6 +54,13 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     'JPY': [],
     'CNY': [],
   };
+
+  @override
+  void initState() {
+    super.initState();
+    openapiInstance = Openapi();
+    openapiInstance.jwt = widget.token;
+  }
 
   @override
   void dispose() {
@@ -84,9 +91,6 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
 
   String? _validateField(String value, String fieldName) {
     if (value.isEmpty) {
-      setState(() {
-        validationErrors[fieldName] = 'This field is required';
-      });
       return 'This field is required';
     }
 
@@ -106,61 +110,77 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
       }
     }
 
-    setState(() {
-      validationErrors.remove(fieldName);
-    });
     return null;
   }
 
 Future<void> _findTheSimilarIdToUom() async {
-  if (_selectedUomForId == null) return;
+  final currentCurrency = selectedCurrency;
+  
+  if (currentCurrency == null || currentCurrency.isEmpty) {
+    print('Error: No currency selected');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please select a currency first'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
 
+  print('Starting to find similar IDs for currency: $currentCurrency');
+  
   setState(() {
     _isLoadingIds = true;
     _similarIds = [];
   });
 
   try {
-    final jwtToken = openapiInstance.jwt;
-    if (jwtToken.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context).authTokenMissing),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    // Check if we already have data for this currency
-    if (_detailsTakenBasedonCurrencyUom[_selectedUomForId]!.isNotEmpty) {
+    // Check if we already have cached results for this currency
+    if (_detailsTakenBasedonCurrencyUom[currentCurrency]?.isNotEmpty ?? false) {
+      print('Found cached results for $currentCurrency');
       setState(() {
-        _similarIds = _detailsTakenBasedonCurrencyUom[_selectedUomForId]!;
+        _similarIds = _detailsTakenBasedonCurrencyUom[currentCurrency]!;
       });
+      print('IDs found for $currentCurrency: $_similarIds');
       return;
     }
 
-    // Fetch all way bills and filter by currency
+    print('Fetching way bills from database...');
     final response = await openapiInstance.getWayBillResourceApi().getAllWayBills(
-      headers: {'Authorization': 'Bearer $jwtToken'}
-    );
-
-    // Process the response and filter by currency
-    final wayBills = response.data;
-    final filteredWayBills = wayBills?.where((wayBill) => 
-      wayBill.currencyUom == _selectedUomForId
-    ).toList() ?? [];
-
-    // Extract IDs from filtered way bills
-    final ids = filteredWayBills.map((wayBill) => wayBill.id.toString()).toList();
-
-    // Update our stored data
-    setState(() {
-      _detailsTakenBasedonCurrencyUom[_selectedUomForId!] = ids;
-      _similarIds = ids;
+      headers: {'Authorization': 'Bearer ${widget.token}'}
+    ).catchError((error) {
+      print('Error fetching way bills: $error');
+      throw error;
     });
 
+    print('Database fetch completed successfully');
+    final wayBills = response.data;
+    final filteredWayBills = wayBills?.where((wayBill) => 
+      wayBill.currencyUom == currentCurrency
+    ).toList() ?? [];
+
+    print('Filtered ${filteredWayBills.length} way bills for currency $currentCurrency');
+    
+    if (filteredWayBills.isEmpty) {
+      print('No way bills found for currency: $currentCurrency');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Currency UOM: $currentCurrency has no related ID on database'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+    } else {
+      final ids = filteredWayBills.map((wayBill) => wayBill.id.toString()).toList();
+      print('Found IDs for $currentCurrency: $ids');
+      
+      setState(() {
+        _detailsTakenBasedonCurrencyUom[currentCurrency] = ids;
+        _similarIds = ids;
+      });
+    }
+
   } catch (e) {
+    print('Error in _findTheSimilarIdToUom: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Failed to fetch IDs: ${e.toString()}'),
@@ -168,6 +188,7 @@ Future<void> _findTheSimilarIdToUom() async {
       ),
     );
   } finally {
+    print('Process completed for currency: $currentCurrency');
     setState(() {
       _isLoadingIds = false;
     });
@@ -179,92 +200,73 @@ Future<void> _findTheSimilarIdToUom() async {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return MaterialApp(
-      locale: _currentLocale,
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ar'),
-        Locale('de'),
-        Locale('ml'),
-      ],
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: Builder(
-        builder: (context) {
-          return Directionality(
-            textDirection: _currentLocale.languageCode == 'ar' 
-                ? TextDirection.rtl 
-                : TextDirection.ltr,
-            child: GestureDetector(
-              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-              child: Scaffold(
-                appBar: AppBar(
-                  backgroundColor: colorScheme.primary,
-                  title: Text(
-                    AppLocalizations.of(context).wayBill,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Directionality(
+      textDirection: _currentLocale.languageCode == 'ar' 
+          ? TextDirection.rtl 
+          : TextDirection.ltr,
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: colorScheme.primary,
+            title: Text(
+              AppLocalizations.of(context).wayBill,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            elevation: 2,
+            actions: [
+              DropdownButton<Locale>(
+                underline: const SizedBox(),
+                icon: const Icon(Icons.language, color: Colors.white),
+                value: _currentLocale,
+                items: const [
+                  DropdownMenuItem(
+                    value: Locale('en'),
+                    child: Text('EN'),
                   ),
-                  elevation: 2,
-                  actions: [
-                    DropdownButton<Locale>(
-                      underline: const SizedBox(),
-                      icon: const Icon(Icons.language, color: Colors.white),
-                      value: _currentLocale,
-                      items: const [
-                        DropdownMenuItem(
-                          value: Locale('en'),
-                          child: Text('EN'),
-                        ),
-                        DropdownMenuItem(
-                          value: Locale('ar'),
-                          child: Text('AR'),
-                        ),
-                        DropdownMenuItem(
-                          value: Locale('de'),
-                          child: Text('DE'),
-                        ),
-                        DropdownMenuItem(
-                          value: Locale('ml'),
-                          child: Text('ML'),
-                        ),
-                      ],
-                      onChanged: (Locale? value) {
-                        if (value != null) {
-                          _changeLanguage(value);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                body: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SingleChildScrollView(
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            _buildTopActionBar(context, theme),
-                            const SizedBox(height: 16),
-                            _buildFormSection(context, theme, colorScheme),
-                          ],
-                        ),
-                      ),
-                    ),
+                  DropdownMenuItem(
+                    value: Locale('ar'),
+                    child: Text('AR'),
+                  ),
+                  DropdownMenuItem(
+                    value: Locale('de'),
+                    child: Text('DE'),
+                  ),
+                  DropdownMenuItem(
+                    value: Locale('ml'),
+                    child: Text('ML'),
+                  ),
+                ],
+                onChanged: (Locale? value) {
+                  if (value != null) {
+                    _changeLanguage(value);
+                  }
+                },
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      _buildTopActionBar(context, theme),
+                      const SizedBox(height: 16),
+                      _buildFormSection(context, theme, colorScheme),
+                    ],
                   ),
                 ),
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
@@ -370,11 +372,7 @@ Future<void> _findTheSimilarIdToUom() async {
                 Expanded(
                   child: Column(
                     children: [
-                      _buildFormField(
-                        AppLocalizations.of(context).id, 
-                        controller: _controllers[0],
-                        fieldName: 'id',
-                      ),
+                      _buildIdFieldWithDropdown(_controllers[0], 'id'),
                       const SizedBox(height: 16),
                       _buildFormField(
                         AppLocalizations.of(context).boxLimit,
@@ -449,8 +447,10 @@ Future<void> _findTheSimilarIdToUom() async {
                       validationErrors.clear();
                       selectedCurrency = 'SAUDI_RIYAL';
                       selectedStatus = 'Status Positive';
-                      _selectedUomForId = null;
                       _similarIds = [];
+                      for (var controller in _controllers) {
+                        controller.clear();
+                      }
                     });
                   },
                   style: OutlinedButton.styleFrom(
@@ -530,7 +530,6 @@ Future<void> _findTheSimilarIdToUom() async {
                         validationErrors.clear();
                         selectedCurrency = 'SAUDI_RIYAL';
                         selectedStatus = 'Status Positive';
-                        _selectedUomForId = null;
                         _similarIds = [];
                         for (var controller in _controllers) {
                           controller.clear();
@@ -586,8 +585,6 @@ Future<void> _findTheSimilarIdToUom() async {
     String? hintText,
     IconData? suffixIcon,
   }) {
-    final isIdField = fieldName == 'id';
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -599,46 +596,16 @@ Future<void> _findTheSimilarIdToUom() async {
           ),
         ),
         const SizedBox(height: 8),
-        if (isIdField)
-          _buildIdFieldWithDropdown(controller, fieldName)
-        else
-          TextFormField(
-            controller: controller,
-            keyboardType: keyboardType,
-            validator: (value) => _validateField(value ?? '', fieldName),
-            decoration: InputDecoration(
-              hintText: hintText,
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              errorText: validationErrors[fieldName],
-              errorStyle: const TextStyle(color: Colors.red),
-              suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildIdFieldWithDropdown(TextEditingController controller, String fieldName) {
-    return Stack(
-      children: [
         TextFormField(
           controller: controller,
+          keyboardType: keyboardType,
           validator: (value) => _validateField(value ?? '', fieldName),
           decoration: InputDecoration(
+            hintText: hintText,
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -649,45 +616,85 @@ Future<void> _findTheSimilarIdToUom() async {
             ),
             errorText: validationErrors[fieldName],
             errorStyle: const TextStyle(color: Colors.red),
+            suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
           ),
-          onTap: () {
-            if (_selectedUomForId != null) {
-              _findTheSimilarIdToUom();
-            }
-          },
         ),
-        if (_similarIds.isNotEmpty)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: DropdownButtonFormField<String>(
-                value: controller.text.isNotEmpty ? controller.text : null,
-                items: _similarIds.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                },
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
+      ],
+    );
+  }
+
+  Widget _buildIdFieldWithDropdown(TextEditingController controller, String fieldName) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context).id,
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Stack(
+          children: [
+            TextFormField(
+              controller: controller,
+              validator: (value) => _validateField(value ?? '', fieldName),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
+                ),
+                errorText: validationErrors[fieldName],
+                errorStyle: const TextStyle(color: Colors.red),
+                suffixIcon: _isLoadingIds
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : null,
+              ),
+              onTap: _findTheSimilarIdToUom,
+            ),
+            if (_similarIds.isNotEmpty)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: controller.text.isNotEmpty ? controller.text : null,
+                      items: _similarIds.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(value),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          controller.text = newValue;
+                        }
+                      },
+                      hint: const SizedBox(),
+                      icon: const SizedBox(),
+                      dropdownColor: Colors.white,
+                      elevation: 2,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        if (_isLoadingIds)
-          const Positioned(
-            right: 8,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
-          ),
+          ],
+        ),
       ],
     );
   }
@@ -736,8 +743,7 @@ Future<void> _findTheSimilarIdToUom() async {
           onChanged: (String? newValue) {
             setState(() {
               selectedCurrency = newValue;
-              _selectedUomForId = newValue;
-              _similarIds = []; 
+              _similarIds = [];
             });
           },
         ),

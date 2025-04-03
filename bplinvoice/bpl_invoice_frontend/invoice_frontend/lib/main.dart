@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:invoice_frontend/LoginWidget.dart';
 import 'package:invoice_frontend/localization/app_localizations.dart';
 
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,25 +36,23 @@ class MyApp extends StatelessWidget {
         ),
       ),
       localizationsDelegates: const [
-        AppLocalizations.delegate, // Your custom delegate
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en'), // English
-        Locale('ar'), // Arabic
-        Locale('de'), // German
-        Locale('ml'), // Malayalam
+        Locale('en'),
+        Locale('ar'),
+        Locale('de'),
+        Locale('ml'),
       ],
       localeResolutionCallback: (locale, supportedLocales) {
-        // Check if the current device locale is supported
         for (var supportedLocale in supportedLocales) {
           if (supportedLocale.languageCode == locale?.languageCode) {
             return supportedLocale;
           }
         }
-        // If not, return the first supported locale (English)
         return supportedLocales.first;
       },
       home: const LoginWidget(),
