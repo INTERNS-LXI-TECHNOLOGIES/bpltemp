@@ -1,4 +1,4 @@
-# openapi.api.ParentOrganizationResourceApi
+# openapi.api.ParentorganizationResourceApi
 
 ## Load the API package
 ```dart
@@ -9,16 +9,16 @@ All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**createParentOrganization**](ParentOrganizationResourceApi.md#createparentorganization) | **POST** /api/parent-organizations | 
-[**deleteParentOrganization**](ParentOrganizationResourceApi.md#deleteparentorganization) | **DELETE** /api/parent-organizations/{id} | 
-[**getAllParentOrganizations**](ParentOrganizationResourceApi.md#getallparentorganizations) | **GET** /api/parent-organizations | 
-[**getParentOrganization**](ParentOrganizationResourceApi.md#getparentorganization) | **GET** /api/parent-organizations/{id} | 
-[**partialUpdateParentOrganization**](ParentOrganizationResourceApi.md#partialupdateparentorganization) | **PATCH** /api/parent-organizations/{id} | 
-[**updateParentOrganization**](ParentOrganizationResourceApi.md#updateparentorganization) | **PUT** /api/parent-organizations/{id} | 
+[**createParentorganization**](ParentorganizationResourceApi.md#createparentorganization) | **POST** /api/parentorganizations | 
+[**deleteParentorganization**](ParentorganizationResourceApi.md#deleteparentorganization) | **DELETE** /api/parentorganizations/{id} | 
+[**getAllParentorganizations**](ParentorganizationResourceApi.md#getallparentorganizations) | **GET** /api/parentorganizations | 
+[**getParentorganization**](ParentorganizationResourceApi.md#getparentorganization) | **GET** /api/parentorganizations/{id} | 
+[**partialUpdateParentorganization**](ParentorganizationResourceApi.md#partialupdateparentorganization) | **PATCH** /api/parentorganizations/{id} | 
+[**updateParentorganization**](ParentorganizationResourceApi.md#updateparentorganization) | **PUT** /api/parentorganizations/{id} | 
 
 
-# **createParentOrganization**
-> ParentOrganization createParentOrganization(parentOrganization)
+# **createParentorganization**
+> Parentorganization createParentorganization(parentorganization)
 
 
 
@@ -26,14 +26,14 @@ Method | HTTP request | Description
 ```dart
 import 'package:openapi/api.dart';
 
-final api = Openapi().getParentOrganizationResourceApi();
-final ParentOrganization parentOrganization = ; // ParentOrganization | 
+final api = Openapi().getParentorganizationResourceApi();
+final Parentorganization parentorganization = ; // Parentorganization | 
 
 try {
-    final response = api.createParentOrganization(parentOrganization);
+    final response = api.createParentorganization(parentorganization);
     print(response);
 } catch on DioException (e) {
-    print('Exception when calling ParentOrganizationResourceApi->createParentOrganization: $e\n');
+    print('Exception when calling ParentorganizationResourceApi->createParentorganization: $e\n');
 }
 ```
 
@@ -41,11 +41,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentOrganization** | [**ParentOrganization**](ParentOrganization.md)|  | 
+ **parentorganization** | [**Parentorganization**](Parentorganization.md)|  | 
 
 ### Return type
 
-[**ParentOrganization**](ParentOrganization.md)
+[**Parentorganization**](Parentorganization.md)
 
 ### Authorization
 
@@ -58,8 +58,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **deleteParentOrganization**
-> deleteParentOrganization(id)
+# **deleteParentorganization**
+> deleteParentorganization(id)
 
 
 
@@ -67,13 +67,13 @@ No authorization required
 ```dart
 import 'package:openapi/api.dart';
 
-final api = Openapi().getParentOrganizationResourceApi();
+final api = Openapi().getParentorganizationResourceApi();
 final int id = 789; // int | 
 
 try {
-    api.deleteParentOrganization(id);
+    api.deleteParentorganization(id);
 } catch on DioException (e) {
-    print('Exception when calling ParentOrganizationResourceApi->deleteParentOrganization: $e\n');
+    print('Exception when calling ParentorganizationResourceApi->deleteParentorganization: $e\n');
 }
 ```
 
@@ -98,8 +98,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getAllParentOrganizations**
-> BuiltList<ParentOrganization> getAllParentOrganizations(filter)
+# **getAllParentorganizations**
+> BuiltList<Parentorganization> getAllParentorganizations()
 
 
 
@@ -107,26 +107,22 @@ No authorization required
 ```dart
 import 'package:openapi/api.dart';
 
-final api = Openapi().getParentOrganizationResourceApi();
-final String filter = filter_example; // String | 
+final api = Openapi().getParentorganizationResourceApi();
 
 try {
-    final response = api.getAllParentOrganizations(filter);
+    final response = api.getAllParentorganizations();
     print(response);
 } catch on DioException (e) {
-    print('Exception when calling ParentOrganizationResourceApi->getAllParentOrganizations: $e\n');
+    print('Exception when calling ParentorganizationResourceApi->getAllParentorganizations: $e\n');
 }
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **filter** | **String**|  | [optional] 
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**BuiltList&lt;ParentOrganization&gt;**](ParentOrganization.md)
+[**BuiltList&lt;Parentorganization&gt;**](Parentorganization.md)
 
 ### Authorization
 
@@ -139,8 +135,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getParentOrganization**
-> ParentOrganization getParentOrganization(id)
+# **getParentorganization**
+> Parentorganization getParentorganization(id)
 
 
 
@@ -148,14 +144,14 @@ No authorization required
 ```dart
 import 'package:openapi/api.dart';
 
-final api = Openapi().getParentOrganizationResourceApi();
+final api = Openapi().getParentorganizationResourceApi();
 final int id = 789; // int | 
 
 try {
-    final response = api.getParentOrganization(id);
+    final response = api.getParentorganization(id);
     print(response);
 } catch on DioException (e) {
-    print('Exception when calling ParentOrganizationResourceApi->getParentOrganization: $e\n');
+    print('Exception when calling ParentorganizationResourceApi->getParentorganization: $e\n');
 }
 ```
 
@@ -167,7 +163,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ParentOrganization**](ParentOrganization.md)
+[**Parentorganization**](Parentorganization.md)
 
 ### Authorization
 
@@ -180,8 +176,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **partialUpdateParentOrganization**
-> ParentOrganization partialUpdateParentOrganization(id, parentOrganization)
+# **partialUpdateParentorganization**
+> Parentorganization partialUpdateParentorganization(id, parentorganization)
 
 
 
@@ -189,15 +185,15 @@ No authorization required
 ```dart
 import 'package:openapi/api.dart';
 
-final api = Openapi().getParentOrganizationResourceApi();
+final api = Openapi().getParentorganizationResourceApi();
 final int id = 789; // int | 
-final ParentOrganization parentOrganization = ; // ParentOrganization | 
+final Parentorganization parentorganization = ; // Parentorganization | 
 
 try {
-    final response = api.partialUpdateParentOrganization(id, parentOrganization);
+    final response = api.partialUpdateParentorganization(id, parentorganization);
     print(response);
 } catch on DioException (e) {
-    print('Exception when calling ParentOrganizationResourceApi->partialUpdateParentOrganization: $e\n');
+    print('Exception when calling ParentorganizationResourceApi->partialUpdateParentorganization: $e\n');
 }
 ```
 
@@ -206,11 +202,11 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **int**|  | 
- **parentOrganization** | [**ParentOrganization**](ParentOrganization.md)|  | 
+ **parentorganization** | [**Parentorganization**](Parentorganization.md)|  | 
 
 ### Return type
 
-[**ParentOrganization**](ParentOrganization.md)
+[**Parentorganization**](Parentorganization.md)
 
 ### Authorization
 
@@ -223,8 +219,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updateParentOrganization**
-> ParentOrganization updateParentOrganization(id, parentOrganization)
+# **updateParentorganization**
+> Parentorganization updateParentorganization(id, parentorganization)
 
 
 
@@ -232,15 +228,15 @@ No authorization required
 ```dart
 import 'package:openapi/api.dart';
 
-final api = Openapi().getParentOrganizationResourceApi();
+final api = Openapi().getParentorganizationResourceApi();
 final int id = 789; // int | 
-final ParentOrganization parentOrganization = ; // ParentOrganization | 
+final Parentorganization parentorganization = ; // Parentorganization | 
 
 try {
-    final response = api.updateParentOrganization(id, parentOrganization);
+    final response = api.updateParentorganization(id, parentorganization);
     print(response);
 } catch on DioException (e) {
-    print('Exception when calling ParentOrganizationResourceApi->updateParentOrganization: $e\n');
+    print('Exception when calling ParentorganizationResourceApi->updateParentorganization: $e\n');
 }
 ```
 
@@ -249,11 +245,11 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **int**|  | 
- **parentOrganization** | [**ParentOrganization**](ParentOrganization.md)|  | 
+ **parentorganization** | [**Parentorganization**](Parentorganization.md)|  | 
 
 ### Return type
 
-[**ParentOrganization**](ParentOrganization.md)
+[**Parentorganization**](Parentorganization.md)
 
 ### Authorization
 

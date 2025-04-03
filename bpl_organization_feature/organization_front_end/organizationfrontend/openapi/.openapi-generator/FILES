@@ -13,8 +13,8 @@ doc/LoginVM.md
 doc/ManagedUserVM.md
 doc/Organization.md
 doc/OrganizationResourceApi.md
-doc/ParentOrganization.md
-doc/ParentOrganizationResourceApi.md
+doc/Parentorganization.md
+doc/ParentorganizationResourceApi.md
 doc/PasswordChangeDTO.md
 doc/PublicUserResourceApi.md
 doc/User.md
@@ -26,7 +26,7 @@ lib/src/api/account_resource_api.dart
 lib/src/api/authenticate_controller_api.dart
 lib/src/api/authority_resource_api.dart
 lib/src/api/organization_resource_api.dart
-lib/src/api/parent_organization_resource_api.dart
+lib/src/api/parentorganization_resource_api.dart
 lib/src/api/public_user_resource_api.dart
 lib/src/api/user_resource_api.dart
 lib/src/api_util.dart
@@ -44,7 +44,7 @@ lib/src/model/key_and_password_vm.dart
 lib/src/model/login_vm.dart
 lib/src/model/managed_user_vm.dart
 lib/src/model/organization.dart
-lib/src/model/parent_organization.dart
+lib/src/model/parentorganization.dart
 lib/src/model/password_change_dto.dart
 lib/src/model/user.dart
 lib/src/model/user_dto.dart
@@ -61,8 +61,8 @@ test/login_vm_test.dart
 test/managed_user_vm_test.dart
 test/organization_resource_api_test.dart
 test/organization_test.dart
-test/parent_organization_resource_api_test.dart
-test/parent_organization_test.dart
+test/parentorganization_resource_api_test.dart
+test/parentorganization_test.dart
 test/password_change_dto_test.dart
 test/public_user_resource_api_test.dart
 test/user_dto_test.dart

@@ -1,4 +1,4 @@
-# openapi.model.ParentOrganization
+# openapi.model.Parentorganization
 
 ## Load the model package
 ```dart
@@ -9,8 +9,8 @@ import 'package:openapi/api.dart';
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **int** |  | [optional] 
-**name** | **String** |  | 
-**organization** | [**Organization**](Organization.md) |  | [optional] 
+**name** | **String** |  | [optional] 
+**description** | **String** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

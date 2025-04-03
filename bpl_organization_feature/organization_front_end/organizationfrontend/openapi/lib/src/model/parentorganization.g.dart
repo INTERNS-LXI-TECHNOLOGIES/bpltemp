@@ -1,40 +1,39 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'organization.dart';
+part of 'parentorganization.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$Organization extends Organization {
+class _$Parentorganization extends Parentorganization {
   @override
   final int? id;
-  @override
-  final String? externalId;
   @override
   final String? name;
   @override
   final String? description;
 
-  factory _$Organization([void Function(OrganizationBuilder)? updates]) =>
-      (new OrganizationBuilder()..update(updates))._build();
+  factory _$Parentorganization(
+          [void Function(ParentorganizationBuilder)? updates]) =>
+      (new ParentorganizationBuilder()..update(updates))._build();
 
-  _$Organization._({this.id, this.externalId, this.name, this.description})
-      : super._();
+  _$Parentorganization._({this.id, this.name, this.description}) : super._();
 
   @override
-  Organization rebuild(void Function(OrganizationBuilder) updates) =>
+  Parentorganization rebuild(
+          void Function(ParentorganizationBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  OrganizationBuilder toBuilder() => new OrganizationBuilder()..replace(this);
+  ParentorganizationBuilder toBuilder() =>
+      new ParentorganizationBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Organization &&
+    return other is Parentorganization &&
         id == other.id &&
-        externalId == other.externalId &&
         name == other.name &&
         description == other.description;
   }
@@ -43,7 +42,6 @@ class _$Organization extends Organization {
   int get hashCode {
     var _$hash = 0;
     _$hash = $jc(_$hash, id.hashCode);
-    _$hash = $jc(_$hash, externalId.hashCode);
     _$hash = $jc(_$hash, name.hashCode);
     _$hash = $jc(_$hash, description.hashCode);
     _$hash = $jf(_$hash);
@@ -52,26 +50,21 @@ class _$Organization extends Organization {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'Organization')
+    return (newBuiltValueToStringHelper(r'Parentorganization')
           ..add('id', id)
-          ..add('externalId', externalId)
           ..add('name', name)
           ..add('description', description))
         .toString();
   }
 }
 
-class OrganizationBuilder
-    implements Builder<Organization, OrganizationBuilder> {
-  _$Organization? _$v;
+class ParentorganizationBuilder
+    implements Builder<Parentorganization, ParentorganizationBuilder> {
+  _$Parentorganization? _$v;
 
   int? _id;
   int? get id => _$this._id;
   set id(int? id) => _$this._id = id;
-
-  String? _externalId;
-  String? get externalId => _$this._externalId;
-  set externalId(String? externalId) => _$this._externalId = externalId;
 
   String? _name;
   String? get name => _$this._name;
@@ -81,15 +74,14 @@ class OrganizationBuilder
   String? get description => _$this._description;
   set description(String? description) => _$this._description = description;
 
-  OrganizationBuilder() {
-    Organization._defaults(this);
+  ParentorganizationBuilder() {
+    Parentorganization._defaults(this);
   }
 
-  OrganizationBuilder get _$this {
+  ParentorganizationBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _id = $v.id;
-      _externalId = $v.externalId;
       _name = $v.name;
       _description = $v.description;
       _$v = null;
@@ -98,24 +90,23 @@ class OrganizationBuilder
   }
 
   @override
-  void replace(Organization other) {
+  void replace(Parentorganization other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$Organization;
+    _$v = other as _$Parentorganization;
   }
 
   @override
-  void update(void Function(OrganizationBuilder)? updates) {
+  void update(void Function(ParentorganizationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  Organization build() => _build();
+  Parentorganization build() => _build();
 
-  _$Organization _build() {
+  _$Parentorganization _build() {
     final _$result = _$v ??
-        new _$Organization._(
+        new _$Parentorganization._(
           id: id,
-          externalId: externalId,
           name: name,
           description: description,
         );

@@ -27,15 +27,5 @@ void main() {
       // TODO
     });
 
-    // String organizationType
-    test('to test the property `organizationType`', () async {
-      // TODO
-    });
-
-    // String organizationGroup
-    test('to test the property `organizationGroup`', () async {
-      // TODO
-    });
-
   });
 }

@@ -3,50 +3,49 @@
 //
 
 // ignore_for_file: unused_element
-import 'package:openapi/src/model/organization.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'parent_organization.g.dart';
+part 'parentorganization.g.dart';
 
-/// ParentOrganization
+/// Parentorganization
 ///
 /// Properties:
 /// * [id] 
 /// * [name] 
-/// * [organization] 
+/// * [description] 
 @BuiltValue()
-abstract class ParentOrganization implements Built<ParentOrganization, ParentOrganizationBuilder> {
+abstract class Parentorganization implements Built<Parentorganization, ParentorganizationBuilder> {
   @BuiltValueField(wireName: r'id')
   int? get id;
 
   @BuiltValueField(wireName: r'name')
-  String get name;
+  String? get name;
 
-  @BuiltValueField(wireName: r'organization')
-  Organization? get organization;
+  @BuiltValueField(wireName: r'description')
+  String? get description;
 
-  ParentOrganization._();
+  Parentorganization._();
 
-  factory ParentOrganization([void updates(ParentOrganizationBuilder b)]) = _$ParentOrganization;
+  factory Parentorganization([void updates(ParentorganizationBuilder b)]) = _$Parentorganization;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(ParentOrganizationBuilder b) => b;
+  static void _defaults(ParentorganizationBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ParentOrganization> get serializer => _$ParentOrganizationSerializer();
+  static Serializer<Parentorganization> get serializer => _$ParentorganizationSerializer();
 }
 
-class _$ParentOrganizationSerializer implements PrimitiveSerializer<ParentOrganization> {
+class _$ParentorganizationSerializer implements PrimitiveSerializer<Parentorganization> {
   @override
-  final Iterable<Type> types = const [ParentOrganization, _$ParentOrganization];
+  final Iterable<Type> types = const [Parentorganization, _$Parentorganization];
 
   @override
-  final String wireName = r'ParentOrganization';
+  final String wireName = r'Parentorganization';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    ParentOrganization object, {
+    Parentorganization object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
     if (object.id != null) {
@@ -56,16 +55,18 @@ class _$ParentOrganizationSerializer implements PrimitiveSerializer<ParentOrgani
         specifiedType: const FullType(int),
       );
     }
-    yield r'name';
-    yield serializers.serialize(
-      object.name,
-      specifiedType: const FullType(String),
-    );
-    if (object.organization != null) {
-      yield r'organization';
+    if (object.name != null) {
+      yield r'name';
       yield serializers.serialize(
-        object.organization,
-        specifiedType: const FullType(Organization),
+        object.name,
+        specifiedType: const FullType(String),
+      );
+    }
+    if (object.description != null) {
+      yield r'description';
+      yield serializers.serialize(
+        object.description,
+        specifiedType: const FullType(String),
       );
     }
   }
@@ -73,7 +74,7 @@ class _$ParentOrganizationSerializer implements PrimitiveSerializer<ParentOrgani
   @override
   Object serialize(
     Serializers serializers,
-    ParentOrganization object, {
+    Parentorganization object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
@@ -84,7 +85,7 @@ class _$ParentOrganizationSerializer implements PrimitiveSerializer<ParentOrgani
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required ParentOrganizationBuilder result,
+    required ParentorganizationBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -105,12 +106,12 @@ class _$ParentOrganizationSerializer implements PrimitiveSerializer<ParentOrgani
           ) as String;
           result.name = valueDes;
           break;
-        case r'organization':
+        case r'description':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(Organization),
-          ) as Organization;
-          result.organization.replace(valueDes);
+            specifiedType: const FullType(String),
+          ) as String;
+          result.description = valueDes;
           break;
         default:
           unhandled.add(key);
@@ -121,12 +122,12 @@ class _$ParentOrganizationSerializer implements PrimitiveSerializer<ParentOrgani
   }
 
   @override
-  ParentOrganization deserialize(
+  Parentorganization deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = ParentOrganizationBuilder();
+    final result = ParentorganizationBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

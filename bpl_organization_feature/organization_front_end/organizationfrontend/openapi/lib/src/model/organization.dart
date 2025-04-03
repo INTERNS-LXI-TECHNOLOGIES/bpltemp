@@ -15,8 +15,6 @@ part 'organization.g.dart';
 /// * [externalId] 
 /// * [name] 
 /// * [description] 
-/// * [organizationType] 
-/// * [organizationGroup] 
 @BuiltValue()
 abstract class Organization implements Built<Organization, OrganizationBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -26,16 +24,10 @@ abstract class Organization implements Built<Organization, OrganizationBuilder> 
   String? get externalId;
 
   @BuiltValueField(wireName: r'name')
-  String get name;
+  String? get name;
 
   @BuiltValueField(wireName: r'description')
   String? get description;
-
-  @BuiltValueField(wireName: r'organizationType')
-  String? get organizationType;
-
-  @BuiltValueField(wireName: r'organizationGroup')
-  String? get organizationGroup;
 
   Organization._();
 
@@ -74,29 +66,17 @@ class _$OrganizationSerializer implements PrimitiveSerializer<Organization> {
         specifiedType: const FullType(String),
       );
     }
-    yield r'name';
-    yield serializers.serialize(
-      object.name,
-      specifiedType: const FullType(String),
-    );
+    if (object.name != null) {
+      yield r'name';
+      yield serializers.serialize(
+        object.name,
+        specifiedType: const FullType(String),
+      );
+    }
     if (object.description != null) {
       yield r'description';
       yield serializers.serialize(
         object.description,
-        specifiedType: const FullType(String),
-      );
-    }
-    if (object.organizationType != null) {
-      yield r'organizationType';
-      yield serializers.serialize(
-        object.organizationType,
-        specifiedType: const FullType(String),
-      );
-    }
-    if (object.organizationGroup != null) {
-      yield r'organizationGroup';
-      yield serializers.serialize(
-        object.organizationGroup,
         specifiedType: const FullType(String),
       );
     }
@@ -150,20 +130,6 @@ class _$OrganizationSerializer implements PrimitiveSerializer<Organization> {
             specifiedType: const FullType(String),
           ) as String;
           result.description = valueDes;
-          break;
-        case r'organizationType':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
-          result.organizationType = valueDes;
-          break;
-        case r'organizationGroup':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
-          result.organizationGroup = valueDes;
           break;
         default:
           unhandled.add(key);

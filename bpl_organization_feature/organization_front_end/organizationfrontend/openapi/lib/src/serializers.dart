@@ -21,7 +21,7 @@ import 'package:openapi/src/model/key_and_password_vm.dart';
 import 'package:openapi/src/model/login_vm.dart';
 import 'package:openapi/src/model/managed_user_vm.dart';
 import 'package:openapi/src/model/organization.dart';
-import 'package:openapi/src/model/parent_organization.dart';
+import 'package:openapi/src/model/parentorganization.dart';
 import 'package:openapi/src/model/password_change_dto.dart';
 import 'package:openapi/src/model/user.dart';
 import 'package:openapi/src/model/user_dto.dart';
@@ -36,19 +36,19 @@ part 'serializers.g.dart';
   LoginVM,
   ManagedUserVM,
   Organization,
-  ParentOrganization,
+  Parentorganization,
   PasswordChangeDTO,
   User,
   UserDTO,
 ])
 Serializers serializers = (_$serializers.toBuilder()
       ..addBuilderFactory(
-        const FullType(BuiltList, [FullType(Organization)]),
-        () => ListBuilder<Organization>(),
+        const FullType(BuiltList, [FullType(Parentorganization)]),
+        () => ListBuilder<Parentorganization>(),
       )
       ..addBuilderFactory(
-        const FullType(BuiltList, [FullType(ParentOrganization)]),
-        () => ListBuilder<ParentOrganization>(),
+        const FullType(BuiltList, [FullType(Organization)]),
+        () => ListBuilder<Organization>(),
       )
       ..addBuilderFactory(
         const FullType(BuiltList, [FullType(AdminUserDTO)]),

@@ -14,7 +14,7 @@ export 'package:openapi/src/api/account_resource_api.dart';
 export 'package:openapi/src/api/authenticate_controller_api.dart';
 export 'package:openapi/src/api/authority_resource_api.dart';
 export 'package:openapi/src/api/organization_resource_api.dart';
-export 'package:openapi/src/api/parent_organization_resource_api.dart';
+export 'package:openapi/src/api/parentorganization_resource_api.dart';
 export 'package:openapi/src/api/public_user_resource_api.dart';
 export 'package:openapi/src/api/user_resource_api.dart';
 
@@ -25,7 +25,7 @@ export 'package:openapi/src/model/key_and_password_vm.dart';
 export 'package:openapi/src/model/login_vm.dart';
 export 'package:openapi/src/model/managed_user_vm.dart';
 export 'package:openapi/src/model/organization.dart';
-export 'package:openapi/src/model/parent_organization.dart';
+export 'package:openapi/src/model/parentorganization.dart';
 export 'package:openapi/src/model/password_change_dto.dart';
 export 'package:openapi/src/model/user.dart';
 export 'package:openapi/src/model/user_dto.dart';

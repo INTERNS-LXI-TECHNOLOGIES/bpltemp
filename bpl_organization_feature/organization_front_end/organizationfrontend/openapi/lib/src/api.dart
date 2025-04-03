@@ -13,14 +13,16 @@ import 'package:openapi/src/api/account_resource_api.dart';
 import 'package:openapi/src/api/authenticate_controller_api.dart';
 import 'package:openapi/src/api/authority_resource_api.dart';
 import 'package:openapi/src/api/organization_resource_api.dart';
-import 'package:openapi/src/api/parent_organization_resource_api.dart';
+import 'package:openapi/src/api/parentorganization_resource_api.dart';
 import 'package:openapi/src/api/public_user_resource_api.dart';
 import 'package:openapi/src/api/user_resource_api.dart';
 
 class Openapi {
+
   static const String basePath = r'http://localhost:8080';
 
   static String jwt = '';
+
 
   final Dio dio;
   final Serializers serializers;
@@ -97,10 +99,10 @@ class Openapi {
     return OrganizationResourceApi(dio, serializers);
   }
 
-  /// Get ParentOrganizationResourceApi instance, base route and serializer can be overridden by a given but be careful,
+  /// Get ParentorganizationResourceApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
-  ParentOrganizationResourceApi getParentOrganizationResourceApi() {
-    return ParentOrganizationResourceApi(dio, serializers);
+  ParentorganizationResourceApi getParentorganizationResourceApi() {
+    return ParentorganizationResourceApi(dio, serializers);
   }
 
   /// Get PublicUserResourceApi instance, base route and serializer can be overridden by a given but be careful,

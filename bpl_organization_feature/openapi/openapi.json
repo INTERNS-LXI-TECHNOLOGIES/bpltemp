@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "Organization Back End API",
-        "description": "Organization Back End API documentation",
+        "title": "Organization Backend API",
+        "description": "Organization Backend API documentation",
         "termsOfService": "",
         "contact": {
             "name": "",
@@ -22,12 +22,12 @@
         }
     ],
     "paths": {
-        "/api/parent-organizations/{id}": {
+        "/api/parentorganizations/{id}": {
             "get": {
                 "tags": [
-                    "parent-organization-resource"
+                    "parentorganization-resource"
                 ],
-                "operationId": "getParentOrganization",
+                "operationId": "getParentorganization",
                 "parameters": [
                     {
                         "name": "id",
@@ -45,7 +45,7 @@
                         "content": {
                             "*/*": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ParentOrganization"
+                                    "$ref": "#/components/schemas/Parentorganization"
                                 }
                             }
                         }
@@ -54,9 +54,9 @@
             },
             "put": {
                 "tags": [
-                    "parent-organization-resource"
+                    "parentorganization-resource"
                 ],
-                "operationId": "updateParentOrganization",
+                "operationId": "updateParentorganization",
                 "parameters": [
                     {
                         "name": "id",
@@ -72,7 +72,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ParentOrganization"
+                                "$ref": "#/components/schemas/Parentorganization"
                             }
                         }
                     },
@@ -84,7 +84,7 @@
                         "content": {
                             "*/*": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ParentOrganization"
+                                    "$ref": "#/components/schemas/Parentorganization"
                                 }
                             }
                         }
@@ -93,9 +93,9 @@
             },
             "delete": {
                 "tags": [
-                    "parent-organization-resource"
+                    "parentorganization-resource"
                 ],
-                "operationId": "deleteParentOrganization",
+                "operationId": "deleteParentorganization",
                 "parameters": [
                     {
                         "name": "id",
@@ -115,9 +115,9 @@
             },
             "patch": {
                 "tags": [
-                    "parent-organization-resource"
+                    "parentorganization-resource"
                 ],
-                "operationId": "partialUpdateParentOrganization",
+                "operationId": "partialUpdateParentorganization",
                 "parameters": [
                     {
                         "name": "id",
@@ -133,12 +133,12 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ParentOrganization"
+                                "$ref": "#/components/schemas/Parentorganization"
                             }
                         },
                         "application/merge-patch+json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ParentOrganization"
+                                "$ref": "#/components/schemas/Parentorganization"
                             }
                         }
                     },
@@ -150,7 +150,7 @@
                         "content": {
                             "*/*": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ParentOrganization"
+                                    "$ref": "#/components/schemas/Parentorganization"
                                 }
                             }
                         }
@@ -525,22 +525,12 @@
                 }
             }
         },
-        "/api/parent-organizations": {
+        "/api/parentorganizations": {
             "get": {
                 "tags": [
-                    "parent-organization-resource"
+                    "parentorganization-resource"
                 ],
-                "operationId": "getAllParentOrganizations",
-                "parameters": [
-                    {
-                        "name": "filter",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                "operationId": "getAllParentorganizations",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -549,7 +539,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/ParentOrganization"
+                                        "$ref": "#/components/schemas/Parentorganization"
                                     }
                                 }
                             }
@@ -559,14 +549,14 @@
             },
             "post": {
                 "tags": [
-                    "parent-organization-resource"
+                    "parentorganization-resource"
                 ],
-                "operationId": "createParentOrganization",
+                "operationId": "createParentorganization",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ParentOrganization"
+                                "$ref": "#/components/schemas/Parentorganization"
                             }
                         }
                     },
@@ -578,7 +568,7 @@
                         "content": {
                             "*/*": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ParentOrganization"
+                                    "$ref": "#/components/schemas/Parentorganization"
                                 }
                             }
                         }
@@ -982,10 +972,22 @@
     },
     "components": {
         "schemas": {
+            "Parentorganization": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
             "Organization": {
-                "required": [
-                    "name"
-                ],
                 "type": "object",
                 "properties": {
                     "id": {
@@ -1000,30 +1002,6 @@
                     },
                     "description": {
                         "type": "string"
-                    },
-                    "organizationType": {
-                        "type": "string"
-                    },
-                    "organizationGroup": {
-                        "type": "string"
-                    }
-                }
-            },
-            "ParentOrganization": {
-                "required": [
-                    "name"
-                ],
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "organization": {
-                        "$ref": "#/components/schemas/Organization"
                     }
                 }
             },
