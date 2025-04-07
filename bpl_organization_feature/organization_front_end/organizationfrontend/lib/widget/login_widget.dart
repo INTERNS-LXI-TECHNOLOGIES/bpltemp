@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:openapi/openapi.dart';
 import 'package:organizationfrontend/widget/logistics_dashboard.dart';
+import 'package:organizationfrontend/widget/organization_form.dart';
 
 class LoginWidget extends StatelessWidget {
   final Function(Locale) setLocale;
@@ -50,7 +51,7 @@ class LoginWidget extends StatelessWidget {
                     print('Login successful!');
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LogisticsDashboard(setLocale: setLocale)), // Pass setLocale
+                      MaterialPageRoute(builder: (context) => OrganizationForm()), // Pass setLocale
                     );
                   } else {
                     print('Login failed!');

@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:organizationfrontend/localization/app_localizations.dart';
 import 'package:organizationfrontend/widget/logistics_dashboard.dart';
 import 'package:organizationfrontend/widget/login_widget.dart';
+import 'package:organizationfrontend/widget/organization_form.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,7 +50,9 @@ class _MyAppState extends State<MyApp> {
         }
         return _locale;
       },
-      home: LoginWidget(setLocale: _setLocale), // Pass _setLocale
+      home: LoginWidget(
+        setLocale: _setLocale,
+      ),
 
     );
   }
