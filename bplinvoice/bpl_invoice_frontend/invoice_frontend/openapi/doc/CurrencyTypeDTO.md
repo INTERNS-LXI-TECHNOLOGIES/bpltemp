@@ -1,4 +1,4 @@
-# openapi.model.CurrencyType
+# openapi.model.CurrencyTypeDTO
 
 ## Load the model package
 ```dart

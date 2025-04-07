@@ -2,7 +2,10 @@ package com.lxisofttech.invoice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,9 +28,10 @@ public class CurrencyType implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "currencyType")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "currencyType" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "currencyType")
-    private WayBill wayBill;
+    private Set<WayBill> currencyTypes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -57,22 +61,34 @@ public class CurrencyType implements Serializable {
         this.name = name;
     }
 
-    public WayBill getWayBill() {
-        return this.wayBill;
+    public Set<WayBill> getCurrencyTypes() {
+        return this.currencyTypes;
     }
 
-    public void setWayBill(WayBill wayBill) {
-        if (this.wayBill != null) {
-            this.wayBill.setCurrencyType(null);
+    public void setCurrencyTypes(Set<WayBill> wayBills) {
+        if (this.currencyTypes != null) {
+            this.currencyTypes.forEach(i -> i.setCurrencyType(null));
         }
-        if (wayBill != null) {
-            wayBill.setCurrencyType(this);
+        if (wayBills != null) {
+            wayBills.forEach(i -> i.setCurrencyType(this));
         }
-        this.wayBill = wayBill;
+        this.currencyTypes = wayBills;
     }
 
-    public CurrencyType wayBill(WayBill wayBill) {
-        this.setWayBill(wayBill);
+    public CurrencyType currencyTypes(Set<WayBill> wayBills) {
+        this.setCurrencyTypes(wayBills);
+        return this;
+    }
+
+    public CurrencyType addCurrencyType(WayBill wayBill) {
+        this.currencyTypes.add(wayBill);
+        wayBill.setCurrencyType(this);
+        return this;
+    }
+
+    public CurrencyType removeCurrencyType(WayBill wayBill) {
+        this.currencyTypes.remove(wayBill);
+        wayBill.setCurrencyType(null);
         return this;
     }
 

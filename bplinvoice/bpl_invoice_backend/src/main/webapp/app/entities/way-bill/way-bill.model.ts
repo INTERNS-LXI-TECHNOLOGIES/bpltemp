@@ -12,7 +12,7 @@ export interface IWayBill {
   estimatedShipDate?: dayjs.Dayjs | null;
   status?: string | null;
   referenceNumber?: string | null;
-  currencyType?: ICurrencyType | null;
+  currencyType?: Pick<ICurrencyType, 'id'> | null;
 }
 
 export type NewWayBill = Omit<IWayBill, 'id'> & { id: null };

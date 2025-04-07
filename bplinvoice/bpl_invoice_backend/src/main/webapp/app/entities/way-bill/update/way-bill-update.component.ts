@@ -22,7 +22,7 @@ export class WayBillUpdateComponent implements OnInit {
   isSaving = false;
   wayBill: IWayBill | null = null;
 
-  currencyTypesCollection: ICurrencyType[] = [];
+  currencyTypesSharedCollection: ICurrencyType[] = [];
 
   protected wayBillService = inject(WayBillService);
   protected wayBillFormService = inject(WayBillFormService);
@@ -83,21 +83,21 @@ export class WayBillUpdateComponent implements OnInit {
     this.wayBill = wayBill;
     this.wayBillFormService.resetForm(this.editForm, wayBill);
 
-    this.currencyTypesCollection = this.currencyTypeService.addCurrencyTypeToCollectionIfMissing<ICurrencyType>(
-      this.currencyTypesCollection,
+    this.currencyTypesSharedCollection = this.currencyTypeService.addCurrencyTypeToCollectionIfMissing<ICurrencyType>(
+      this.currencyTypesSharedCollection,
       wayBill.currencyType,
     );
   }
 
   protected loadRelationshipsOptions(): void {
     this.currencyTypeService
-      .query({ filter: 'waybill-is-null' })
+      .query()
       .pipe(map((res: HttpResponse<ICurrencyType[]>) => res.body ?? []))
       .pipe(
         map((currencyTypes: ICurrencyType[]) =>
           this.currencyTypeService.addCurrencyTypeToCollectionIfMissing<ICurrencyType>(currencyTypes, this.wayBill?.currencyType),
         ),
       )
-      .subscribe((currencyTypes: ICurrencyType[]) => (this.currencyTypesCollection = currencyTypes));
+      .subscribe((currencyTypes: ICurrencyType[]) => (this.currencyTypesSharedCollection = currencyTypes));
   }
 }

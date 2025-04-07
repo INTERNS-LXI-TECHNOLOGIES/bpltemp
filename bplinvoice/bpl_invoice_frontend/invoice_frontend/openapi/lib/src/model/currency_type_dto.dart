@@ -6,42 +6,42 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'currency_type.g.dart';
+part 'currency_type_dto.g.dart';
 
-/// CurrencyType
+/// CurrencyTypeDTO
 ///
 /// Properties:
 /// * [id] 
 /// * [name] 
 @BuiltValue()
-abstract class CurrencyType implements Built<CurrencyType, CurrencyTypeBuilder> {
+abstract class CurrencyTypeDTO implements Built<CurrencyTypeDTO, CurrencyTypeDTOBuilder> {
   @BuiltValueField(wireName: r'id')
   int? get id;
 
   @BuiltValueField(wireName: r'name')
   String? get name;
 
-  CurrencyType._();
+  CurrencyTypeDTO._();
 
-  factory CurrencyType([void updates(CurrencyTypeBuilder b)]) = _$CurrencyType;
+  factory CurrencyTypeDTO([void updates(CurrencyTypeDTOBuilder b)]) = _$CurrencyTypeDTO;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(CurrencyTypeBuilder b) => b;
+  static void _defaults(CurrencyTypeDTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<CurrencyType> get serializer => _$CurrencyTypeSerializer();
+  static Serializer<CurrencyTypeDTO> get serializer => _$CurrencyTypeDTOSerializer();
 }
 
-class _$CurrencyTypeSerializer implements PrimitiveSerializer<CurrencyType> {
+class _$CurrencyTypeDTOSerializer implements PrimitiveSerializer<CurrencyTypeDTO> {
   @override
-  final Iterable<Type> types = const [CurrencyType, _$CurrencyType];
+  final Iterable<Type> types = const [CurrencyTypeDTO, _$CurrencyTypeDTO];
 
   @override
-  final String wireName = r'CurrencyType';
+  final String wireName = r'CurrencyTypeDTO';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    CurrencyType object, {
+    CurrencyTypeDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
     if (object.id != null) {
@@ -63,7 +63,7 @@ class _$CurrencyTypeSerializer implements PrimitiveSerializer<CurrencyType> {
   @override
   Object serialize(
     Serializers serializers,
-    CurrencyType object, {
+    CurrencyTypeDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
@@ -74,7 +74,7 @@ class _$CurrencyTypeSerializer implements PrimitiveSerializer<CurrencyType> {
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required CurrencyTypeBuilder result,
+    required CurrencyTypeDTOBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -104,12 +104,12 @@ class _$CurrencyTypeSerializer implements PrimitiveSerializer<CurrencyType> {
   }
 
   @override
-  CurrencyType deserialize(
+  CurrencyTypeDTO deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = CurrencyTypeBuilder();
+    final result = CurrencyTypeDTOBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

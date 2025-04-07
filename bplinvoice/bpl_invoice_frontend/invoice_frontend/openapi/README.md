@@ -78,6 +78,7 @@ Class | Method | HTTP request | Description
 [*AuthorityResourceApi*](doc/AuthorityResourceApi.md) | [**deleteAuthority**](doc/AuthorityResourceApi.md#deleteauthority) | **DELETE** /api/authorities/{id} | 
 [*AuthorityResourceApi*](doc/AuthorityResourceApi.md) | [**getAllAuthorities**](doc/AuthorityResourceApi.md#getallauthorities) | **GET** /api/authorities | 
 [*AuthorityResourceApi*](doc/AuthorityResourceApi.md) | [**getAuthority**](doc/AuthorityResourceApi.md#getauthority) | **GET** /api/authorities/{id} | 
+[*CurrencyTypeResourceApi*](doc/CurrencyTypeResourceApi.md) | [**countCurrencyTypes**](doc/CurrencyTypeResourceApi.md#countcurrencytypes) | **GET** /api/currency-types/count | 
 [*CurrencyTypeResourceApi*](doc/CurrencyTypeResourceApi.md) | [**createCurrencyType**](doc/CurrencyTypeResourceApi.md#createcurrencytype) | **POST** /api/currency-types | 
 [*CurrencyTypeResourceApi*](doc/CurrencyTypeResourceApi.md) | [**deleteCurrencyType**](doc/CurrencyTypeResourceApi.md#deletecurrencytype) | **DELETE** /api/currency-types/{id} | 
 [*CurrencyTypeResourceApi*](doc/CurrencyTypeResourceApi.md) | [**getAllCurrencyTypes**](doc/CurrencyTypeResourceApi.md#getallcurrencytypes) | **GET** /api/currency-types | 
@@ -91,6 +92,7 @@ Class | Method | HTTP request | Description
 [*UserResourceApi*](doc/UserResourceApi.md) | [**getUser**](doc/UserResourceApi.md#getuser) | **GET** /api/admin/users/{login} | 
 [*UserResourceApi*](doc/UserResourceApi.md) | [**updateUser**](doc/UserResourceApi.md#updateuser) | **PUT** /api/admin/users/{login} | 
 [*UserResourceApi*](doc/UserResourceApi.md) | [**updateUser1**](doc/UserResourceApi.md#updateuser1) | **PUT** /api/admin/users | 
+[*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**countWayBills**](doc/WayBillResourceApi.md#countwaybills) | **GET** /api/way-bills/count | 
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**createWayBill**](doc/WayBillResourceApi.md#createwaybill) | **POST** /api/way-bills | 
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**deleteWayBill**](doc/WayBillResourceApi.md#deletewaybill) | **DELETE** /api/way-bills/{id} | 
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**getAllWayBills**](doc/WayBillResourceApi.md#getallwaybills) | **GET** /api/way-bills | 
@@ -103,7 +105,7 @@ Class | Method | HTTP request | Description
 
  - [AdminUserDTO](doc/AdminUserDTO.md)
  - [Authority](doc/Authority.md)
- - [CurrencyType](doc/CurrencyType.md)
+ - [CurrencyTypeDTO](doc/CurrencyTypeDTO.md)
  - [JWTToken](doc/JWTToken.md)
  - [KeyAndPasswordVM](doc/KeyAndPasswordVM.md)
  - [LoginVM](doc/LoginVM.md)
@@ -111,7 +113,7 @@ Class | Method | HTTP request | Description
  - [PasswordChangeDTO](doc/PasswordChangeDTO.md)
  - [User](doc/User.md)
  - [UserDTO](doc/UserDTO.md)
- - [WayBill](doc/WayBill.md)
+ - [WayBillDTO](doc/WayBillDTO.md)
 
 
 ## Documentation For Authorization

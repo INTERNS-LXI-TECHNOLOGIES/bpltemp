@@ -5,6 +5,8 @@ import static com.lxisofttech.invoice.domain.WayBillTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.lxisofttech.invoice.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class CurrencyTypeTest {
@@ -24,16 +26,24 @@ class CurrencyTypeTest {
     }
 
     @Test
-    void wayBillTest() {
+    void currencyTypeTest() {
         CurrencyType currencyType = getCurrencyTypeRandomSampleGenerator();
         WayBill wayBillBack = getWayBillRandomSampleGenerator();
 
-        currencyType.setWayBill(wayBillBack);
-        assertThat(currencyType.getWayBill()).isEqualTo(wayBillBack);
+        currencyType.addCurrencyType(wayBillBack);
+        assertThat(currencyType.getCurrencyTypes()).containsOnly(wayBillBack);
         assertThat(wayBillBack.getCurrencyType()).isEqualTo(currencyType);
 
-        currencyType.wayBill(null);
-        assertThat(currencyType.getWayBill()).isNull();
+        currencyType.removeCurrencyType(wayBillBack);
+        assertThat(currencyType.getCurrencyTypes()).doesNotContain(wayBillBack);
+        assertThat(wayBillBack.getCurrencyType()).isNull();
+
+        currencyType.currencyTypes(new HashSet<>(Set.of(wayBillBack)));
+        assertThat(currencyType.getCurrencyTypes()).containsOnly(wayBillBack);
+        assertThat(wayBillBack.getCurrencyType()).isEqualTo(currencyType);
+
+        currencyType.setCurrencyTypes(new HashSet<>());
+        assertThat(currencyType.getCurrencyTypes()).doesNotContain(wayBillBack);
         assertThat(wayBillBack.getCurrencyType()).isNull();
     }
 }

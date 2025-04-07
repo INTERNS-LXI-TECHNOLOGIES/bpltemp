@@ -42,7 +42,7 @@
                 <constraints nullable="true" />
             </column>
             <column name="currency_type_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_way_bill__currency_type_id" />
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

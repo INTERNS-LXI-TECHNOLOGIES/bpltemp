@@ -3,13 +3,13 @@
 //
 
 // ignore_for_file: unused_element
-import 'package:openapi/src/model/currency_type.dart';
+import 'package:openapi/src/model/currency_type_dto.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'way_bill.g.dart';
+part 'way_bill_dto.g.dart';
 
-/// WayBill
+/// WayBillDTO
 ///
 /// Properties:
 /// * [id] 
@@ -24,7 +24,7 @@ part 'way_bill.g.dart';
 /// * [referenceNumber] 
 /// * [currencyType] 
 @BuiltValue()
-abstract class WayBill implements Built<WayBill, WayBillBuilder> {
+abstract class WayBillDTO implements Built<WayBillDTO, WayBillDTOBuilder> {
   @BuiltValueField(wireName: r'id')
   int? get id;
 
@@ -56,29 +56,29 @@ abstract class WayBill implements Built<WayBill, WayBillBuilder> {
   String? get referenceNumber;
 
   @BuiltValueField(wireName: r'currencyType')
-  CurrencyType? get currencyType;
+  CurrencyTypeDTO? get currencyType;
 
-  WayBill._();
+  WayBillDTO._();
 
-  factory WayBill([void updates(WayBillBuilder b)]) = _$WayBill;
+  factory WayBillDTO([void updates(WayBillDTOBuilder b)]) = _$WayBillDTO;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(WayBillBuilder b) => b;
+  static void _defaults(WayBillDTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<WayBill> get serializer => _$WayBillSerializer();
+  static Serializer<WayBillDTO> get serializer => _$WayBillDTOSerializer();
 }
 
-class _$WayBillSerializer implements PrimitiveSerializer<WayBill> {
+class _$WayBillDTOSerializer implements PrimitiveSerializer<WayBillDTO> {
   @override
-  final Iterable<Type> types = const [WayBill, _$WayBill];
+  final Iterable<Type> types = const [WayBillDTO, _$WayBillDTO];
 
   @override
-  final String wireName = r'WayBill';
+  final String wireName = r'WayBillDTO';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    WayBill object, {
+    WayBillDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
     if (object.id != null) {
@@ -155,7 +155,7 @@ class _$WayBillSerializer implements PrimitiveSerializer<WayBill> {
       yield r'currencyType';
       yield serializers.serialize(
         object.currencyType,
-        specifiedType: const FullType(CurrencyType),
+        specifiedType: const FullType(CurrencyTypeDTO),
       );
     }
   }
@@ -163,7 +163,7 @@ class _$WayBillSerializer implements PrimitiveSerializer<WayBill> {
   @override
   Object serialize(
     Serializers serializers,
-    WayBill object, {
+    WayBillDTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
@@ -174,7 +174,7 @@ class _$WayBillSerializer implements PrimitiveSerializer<WayBill> {
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required WayBillBuilder result,
+    required WayBillDTOBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
@@ -254,8 +254,8 @@ class _$WayBillSerializer implements PrimitiveSerializer<WayBill> {
         case r'currencyType':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(CurrencyType),
-          ) as CurrencyType;
+            specifiedType: const FullType(CurrencyTypeDTO),
+          ) as CurrencyTypeDTO;
           result.currencyType.replace(valueDes);
           break;
         default:
@@ -267,12 +267,12 @@ class _$WayBillSerializer implements PrimitiveSerializer<WayBill> {
   }
 
   @override
-  WayBill deserialize(
+  WayBillDTO deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = WayBillBuilder();
+    final result = WayBillDTOBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

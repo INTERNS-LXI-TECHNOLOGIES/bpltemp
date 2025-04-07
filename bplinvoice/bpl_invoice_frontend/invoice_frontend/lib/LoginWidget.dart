@@ -151,7 +151,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              color: Colors.white,
+                              color: Color.fromARGB(255, 0, 0, 0),
                             ),
                           )
                         : const Text(

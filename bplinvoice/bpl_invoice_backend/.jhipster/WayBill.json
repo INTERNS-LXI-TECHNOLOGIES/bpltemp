@@ -3,6 +3,7 @@
     "changelogDate": "20250326064056"
   },
   "applications": "*",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "boxLimit",
@@ -41,15 +42,18 @@
       "fieldType": "String"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "WayBill",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "currencyType",
-      "otherEntityRelationshipName": "wayBill",
+      "otherEntityRelationshipName": "currencyType",
       "relationshipName": "currencyType",
       "relationshipSide": "left",
-      "relationshipType": "one-to-one"
+      "relationshipType": "many-to-one"
     }
   ],
-  "searchEngine": "no"
+  "searchEngine": "no",
+  "service": "serviceClass"
 }

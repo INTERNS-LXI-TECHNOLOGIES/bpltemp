@@ -1,33 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'currency_type.dart';
+part of 'currency_type_dto.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$CurrencyType extends CurrencyType {
+class _$CurrencyTypeDTO extends CurrencyTypeDTO {
   @override
   final int? id;
   @override
   final String? name;
 
-  factory _$CurrencyType([void Function(CurrencyTypeBuilder)? updates]) =>
-      (new CurrencyTypeBuilder()..update(updates))._build();
+  factory _$CurrencyTypeDTO([void Function(CurrencyTypeDTOBuilder)? updates]) =>
+      (new CurrencyTypeDTOBuilder()..update(updates))._build();
 
-  _$CurrencyType._({this.id, this.name}) : super._();
+  _$CurrencyTypeDTO._({this.id, this.name}) : super._();
 
   @override
-  CurrencyType rebuild(void Function(CurrencyTypeBuilder) updates) =>
+  CurrencyTypeDTO rebuild(void Function(CurrencyTypeDTOBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  CurrencyTypeBuilder toBuilder() => new CurrencyTypeBuilder()..replace(this);
+  CurrencyTypeDTOBuilder toBuilder() =>
+      new CurrencyTypeDTOBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is CurrencyType && id == other.id && name == other.name;
+    return other is CurrencyTypeDTO && id == other.id && name == other.name;
   }
 
   @override
@@ -41,16 +42,16 @@ class _$CurrencyType extends CurrencyType {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'CurrencyType')
+    return (newBuiltValueToStringHelper(r'CurrencyTypeDTO')
           ..add('id', id)
           ..add('name', name))
         .toString();
   }
 }
 
-class CurrencyTypeBuilder
-    implements Builder<CurrencyType, CurrencyTypeBuilder> {
-  _$CurrencyType? _$v;
+class CurrencyTypeDTOBuilder
+    implements Builder<CurrencyTypeDTO, CurrencyTypeDTOBuilder> {
+  _$CurrencyTypeDTO? _$v;
 
   int? _id;
   int? get id => _$this._id;
@@ -60,11 +61,11 @@ class CurrencyTypeBuilder
   String? get name => _$this._name;
   set name(String? name) => _$this._name = name;
 
-  CurrencyTypeBuilder() {
-    CurrencyType._defaults(this);
+  CurrencyTypeDTOBuilder() {
+    CurrencyTypeDTO._defaults(this);
   }
 
-  CurrencyTypeBuilder get _$this {
+  CurrencyTypeDTOBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _id = $v.id;
@@ -75,22 +76,22 @@ class CurrencyTypeBuilder
   }
 
   @override
-  void replace(CurrencyType other) {
+  void replace(CurrencyTypeDTO other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$CurrencyType;
+    _$v = other as _$CurrencyTypeDTO;
   }
 
   @override
-  void update(void Function(CurrencyTypeBuilder)? updates) {
+  void update(void Function(CurrencyTypeDTOBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  CurrencyType build() => _build();
+  CurrencyTypeDTO build() => _build();
 
-  _$CurrencyType _build() {
+  _$CurrencyTypeDTO _build() {
     final _$result = _$v ??
-        new _$CurrencyType._(
+        new _$CurrencyTypeDTO._(
           id: id,
           name: name,
         );

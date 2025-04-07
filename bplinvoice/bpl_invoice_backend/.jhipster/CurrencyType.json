@@ -3,21 +3,25 @@
     "changelogDate": "20250326064057"
   },
   "applications": "*",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "name",
       "fieldType": "String"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "CurrencyType",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "wayBill",
-      "otherEntityRelationshipName": "currencyType",
-      "relationshipName": "wayBill",
+      "relationshipName": "currencyType",
       "relationshipSide": "right",
-      "relationshipType": "one-to-one"
+      "relationshipType": "one-to-many",
+      "relationshipValidateRules": "required"
     }
   ],
-  "searchEngine": "no"
+  "searchEngine": "no",
+  "service": "serviceClass"
 }

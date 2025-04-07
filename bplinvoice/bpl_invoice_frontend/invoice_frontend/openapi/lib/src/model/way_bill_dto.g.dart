@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'way_bill.dart';
+part of 'way_bill_dto.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-class _$WayBill extends WayBill {
+class _$WayBillDTO extends WayBillDTO {
   @override
   final int? id;
   @override
@@ -28,12 +28,12 @@ class _$WayBill extends WayBill {
   @override
   final String? referenceNumber;
   @override
-  final CurrencyType? currencyType;
+  final CurrencyTypeDTO? currencyType;
 
-  factory _$WayBill([void Function(WayBillBuilder)? updates]) =>
-      (new WayBillBuilder()..update(updates))._build();
+  factory _$WayBillDTO([void Function(WayBillDTOBuilder)? updates]) =>
+      (new WayBillDTOBuilder()..update(updates))._build();
 
-  _$WayBill._(
+  _$WayBillDTO._(
       {this.id,
       this.boxLimit,
       this.shipmentType,
@@ -48,16 +48,16 @@ class _$WayBill extends WayBill {
       : super._();
 
   @override
-  WayBill rebuild(void Function(WayBillBuilder) updates) =>
+  WayBillDTO rebuild(void Function(WayBillDTOBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  WayBillBuilder toBuilder() => new WayBillBuilder()..replace(this);
+  WayBillDTOBuilder toBuilder() => new WayBillDTOBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is WayBill &&
+    return other is WayBillDTO &&
         id == other.id &&
         boxLimit == other.boxLimit &&
         shipmentType == other.shipmentType &&
@@ -91,7 +91,7 @@ class _$WayBill extends WayBill {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'WayBill')
+    return (newBuiltValueToStringHelper(r'WayBillDTO')
           ..add('id', id)
           ..add('boxLimit', boxLimit)
           ..add('shipmentType', shipmentType)
@@ -107,8 +107,8 @@ class _$WayBill extends WayBill {
   }
 }
 
-class WayBillBuilder implements Builder<WayBill, WayBillBuilder> {
-  _$WayBill? _$v;
+class WayBillDTOBuilder implements Builder<WayBillDTO, WayBillDTOBuilder> {
+  _$WayBillDTO? _$v;
 
   int? _id;
   int? get id => _$this._id;
@@ -154,17 +154,17 @@ class WayBillBuilder implements Builder<WayBill, WayBillBuilder> {
   set referenceNumber(String? referenceNumber) =>
       _$this._referenceNumber = referenceNumber;
 
-  CurrencyTypeBuilder? _currencyType;
-  CurrencyTypeBuilder get currencyType =>
-      _$this._currencyType ??= new CurrencyTypeBuilder();
-  set currencyType(CurrencyTypeBuilder? currencyType) =>
+  CurrencyTypeDTOBuilder? _currencyType;
+  CurrencyTypeDTOBuilder get currencyType =>
+      _$this._currencyType ??= new CurrencyTypeDTOBuilder();
+  set currencyType(CurrencyTypeDTOBuilder? currencyType) =>
       _$this._currencyType = currencyType;
 
-  WayBillBuilder() {
-    WayBill._defaults(this);
+  WayBillDTOBuilder() {
+    WayBillDTO._defaults(this);
   }
 
-  WayBillBuilder get _$this {
+  WayBillDTOBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _id = $v.id;
@@ -184,24 +184,24 @@ class WayBillBuilder implements Builder<WayBill, WayBillBuilder> {
   }
 
   @override
-  void replace(WayBill other) {
+  void replace(WayBillDTO other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$WayBill;
+    _$v = other as _$WayBillDTO;
   }
 
   @override
-  void update(void Function(WayBillBuilder)? updates) {
+  void update(void Function(WayBillDTOBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  WayBill build() => _build();
+  WayBillDTO build() => _build();
 
-  _$WayBill _build() {
-    _$WayBill _$result;
+  _$WayBillDTO _build() {
+    _$WayBillDTO _$result;
     try {
       _$result = _$v ??
-          new _$WayBill._(
+          new _$WayBillDTO._(
             id: id,
             boxLimit: boxLimit,
             shipmentType: shipmentType,
@@ -221,7 +221,7 @@ class WayBillBuilder implements Builder<WayBill, WayBillBuilder> {
         _currencyType?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            r'WayBill', _$failedField, e.toString());
+            r'WayBillDTO', _$failedField, e.toString());
       }
       rethrow;
     }

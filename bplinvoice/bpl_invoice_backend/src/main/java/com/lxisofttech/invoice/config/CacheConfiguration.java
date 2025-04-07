@@ -52,6 +52,7 @@ public class CacheConfiguration {
             createCache(cm, com.lxisofttech.invoice.domain.User.class.getName() + ".authorities");
             createCache(cm, com.lxisofttech.invoice.domain.WayBill.class.getName());
             createCache(cm, com.lxisofttech.invoice.domain.CurrencyType.class.getName());
+            createCache(cm, com.lxisofttech.invoice.domain.CurrencyType.class.getName() + ".currencyTypes");
             // jhipster-needle-ehcache-add-entry
         };
     }

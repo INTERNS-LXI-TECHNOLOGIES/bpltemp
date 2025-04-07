@@ -19,7 +19,6 @@ import 'package:openapi/src/api/way_bill_resource_api.dart';
 
 class Openapi {
   static const String basePath = r'http://localhost:8080';
-  String jwt = "";
 
   final Dio dio;
   final Serializers serializers;

@@ -125,7 +125,7 @@
             [compareWith]="compareCurrencyType"
           >
             <option [ngValue]="null"></option>
-            @for (currencyTypeOption of currencyTypesCollection; track $index) {
+            @for (currencyTypeOption of currencyTypesSharedCollection; track $index) {
               <option [ngValue]="currencyTypeOption">{{ currencyTypeOption.id }}</option>
             }
           </select>

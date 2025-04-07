@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CurrencyTypeRepository extends JpaRepository<CurrencyType, Long> {}
+public interface CurrencyTypeRepository extends JpaRepository<CurrencyType, Long>, JpaSpecificationExecutor<CurrencyType> {}

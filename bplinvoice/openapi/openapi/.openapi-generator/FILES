@@ -7,7 +7,7 @@ doc/AdminUserDTO.md
 doc/AuthenticateControllerApi.md
 doc/Authority.md
 doc/AuthorityResourceApi.md
-doc/CurrencyType.md
+doc/CurrencyTypeDTO.md
 doc/CurrencyTypeResourceApi.md
 doc/JWTToken.md
 doc/KeyAndPasswordVM.md
@@ -18,7 +18,7 @@ doc/PublicUserResourceApi.md
 doc/User.md
 doc/UserDTO.md
 doc/UserResourceApi.md
-doc/WayBill.md
+doc/WayBillDTO.md
 doc/WayBillResourceApi.md
 lib/openapi.dart
 lib/src/api.dart
@@ -38,7 +38,7 @@ lib/src/auth/oauth.dart
 lib/src/date_serializer.dart
 lib/src/model/admin_user_dto.dart
 lib/src/model/authority.dart
-lib/src/model/currency_type.dart
+lib/src/model/currency_type_dto.dart
 lib/src/model/date.dart
 lib/src/model/jwt_token.dart
 lib/src/model/key_and_password_vm.dart
@@ -47,7 +47,7 @@ lib/src/model/managed_user_vm.dart
 lib/src/model/password_change_dto.dart
 lib/src/model/user.dart
 lib/src/model/user_dto.dart
-lib/src/model/way_bill.dart
+lib/src/model/way_bill_dto.dart
 lib/src/serializers.dart
 pubspec.yaml
 test/account_resource_api_test.dart
@@ -55,8 +55,8 @@ test/admin_user_dto_test.dart
 test/authenticate_controller_api_test.dart
 test/authority_resource_api_test.dart
 test/authority_test.dart
+test/currency_type_dto_test.dart
 test/currency_type_resource_api_test.dart
-test/currency_type_test.dart
 test/jwt_token_test.dart
 test/key_and_password_vm_test.dart
 test/login_vm_test.dart
@@ -66,5 +66,5 @@ test/public_user_resource_api_test.dart
 test/user_dto_test.dart
 test/user_resource_api_test.dart
 test/user_test.dart
+test/way_bill_dto_test.dart
 test/way_bill_resource_api_test.dart
-test/way_bill_test.dart

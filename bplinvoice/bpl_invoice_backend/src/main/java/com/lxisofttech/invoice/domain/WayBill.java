@@ -50,9 +50,8 @@ public class WayBill implements Serializable {
     @Column(name = "reference_number")
     private String referenceNumber;
 
-    @JsonIgnoreProperties(value = { "wayBill" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "currencyTypes" }, allowSetters = true)
     private CurrencyType currencyType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

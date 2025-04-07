@@ -16,7 +16,7 @@ import 'package:openapi/src/model/date.dart';
 
 import 'package:openapi/src/model/admin_user_dto.dart';
 import 'package:openapi/src/model/authority.dart';
-import 'package:openapi/src/model/currency_type.dart';
+import 'package:openapi/src/model/currency_type_dto.dart';
 import 'package:openapi/src/model/jwt_token.dart';
 import 'package:openapi/src/model/key_and_password_vm.dart';
 import 'package:openapi/src/model/login_vm.dart';
@@ -24,14 +24,14 @@ import 'package:openapi/src/model/managed_user_vm.dart';
 import 'package:openapi/src/model/password_change_dto.dart';
 import 'package:openapi/src/model/user.dart';
 import 'package:openapi/src/model/user_dto.dart';
-import 'package:openapi/src/model/way_bill.dart';
+import 'package:openapi/src/model/way_bill_dto.dart';
 
 part 'serializers.g.dart';
 
 @SerializersFor([
   AdminUserDTO,
   Authority,
-  CurrencyType,
+  CurrencyTypeDTO,
   JWTToken,
   KeyAndPasswordVM,
   LoginVM,
@@ -39,20 +39,28 @@ part 'serializers.g.dart';
   PasswordChangeDTO,
   User,
   UserDTO,
-  WayBill,
+  WayBillDTO,
 ])
 Serializers serializers = (_$serializers.toBuilder()
+      ..addBuilderFactory(
+        const FullType(BuiltList, [FullType(CurrencyTypeDTO)]),
+        () => ListBuilder<CurrencyTypeDTO>(),
+      )
+      ..addBuilderFactory(
+        const FullType(BuiltList, [FullType(int)]),
+        () => ListBuilder<int>(),
+      )
       ..addBuilderFactory(
         const FullType(BuiltList, [FullType(AdminUserDTO)]),
         () => ListBuilder<AdminUserDTO>(),
       )
       ..addBuilderFactory(
-        const FullType(BuiltList, [FullType(WayBill)]),
-        () => ListBuilder<WayBill>(),
+        const FullType(BuiltList, [FullType(DateTime)]),
+        () => ListBuilder<DateTime>(),
       )
       ..addBuilderFactory(
-        const FullType(BuiltList, [FullType(CurrencyType)]),
-        () => ListBuilder<CurrencyType>(),
+        const FullType(BuiltList, [FullType(WayBillDTO)]),
+        () => ListBuilder<WayBillDTO>(),
       )
       ..addBuilderFactory(
         const FullType(BuiltList, [FullType(String)]),

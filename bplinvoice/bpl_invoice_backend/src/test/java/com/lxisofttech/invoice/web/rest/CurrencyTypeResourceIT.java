@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lxisofttech.invoice.IntegrationTest;
 import com.lxisofttech.invoice.domain.CurrencyType;
 import com.lxisofttech.invoice.repository.CurrencyTypeRepository;
+import com.lxisofttech.invoice.service.dto.CurrencyTypeDTO;
+import com.lxisofttech.invoice.service.mapper.CurrencyTypeMapper;
 import jakarta.persistence.EntityManager;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -48,6 +50,9 @@ class CurrencyTypeResourceIT {
     private CurrencyTypeRepository currencyTypeRepository;
 
     @Autowired
+    private CurrencyTypeMapper currencyTypeMapper;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -63,8 +68,9 @@ class CurrencyTypeResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static CurrencyType createEntity() {
-        return new CurrencyType().name(DEFAULT_NAME);
+    public static CurrencyType createEntity(EntityManager em) {
+        CurrencyType currencyType = new CurrencyType().name(DEFAULT_NAME);
+        return currencyType;
     }
 
     /**
@@ -73,13 +79,14 @@ class CurrencyTypeResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static CurrencyType createUpdatedEntity() {
-        return new CurrencyType().name(UPDATED_NAME);
+    public static CurrencyType createUpdatedEntity(EntityManager em) {
+        CurrencyType updatedCurrencyType = new CurrencyType().name(UPDATED_NAME);
+        return updatedCurrencyType;
     }
 
     @BeforeEach
     public void initTest() {
-        currencyType = createEntity();
+        currencyType = createEntity(em);
     }
 
     @AfterEach
@@ -95,18 +102,20 @@ class CurrencyTypeResourceIT {
     void createCurrencyType() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the CurrencyType
-        var returnedCurrencyType = om.readValue(
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
+        var returnedCurrencyTypeDTO = om.readValue(
             restCurrencyTypeMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(currencyType)))
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(currencyTypeDTO)))
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString(),
-            CurrencyType.class
+            CurrencyTypeDTO.class
         );
 
         // Validate the CurrencyType in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
+        var returnedCurrencyType = currencyTypeMapper.toEntity(returnedCurrencyTypeDTO);
         assertCurrencyTypeUpdatableFieldsEquals(returnedCurrencyType, getPersistedCurrencyType(returnedCurrencyType));
 
         insertedCurrencyType = returnedCurrencyType;
@@ -117,12 +126,13 @@ class CurrencyTypeResourceIT {
     void createCurrencyTypeWithExistingId() throws Exception {
         // Create the CurrencyType with an existing ID
         currencyType.setId(1L);
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCurrencyTypeMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(currencyType)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(currencyTypeDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the CurrencyType in the database
@@ -161,6 +171,114 @@ class CurrencyTypeResourceIT {
 
     @Test
     @Transactional
+    void getCurrencyTypesByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedCurrencyType = currencyTypeRepository.saveAndFlush(currencyType);
+
+        Long id = currencyType.getId();
+
+        defaultCurrencyTypeFiltering("id.equals=" + id, "id.notEquals=" + id);
+
+        defaultCurrencyTypeFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+
+        defaultCurrencyTypeFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrencyTypesByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedCurrencyType = currencyTypeRepository.saveAndFlush(currencyType);
+
+        // Get all the currencyTypeList where name equals to
+        defaultCurrencyTypeFiltering("name.equals=" + DEFAULT_NAME, "name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrencyTypesByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedCurrencyType = currencyTypeRepository.saveAndFlush(currencyType);
+
+        // Get all the currencyTypeList where name in
+        defaultCurrencyTypeFiltering("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME, "name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrencyTypesByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedCurrencyType = currencyTypeRepository.saveAndFlush(currencyType);
+
+        // Get all the currencyTypeList where name is not null
+        defaultCurrencyTypeFiltering("name.specified=true", "name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrencyTypesByNameContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCurrencyType = currencyTypeRepository.saveAndFlush(currencyType);
+
+        // Get all the currencyTypeList where name contains
+        defaultCurrencyTypeFiltering("name.contains=" + DEFAULT_NAME, "name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrencyTypesByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCurrencyType = currencyTypeRepository.saveAndFlush(currencyType);
+
+        // Get all the currencyTypeList where name does not contain
+        defaultCurrencyTypeFiltering("name.doesNotContain=" + UPDATED_NAME, "name.doesNotContain=" + DEFAULT_NAME);
+    }
+
+    private void defaultCurrencyTypeFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultCurrencyTypeShouldBeFound(shouldBeFound);
+        defaultCurrencyTypeShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultCurrencyTypeShouldBeFound(String filter) throws Exception {
+        restCurrencyTypeMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(currencyType.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+
+        // Check, that the count call also returns 1
+        restCurrencyTypeMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultCurrencyTypeShouldNotBeFound(String filter) throws Exception {
+        restCurrencyTypeMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCurrencyTypeMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingCurrencyType() throws Exception {
         // Get the currencyType
         restCurrencyTypeMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
@@ -179,12 +297,13 @@ class CurrencyTypeResourceIT {
         // Disconnect from session so that the updates on updatedCurrencyType are not directly saved in db
         em.detach(updatedCurrencyType);
         updatedCurrencyType.name(UPDATED_NAME);
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(updatedCurrencyType);
 
         restCurrencyTypeMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedCurrencyType.getId())
+                put(ENTITY_API_URL_ID, currencyTypeDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(om.writeValueAsBytes(updatedCurrencyType))
+                    .content(om.writeValueAsBytes(currencyTypeDTO))
             )
             .andExpect(status().isOk());
 
@@ -199,12 +318,15 @@ class CurrencyTypeResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         currencyType.setId(longCount.incrementAndGet());
 
+        // Create the CurrencyType
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCurrencyTypeMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, currencyType.getId())
+                put(ENTITY_API_URL_ID, currencyTypeDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(om.writeValueAsBytes(currencyType))
+                    .content(om.writeValueAsBytes(currencyTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -218,12 +340,15 @@ class CurrencyTypeResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         currencyType.setId(longCount.incrementAndGet());
 
+        // Create the CurrencyType
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCurrencyTypeMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(om.writeValueAsBytes(currencyType))
+                    .content(om.writeValueAsBytes(currencyTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -237,9 +362,12 @@ class CurrencyTypeResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         currencyType.setId(longCount.incrementAndGet());
 
+        // Create the CurrencyType
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCurrencyTypeMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(currencyType)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(currencyTypeDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the CurrencyType in the database
@@ -311,12 +439,15 @@ class CurrencyTypeResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         currencyType.setId(longCount.incrementAndGet());
 
+        // Create the CurrencyType
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCurrencyTypeMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, currencyType.getId())
+                patch(ENTITY_API_URL_ID, currencyTypeDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(om.writeValueAsBytes(currencyType))
+                    .content(om.writeValueAsBytes(currencyTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -330,12 +461,15 @@ class CurrencyTypeResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         currencyType.setId(longCount.incrementAndGet());
 
+        // Create the CurrencyType
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCurrencyTypeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(om.writeValueAsBytes(currencyType))
+                    .content(om.writeValueAsBytes(currencyTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -349,9 +483,12 @@ class CurrencyTypeResourceIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         currencyType.setId(longCount.incrementAndGet());
 
+        // Create the CurrencyType
+        CurrencyTypeDTO currencyTypeDTO = currencyTypeMapper.toDto(currencyType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCurrencyTypeMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(currencyType)))
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(currencyTypeDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the CurrencyType in the database

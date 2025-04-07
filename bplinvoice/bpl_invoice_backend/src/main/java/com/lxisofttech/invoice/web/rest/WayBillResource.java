@@ -2,19 +2,29 @@ package com.lxisofttech.invoice.web.rest;
 
 import com.lxisofttech.invoice.domain.WayBill;
 import com.lxisofttech.invoice.repository.WayBillRepository;
+import com.lxisofttech.invoice.service.WayBillQueryService;
+import com.lxisofttech.invoice.service.WayBillService;
+import com.lxisofttech.invoice.service.criteria.WayBillCriteria;
+import com.lxisofttech.invoice.service.dto.WayBillDTO;
 import com.lxisofttech.invoice.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -22,7 +32,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/way-bills")
-@Transactional
 public class WayBillResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(WayBillResource.class);
@@ -32,167 +41,120 @@ public class WayBillResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final WayBillService wayBillService;
     private final WayBillRepository wayBillRepository;
+    private final WayBillQueryService wayBillQueryService;
 
-    public WayBillResource(WayBillRepository wayBillRepository) {
+    public WayBillResource(WayBillService wayBillService, WayBillRepository wayBillRepository, WayBillQueryService wayBillQueryService) {
+        this.wayBillService = wayBillService;
         this.wayBillRepository = wayBillRepository;
+        this.wayBillQueryService = wayBillQueryService;
     }
 
-    /**
-     * {@code POST  /way-bills} : Create a new wayBill.
-     *
-     * @param wayBill the wayBill to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new wayBill, or with status {@code 400 (Bad Request)} if the wayBill has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("")
-    public ResponseEntity<WayBill> createWayBill(@RequestBody WayBill wayBill) throws URISyntaxException {
-        LOG.debug("REST request to save WayBill : {}", wayBill);
-        if (wayBill.getId() != null) {
+    public ResponseEntity<WayBillDTO> createWayBill(@RequestBody WayBillDTO wayBillDTO) throws URISyntaxException {
+        LOG.debug("REST request to save WayBill : {}", wayBillDTO);
+        if (wayBillDTO.getId() != null) {
             throw new BadRequestAlertException("A new wayBill cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        wayBill = wayBillRepository.save(wayBill);
-        return ResponseEntity.created(new URI("/api/way-bills/" + wayBill.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, wayBill.getId().toString()))
-            .body(wayBill);
+        wayBillDTO = wayBillService.save(wayBillDTO);
+        return ResponseEntity.created(new URI("/api/way-bills/" + wayBillDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, wayBillDTO.getId().toString()))
+            .body(wayBillDTO);
     }
 
-    /**
-     * {@code PUT  /way-bills/:id} : Updates an existing wayBill.
-     *
-     * @param id the id of the wayBill to save.
-     * @param wayBill the wayBill to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated wayBill,
-     * or with status {@code 400 (Bad Request)} if the wayBill is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the wayBill couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/{id}")
-    public ResponseEntity<WayBill> updateWayBill(@PathVariable(value = "id", required = false) final Long id, @RequestBody WayBill wayBill)
-        throws URISyntaxException {
-        LOG.debug("REST request to update WayBill : {}, {}", id, wayBill);
-        if (wayBill.getId() == null) {
+    public ResponseEntity<WayBillDTO> updateWayBill(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody WayBillDTO wayBillDTO
+    ) throws URISyntaxException {
+        LOG.debug("REST request to update WayBill : {}, {}", id, wayBillDTO);
+        if (wayBillDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, wayBill.getId())) {
+        if (!Objects.equals(id, wayBillDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-
         if (!wayBillRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
-        wayBill = wayBillRepository.save(wayBill);
+        wayBillDTO = wayBillService.update(wayBillDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wayBill.getId().toString()))
-            .body(wayBill);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wayBillDTO.getId().toString()))
+            .body(wayBillDTO);
     }
 
-    /**
-     * {@code PATCH  /way-bills/:id} : Partial updates given fields of an existing wayBill, field will ignore if it is null
-     *
-     * @param id the id of the wayBill to save.
-     * @param wayBill the wayBill to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated wayBill,
-     * or with status {@code 400 (Bad Request)} if the wayBill is not valid,
-     * or with status {@code 404 (Not Found)} if the wayBill is not found,
-     * or with status {@code 500 (Internal Server Error)} if the wayBill couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<WayBill> partialUpdateWayBill(
+    public ResponseEntity<WayBillDTO> partialUpdateWayBill(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody WayBill wayBill
+        @RequestBody WayBillDTO wayBillDTO
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update WayBill partially : {}, {}", id, wayBill);
-        if (wayBill.getId() == null) {
+        LOG.debug("REST request to partial update WayBill partially : {}, {}", id, wayBillDTO);
+        if (wayBillDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, wayBill.getId())) {
+        if (!Objects.equals(id, wayBillDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-
         if (!wayBillRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
-        Optional<WayBill> result = wayBillRepository
-            .findById(wayBill.getId())
-            .map(existingWayBill -> {
-                if (wayBill.getBoxLimit() != null) {
-                    existingWayBill.setBoxLimit(wayBill.getBoxLimit());
-                }
-                if (wayBill.getShipmentType() != null) {
-                    existingWayBill.setShipmentType(wayBill.getShipmentType());
-                }
-                if (wayBill.getOpfac() != null) {
-                    existingWayBill.setOpfac(wayBill.getOpfac());
-                }
-                if (wayBill.getDeliveryAgent() != null) {
-                    existingWayBill.setDeliveryAgent(wayBill.getDeliveryAgent());
-                }
-                if (wayBill.getEstimatedReadyDate() != null) {
-                    existingWayBill.setEstimatedReadyDate(wayBill.getEstimatedReadyDate());
-                }
-                if (wayBill.getCurrencyUom() != null) {
-                    existingWayBill.setCurrencyUom(wayBill.getCurrencyUom());
-                }
-                if (wayBill.getEstimatedShipDate() != null) {
-                    existingWayBill.setEstimatedShipDate(wayBill.getEstimatedShipDate());
-                }
-                if (wayBill.getStatus() != null) {
-                    existingWayBill.setStatus(wayBill.getStatus());
-                }
-                if (wayBill.getReferenceNumber() != null) {
-                    existingWayBill.setReferenceNumber(wayBill.getReferenceNumber());
-                }
-
-                return existingWayBill;
-            })
-            .map(wayBillRepository::save);
-
+        Optional<WayBillDTO> result = wayBillService.partialUpdate(wayBillDTO);
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wayBill.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wayBillDTO.getId().toString())
         );
     }
 
-    /**
-     * {@code GET  /way-bills} : get all the wayBills.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of wayBills in body.
-     */
     @GetMapping("")
-    public List<WayBill> getAllWayBills() {
-        LOG.debug("REST request to get all WayBills");
-        return wayBillRepository.findAll();
+    public ResponseEntity<List<WayBillDTO>> getAllWayBills(
+        WayBillCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get WayBills by criteria: {}", criteria);
+        Page<WayBillDTO> page = wayBillQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    /**
-     * {@code GET  /way-bills/:id} : get the "id" wayBill.
-     *
-     * @param id the id of the wayBill to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the wayBill, or with status {@code 404 (Not Found)}.
-     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countWayBills(WayBillCriteria criteria) {
+        LOG.debug("REST request to count WayBills by criteria: {}", criteria);
+        return ResponseEntity.ok().body(wayBillQueryService.countByCriteria(criteria));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<WayBill> getWayBill(@PathVariable("id") Long id) {
+    public ResponseEntity<WayBillDTO> getWayBill(@PathVariable("id") Long id) {
         LOG.debug("REST request to get WayBill : {}", id);
-        Optional<WayBill> wayBill = wayBillRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(wayBill);
+        Optional<WayBillDTO> wayBillDTO = wayBillService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(wayBillDTO);
     }
 
-    /**
-     * {@code DELETE  /way-bills/:id} : delete the "id" wayBill.
-     *
-     * @param id the id of the wayBill to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWayBill(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete WayBill : {}", id);
-        wayBillRepository.deleteById(id);
+        wayBillService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    /**
+     * GET  /by-currency-id/{currencyId} : get all waybill IDs by CurrencyType.
+     */
+    @GetMapping("/by-currency-id/{currencyId}")
+    public ResponseEntity<List<Long>> getWayBillIdsByCurrency(@PathVariable Long currencyId) {
+        List<Long> wayBillIds = wayBillRepository.findByCurrencyType_Id(currencyId)
+            .stream()
+            .map(WayBill::getId)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok().body(wayBillIds);
+    }
+
+    @GetMapping("/waybills/by-currency/{currencyName}")
+    public ResponseEntity<List<WayBill>> getWayBillsByCurrencyName(@PathVariable String currencyName) {
+        List<WayBill> result = wayBillService.getWayBillsByCurrencyName(currencyName);
+        return ResponseEntity.ok(result);
+    }
+    
 }

@@ -7,7 +7,12 @@ void main() {
   final instance = Openapi().getCurrencyTypeResourceApi();
 
   group(CurrencyTypeResourceApi, () {
-    //Future<CurrencyType> createCurrencyType(CurrencyType currencyType) async
+    //Future<int> countCurrencyTypes({ int idPeriodGreaterThan, int idPeriodLessThan, int idPeriodGreaterThanOrEqual, int idPeriodLessThanOrEqual, int idPeriodEquals, int idPeriodNotEquals, bool idPeriodSpecified, BuiltList<int> idPeriodIn, BuiltList<int> idPeriodNotIn, String namePeriodContains, String namePeriodDoesNotContain, String namePeriodEquals, String namePeriodNotEquals, bool namePeriodSpecified, BuiltList<String> namePeriodIn, BuiltList<String> namePeriodNotIn, int currencyTypeIdPeriodGreaterThan, int currencyTypeIdPeriodLessThan, int currencyTypeIdPeriodGreaterThanOrEqual, int currencyTypeIdPeriodLessThanOrEqual, int currencyTypeIdPeriodEquals, int currencyTypeIdPeriodNotEquals, bool currencyTypeIdPeriodSpecified, BuiltList<int> currencyTypeIdPeriodIn, BuiltList<int> currencyTypeIdPeriodNotIn, bool distinct }) async
+    test('test countCurrencyTypes', () async {
+      // TODO
+    });
+
+    //Future<CurrencyTypeDTO> createCurrencyType(CurrencyTypeDTO currencyTypeDTO) async
     test('test createCurrencyType', () async {
       // TODO
     });
@@ -17,22 +22,22 @@ void main() {
       // TODO
     });
 
-    //Future<BuiltList<CurrencyType>> getAllCurrencyTypes({ String filter }) async
+    //Future<BuiltList<CurrencyTypeDTO>> getAllCurrencyTypes({ int idPeriodGreaterThan, int idPeriodLessThan, int idPeriodGreaterThanOrEqual, int idPeriodLessThanOrEqual, int idPeriodEquals, int idPeriodNotEquals, bool idPeriodSpecified, BuiltList<int> idPeriodIn, BuiltList<int> idPeriodNotIn, String namePeriodContains, String namePeriodDoesNotContain, String namePeriodEquals, String namePeriodNotEquals, bool namePeriodSpecified, BuiltList<String> namePeriodIn, BuiltList<String> namePeriodNotIn, int currencyTypeIdPeriodGreaterThan, int currencyTypeIdPeriodLessThan, int currencyTypeIdPeriodGreaterThanOrEqual, int currencyTypeIdPeriodLessThanOrEqual, int currencyTypeIdPeriodEquals, int currencyTypeIdPeriodNotEquals, bool currencyTypeIdPeriodSpecified, BuiltList<int> currencyTypeIdPeriodIn, BuiltList<int> currencyTypeIdPeriodNotIn, bool distinct, int page, int size, BuiltList<String> sort }) async
     test('test getAllCurrencyTypes', () async {
       // TODO
     });
 
-    //Future<CurrencyType> getCurrencyType(int id) async
+    //Future<CurrencyTypeDTO> getCurrencyType(int id) async
     test('test getCurrencyType', () async {
       // TODO
     });
 
-    //Future<CurrencyType> partialUpdateCurrencyType(int id, CurrencyType currencyType) async
+    //Future<CurrencyTypeDTO> partialUpdateCurrencyType(int id, CurrencyTypeDTO currencyTypeDTO) async
     test('test partialUpdateCurrencyType', () async {
       // TODO
     });
 
-    //Future<CurrencyType> updateCurrencyType(int id, CurrencyType currencyType) async
+    //Future<CurrencyTypeDTO> updateCurrencyType(int id, CurrencyTypeDTO currencyTypeDTO) async
     test('test updateCurrencyType', () async {
       // TODO
     });

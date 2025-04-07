@@ -47,22 +47,26 @@ describe('WayBill Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should call currencyType query and add missing value', () => {
+    it('Should call CurrencyType query and add missing value', () => {
       const wayBill: IWayBill = { id: 6454 };
       const currencyType: ICurrencyType = { id: 3445 };
       wayBill.currencyType = currencyType;
 
       const currencyTypeCollection: ICurrencyType[] = [{ id: 3445 }];
       jest.spyOn(currencyTypeService, 'query').mockReturnValue(of(new HttpResponse({ body: currencyTypeCollection })));
-      const expectedCollection: ICurrencyType[] = [currencyType, ...currencyTypeCollection];
+      const additionalCurrencyTypes = [currencyType];
+      const expectedCollection: ICurrencyType[] = [...additionalCurrencyTypes, ...currencyTypeCollection];
       jest.spyOn(currencyTypeService, 'addCurrencyTypeToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ wayBill });
       comp.ngOnInit();
 
       expect(currencyTypeService.query).toHaveBeenCalled();
-      expect(currencyTypeService.addCurrencyTypeToCollectionIfMissing).toHaveBeenCalledWith(currencyTypeCollection, currencyType);
-      expect(comp.currencyTypesCollection).toEqual(expectedCollection);
+      expect(currencyTypeService.addCurrencyTypeToCollectionIfMissing).toHaveBeenCalledWith(
+        currencyTypeCollection,
+        ...additionalCurrencyTypes.map(expect.objectContaining),
+      );
+      expect(comp.currencyTypesSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
@@ -73,7 +77,7 @@ describe('WayBill Management Update Component', () => {
       activatedRoute.data = of({ wayBill });
       comp.ngOnInit();
 
-      expect(comp.currencyTypesCollection).toContainEqual(currencyType);
+      expect(comp.currencyTypesSharedCollection).toContainEqual(currencyType);
       expect(comp.wayBill).toEqual(wayBill);
     });
   });

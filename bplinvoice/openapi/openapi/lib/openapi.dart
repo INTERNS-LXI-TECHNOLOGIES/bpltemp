@@ -20,7 +20,7 @@ export 'package:openapi/src/api/way_bill_resource_api.dart';
 
 export 'package:openapi/src/model/admin_user_dto.dart';
 export 'package:openapi/src/model/authority.dart';
-export 'package:openapi/src/model/currency_type.dart';
+export 'package:openapi/src/model/currency_type_dto.dart';
 export 'package:openapi/src/model/jwt_token.dart';
 export 'package:openapi/src/model/key_and_password_vm.dart';
 export 'package:openapi/src/model/login_vm.dart';
@@ -28,5 +28,5 @@ export 'package:openapi/src/model/managed_user_vm.dart';
 export 'package:openapi/src/model/password_change_dto.dart';
 export 'package:openapi/src/model/user.dart';
 export 'package:openapi/src/model/user_dto.dart';
-export 'package:openapi/src/model/way_bill.dart';
+export 'package:openapi/src/model/way_bill_dto.dart';
 

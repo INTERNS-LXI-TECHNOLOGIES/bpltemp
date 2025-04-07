@@ -1,4 +1,4 @@
-# openapi.model.WayBill
+# openapi.model.WayBillDTO
 
 ## Load the model package
 ```dart
@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **estimatedShipDate** | [**DateTime**](DateTime.md) |  | [optional] 
 **status** | **String** |  | [optional] 
 **referenceNumber** | **String** |  | [optional] 
-**currencyType** | [**CurrencyType**](CurrencyType.md) |  | [optional] 
+**currencyType** | [**CurrencyTypeDTO**](CurrencyTypeDTO.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
