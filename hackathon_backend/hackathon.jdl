@@ -1,0 +1,18 @@
+entity Company {
+  name String required minlength(2),
+  location String
+}
+
+entity Employee {
+  name String required minlength(2),
+  position String required,
+  email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+}
+
+relationship OneToMany {
+  Company{employees} to Employee{company(required)}
+}
+
+dto Company, Employee with mapstruct
+paginate Company, Employee with pagination
+service Company, Employee with serviceClass
