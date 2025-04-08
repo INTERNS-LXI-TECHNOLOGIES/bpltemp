@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:organizationfrontend/localization/app_localizations.dart';
-import 'package:organizationfrontend/widget/logistics_dashboard.dart';
 import 'package:organizationfrontend/widget/login_widget.dart';
 import 'package:organizationfrontend/widget/organization_form.dart';
+import 'localization/app_localizations.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -11,11 +11,11 @@ void main() {
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = Locale('en');
+  Locale _locale = const Locale('en');
 
   void _setLocale(Locale locale) {
     setState(() {
@@ -29,31 +29,29 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Organization Dashboard',
       locale: _locale,
-      supportedLocales: [
+      supportedLocales: const [
         Locale('en'),
         Locale('hi'),
         Locale('ta'),
         Locale('ml'),
       ],
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       localeResolutionCallback: (locale, supportedLocales) {
-        if (locale == null) return _locale;
-        for (var supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale.languageCode) {
-            return supportedLocale;
+        if (locale != null) {
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == locale.languageCode) {
+              return supportedLocale;
+            }
           }
         }
-        return _locale;
+        return const Locale('en');
       },
-      home: LoginWidget(
-        setLocale: _setLocale,
-      ),
-
+      home: LoginWidget(setLocale: _setLocale),
     );
   }
 }
