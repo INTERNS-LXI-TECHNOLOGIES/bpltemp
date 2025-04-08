@@ -97,6 +97,8 @@ Class | Method | HTTP request | Description
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**deleteWayBill**](doc/WayBillResourceApi.md#deletewaybill) | **DELETE** /api/way-bills/{id} | 
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**getAllWayBills**](doc/WayBillResourceApi.md#getallwaybills) | **GET** /api/way-bills | 
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**getWayBill**](doc/WayBillResourceApi.md#getwaybill) | **GET** /api/way-bills/{id} | 
+[*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**getWayBillIdsByCurrency**](doc/WayBillResourceApi.md#getwaybillidsbycurrency) | **GET** /api/way-bills/waybills/by-currency/{currency} | 
+[*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**getWayBillIdsByCurrency1**](doc/WayBillResourceApi.md#getwaybillidsbycurrency1) | **GET** /api/way-bills/by-currency-id/{currencyId} | 
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**partialUpdateWayBill**](doc/WayBillResourceApi.md#partialupdatewaybill) | **PATCH** /api/way-bills/{id} | 
 [*WayBillResourceApi*](doc/WayBillResourceApi.md) | [**updateWayBill**](doc/WayBillResourceApi.md#updatewaybill) | **PUT** /api/way-bills/{id} | 
 

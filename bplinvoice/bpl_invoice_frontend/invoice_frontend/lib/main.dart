@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:invoice_frontend/LoginWidget.dart';
 import 'package:invoice_frontend/localization/app_localizations.dart';
 
-
 void main() {
   runApp(
     ProviderScope(

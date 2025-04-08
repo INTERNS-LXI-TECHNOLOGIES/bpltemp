@@ -1960,6 +1960,40 @@
                 }
             }
         },
+        "/api/way-bills/waybills/by-currency/{currency}": {
+            "get": {
+                "tags": [
+                    "way-bill-resource"
+                ],
+                "operationId": "getWayBillIdsByCurrency",
+                "parameters": [
+                    {
+                        "name": "currency",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "format": "int64"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/way-bills/count": {
             "get": {
                 "tags": [
@@ -2786,6 +2820,41 @@
                                 "schema": {
                                     "type": "integer",
                                     "format": "int64"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/way-bills/by-currency-id/{currencyId}": {
+            "get": {
+                "tags": [
+                    "way-bill-resource"
+                ],
+                "operationId": "getWayBillIdsByCurrency_1",
+                "parameters": [
+                    {
+                        "name": "currencyId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "format": "int64"
+                                    }
                                 }
                             }
                         }

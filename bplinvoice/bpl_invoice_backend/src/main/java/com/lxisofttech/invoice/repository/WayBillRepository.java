@@ -16,7 +16,5 @@ public interface WayBillRepository extends JpaRepository<WayBill, Long>, JpaSpec
     List<WayBill> findByCurrencyType_Id(Long currencyTypeId);
     List<WayBill> findByCurrencyType_Name(String currencyName);
     
-@Query("SELECT wb FROM WayBill wb JOIN FETCH wb.currencyType")
-List<WayBill> findAllWithCurrencyType();
 
 }

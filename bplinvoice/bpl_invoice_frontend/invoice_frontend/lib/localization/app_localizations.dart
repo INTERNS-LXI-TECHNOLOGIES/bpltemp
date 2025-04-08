@@ -9,8 +9,7 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   static final Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -123,7 +122,6 @@ class AppLocalizations {
       'validation.refNumberRequired': 'Referenznummer ist erforderlich',
       'validation.refNumberMinLength': 'Die Referenznummer muss mindestens 5 Zeichen lang sein',
       'validation.refNumberFormat': 'Die Referenznummer muss mindestens einen Großbuchstaben und eine Zahl enthalten',
-      
     },
     'ml': {
       'wayBill': 'വേ ബിൽ',
@@ -164,7 +162,6 @@ class AppLocalizations {
     },
   };
 
-
   String get wayBill => _localizedValues[locale.languageCode]!['wayBill']!;
   String get invDetails => _localizedValues[locale.languageCode]!['invDetails']!;
   String get shipItems => _localizedValues[locale.languageCode]!['shipItems']!;
@@ -199,7 +196,7 @@ class AppLocalizations {
   String getValidationMessage(String errorType, String fieldName) {
     final fieldLabel = _getFieldLabel(fieldName);
     final message = _localizedValues[locale.languageCode]!['validation.$errorType']!;
-    
+
     switch (errorType) {
       case 'minLength':
         return message.replaceAll('{min}', '3');

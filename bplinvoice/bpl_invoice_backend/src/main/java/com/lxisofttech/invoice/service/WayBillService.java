@@ -101,11 +101,11 @@ public class WayBillService {
     }
 
     @Transactional(readOnly = true)
-    public List<WayBill> getWayBillsByCurrencyName(String currencyName) {
-        List<WayBill> wayBills = wayBillRepository.findAllWithCurrencyType();
-
+    public List<Long> getWayBillIdsByCurrency(String currency) {
+        List<WayBill> wayBills = wayBillRepository.findByCurrencyType_Name(currency);
         return wayBills.stream()
-                .filter(wb -> currencyName.equals(wb.getCurrencyType().getName()))
-                .collect(Collectors.toList());
+                       .map(WayBill::getId)
+                       .collect(Collectors.toList());
     }
+    
 }

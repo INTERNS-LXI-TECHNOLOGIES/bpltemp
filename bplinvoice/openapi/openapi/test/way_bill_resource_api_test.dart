@@ -32,6 +32,16 @@ void main() {
       // TODO
     });
 
+    //Future<BuiltList<int>> getWayBillIdsByCurrency(String currency) async
+    test('test getWayBillIdsByCurrency', () async {
+      // TODO
+    });
+
+    //Future<BuiltList<int>> getWayBillIdsByCurrency1(int currencyId) async
+    test('test getWayBillIdsByCurrency1', () async {
+      // TODO
+    });
+
     //Future<WayBillDTO> partialUpdateWayBill(int id, WayBillDTO wayBillDTO) async
     test('test partialUpdateWayBill', () async {
       // TODO

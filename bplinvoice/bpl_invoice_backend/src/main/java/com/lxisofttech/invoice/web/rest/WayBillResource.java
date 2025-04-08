@@ -151,10 +151,11 @@ public class WayBillResource {
         return ResponseEntity.ok().body(wayBillIds);
     }
 
-    @GetMapping("/waybills/by-currency/{currencyName}")
-    public ResponseEntity<List<WayBill>> getWayBillsByCurrencyName(@PathVariable String currencyName) {
-        List<WayBill> result = wayBillService.getWayBillsByCurrencyName(currencyName);
-        return ResponseEntity.ok(result);
+    @GetMapping("/waybills/by-currency/{currency}")
+    public ResponseEntity<List<Long>> getWayBillIdsByCurrency(@PathVariable String currency) {
+        List<Long> wayBillIds = wayBillService.getWayBillIdsByCurrency(currency);
+        return ResponseEntity.ok(wayBillIds);
     }
+    
     
 }

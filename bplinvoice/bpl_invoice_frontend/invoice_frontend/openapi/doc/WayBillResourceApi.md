@@ -14,6 +14,8 @@ Method | HTTP request | Description
 [**deleteWayBill**](WayBillResourceApi.md#deletewaybill) | **DELETE** /api/way-bills/{id} | 
 [**getAllWayBills**](WayBillResourceApi.md#getallwaybills) | **GET** /api/way-bills | 
 [**getWayBill**](WayBillResourceApi.md#getwaybill) | **GET** /api/way-bills/{id} | 
+[**getWayBillIdsByCurrency**](WayBillResourceApi.md#getwaybillidsbycurrency) | **GET** /api/way-bills/waybills/by-currency/{currency} | 
+[**getWayBillIdsByCurrency1**](WayBillResourceApi.md#getwaybillidsbycurrency1) | **GET** /api/way-bills/by-currency-id/{currencyId} | 
 [**partialUpdateWayBill**](WayBillResourceApi.md#partialupdatewaybill) | **PATCH** /api/way-bills/{id} | 
 [**updateWayBill**](WayBillResourceApi.md#updatewaybill) | **PUT** /api/way-bills/{id} | 
 
@@ -564,6 +566,88 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**WayBillDTO**](WayBillDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getWayBillIdsByCurrency**
+> BuiltList<int> getWayBillIdsByCurrency(currency)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getWayBillResourceApi();
+final String currency = currency_example; // String | 
+
+try {
+    final response = api.getWayBillIdsByCurrency(currency);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling WayBillResourceApi->getWayBillIdsByCurrency: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **currency** | **String**|  | 
+
+### Return type
+
+**BuiltList&lt;int&gt;**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getWayBillIdsByCurrency1**
+> BuiltList<int> getWayBillIdsByCurrency1(currencyId)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api = Openapi().getWayBillResourceApi();
+final int currencyId = 789; // int | 
+
+try {
+    final response = api.getWayBillIdsByCurrency1(currencyId);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling WayBillResourceApi->getWayBillIdsByCurrency1: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **currencyId** | **int**|  | 
+
+### Return type
+
+**BuiltList&lt;int&gt;**
 
 ### Authorization
 
