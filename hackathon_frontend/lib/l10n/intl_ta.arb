@@ -1,0 +1,33 @@
+    {
+      "@@locale": "ta",
+      "appTitle": "Flutter CRUD செயலி",
+      "companiesTab": "நிறுவனங்கள்",
+      "employeesTab": "ஊழியர்கள்",
+      "createCompanyButton": "நிறுவனத்தை உருவாக்கு",
+      "companyIdHeader": "ஐடி",
+      "companyNameHeader": "பெயர்",
+      "employeeIdHeader": "ஐடி",
+      "employeeNameHeader": "பெயர்",
+      "employeePositionHeader": "பதவி",
+      "selectCompanyHint": "நிறுவனத்தைத் தேர்ந்தெடுக்கவும்...",
+      "loadingMessage": "ஏற்றுகிறது...",
+      "actionsHeader": "செயல்கள்",
+      "editActionTooltip": "திருத்து",
+      "deleteActionTooltip": "நீக்கு",
+      "companyListTitle": "நிறுவன பட்டியல்:",
+      "employeeListTitle": "ஊழியர் பட்டியல்:",
+      "noEmployeesFound": "இந்த நிறுவனத்திற்கு ஊழியர்கள் இல்லை.",
+      "pleaseSelectCompany": "முதலில் ஒரு நிறுவனத்தைத் தேர்ந்தெடுக்கவும்.",
+      "createActionPending": "நிறுவனத்தை உருவாக்கும் செயல் நிலுவையில் உள்ளது.",
+      "errorMessage": "பிழை: {message}",
+      "@errorMessage": {
+        "description": "பொதுவான பிழை செய்தி",
+        "placeholders": {
+          "message": {
+            "type": "String",
+            "example": "Network failed"
+          }
+        }
+      }
+    }
+    

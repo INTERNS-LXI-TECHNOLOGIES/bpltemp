@@ -1,0 +1,32 @@
+{
+  "@@locale": "en",
+  "appTitle": "Flutter CRUD App",
+  "companiesTab": "Companies",
+  "employeesTab": "Employees",
+  "createCompanyButton": "Create Company",
+  "companyIdHeader": "ID",
+  "companyNameHeader": "Name",
+  "employeeIdHeader": "ID",
+  "employeeNameHeader": "Name",
+  "employeePositionHeader": "Position",
+  "selectCompanyHint": "Select Company...",
+  "loadingMessage": "Loading...",
+  "actionsHeader": "Actions",
+  "editActionTooltip": "Edit",
+  "deleteActionTooltip": "Delete",
+  "companyListTitle": "Company List:",
+  "employeeListTitle": "Employee List:",
+  "noEmployeesFound": "No employees found for this company.",
+  "pleaseSelectCompany": "Please select a company first.",
+  "createActionPending": "Create Company action pending implementation.",
+  "errorMessage": "Error: {message}",
+  "@errorMessage": {
+    "description": "Generic error message",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Network failed"
+      }
+    }
+  }
+}

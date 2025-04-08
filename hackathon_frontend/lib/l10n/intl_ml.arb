@@ -1,0 +1,33 @@
+    {
+      "@@locale": "ml",
+      "appTitle": "Flutter CRUD ആപ്പ്",
+      "companiesTab": "കമ്പനികൾ",
+      "employeesTab": "ജീവനക്കാർ",
+      "createCompanyButton": "കമ്പനി സൃഷ്ടിക്കുക",
+      "companyIdHeader": "ഐഡി",
+      "companyNameHeader": "പേര്",
+      "employeeIdHeader": "ഐഡി",
+      "employeeNameHeader": "പേര്",
+      "employeePositionHeader": "സ്ഥാനം",
+      "selectCompanyHint": "കമ്പനി തിരഞ്ഞെടുക്കുക...",
+      "loadingMessage": "ലോഡ് ചെയ്യുന്നു...",
+      "actionsHeader": "പ്രവർത്തനങ്ങൾ",
+      "editActionTooltip": "എഡിറ്റ് ചെയ്യുക",
+      "deleteActionTooltip": "ഇല്ലാതാക്കുക",
+      "companyListTitle": "കമ്പനി ലിസ്റ്റ്:",
+      "employeeListTitle": "ജീവനക്കാരുടെ ലിസ്റ്റ്:",
+      "noEmployeesFound": "ഈ കമ്പനിക്ക് ജീവനക്കാരില്ല.",
+      "pleaseSelectCompany": "ആദ്യം ഒരു കമ്പനി തിരഞ്ഞെടുക്കുക.",
+      "createActionPending": "കമ്പനി സൃഷ്ടിക്കാനുള്ള പ്രവർത്തനം പുരോഗമിക്കുന്നു.",
+      "errorMessage": "പിശക്: {message}",
+      "@errorMessage": {
+        "description": "പൊതുവായ പിശക് സന്ദേശം",
+        "placeholders": {
+          "message": {
+            "type": "String",
+            "example": "Network failed"
+          }
+        }
+      }
+    }
+    
