@@ -10,7 +10,7 @@ entity Employee {
 }
 
 relationship OneToMany {
-  Company{employees} to Employee{company(required)}
+  Company{employees} to Employee{company}
 }
 
 dto Company, Employee with mapstruct

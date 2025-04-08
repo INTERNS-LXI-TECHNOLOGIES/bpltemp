@@ -41,6 +41,9 @@ public class CacheConfiguration {
             createCache(cm, com.diviso.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, com.diviso.repository.UserRepository.USERS_BY_EMAIL_CACHE);
             createCache(cm, com.diviso.domain.Authority.class.getName());
+            createCache(cm, com.diviso.domain.Company.class.getName());
+            createCache(cm, com.diviso.domain.Company.class.getName() + ".employees");
+            createCache(cm, com.diviso.domain.Employee.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

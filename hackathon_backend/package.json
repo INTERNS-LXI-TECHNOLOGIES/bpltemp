@@ -5,6 +5,8 @@
   "description": "Description for Bpl Hackathon",
   "license": "UNLICENSED",
   "scripts": {
+    "webapp:build": "cross-env DISABLE_NOTIFIER=true npm run webpack:build",
+
     "app:start": "./mvnw -ntp --batch-mode",
     "app:up": "docker compose -f src/main/docker/app.yml up --wait",
     "backend:build-cache": "./mvnw dependency:go-offline -ntp",
