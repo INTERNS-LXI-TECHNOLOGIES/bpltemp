@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
+  openapi:
+    path: ./openapi
   equatable: ^2.0.5
   cupertino_icons: ^1.0.8
   flutter_localizations:

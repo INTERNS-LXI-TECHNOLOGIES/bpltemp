@@ -1,96 +1,126 @@
 import 'package:flutter/material.dart';
-// Import the generated localization file
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// No longer imports CompanyCubit
+import 'package:openapi/openapi.dart';
 
-class CompanyTab extends StatelessWidget {
+class CompanyTab extends StatefulWidget {
+  @override
+  _CompanyTabState createState() => _CompanyTabState();
+}
+
+class _CompanyTabState extends State<CompanyTab> {
+  final Openapi _openapi = Openapi();
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+
+  List<CompanyDTO> companies = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCompanies();
+  }
+
+  Future<void> fetchCompanies() async {
+    final response = await _openapi.getCompanyResourceApi().getAllCompanies();
+
+    if (response.statusCode == 200) {
+      setState(() {
+        companies = response.data?.toList() ?? [];
+      });
+    }
+  }
+
+  Future<void> createCompany() async {
+    final name = _nameController.text.trim();
+    final location = _locationController.text.trim();
+
+    if (name.isEmpty) return;
+
+    final companyBuilder = CompanyDTOBuilder()
+      ..name = name
+      ..location = location;
+
+    final response = await _openapi.getCompanyResourceApi().createCompany(
+      companyDTO: companyBuilder.build(),
+      headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
+    );
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      _nameController.clear();
+      _locationController.clear();
+      fetchCompanies();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Company Created Successfully')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to create company')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Get the localizations instance. The '!' assumes setup is correct.
     final l10n = AppLocalizations.of(context)!;
-
-    // Hardcoded data for UI preview
-    final List<Map<String, String>> staticCompanies = [
-      {'id': 'C001', 'name': 'Tech Solutions'},
-      {'id': 'C002', 'name': 'Global Health'},
-      {'id': 'C003', 'name': 'Finance Hub'},
-    ];
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(labelText: 'Company Name'),
+          ),
+          TextField(
+            controller: _locationController,
+            decoration: InputDecoration(labelText: 'Location (optional)'),
+          ),
+          const SizedBox(height: 8),
           ElevatedButton(
-            onPressed: () {
-              // TODO: Implement create company logic (e.g., show dialog)
-              // This button press does not depend on Cubit/Bloc
-              print("Create Company button pressed (UI only)");
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.createActionPending),
-                ), // Localized message
-              );
-            },
-            // Use localized string
-            child: Text(l10n.createCompanyButton),
+            onPressed: createCompany,
+            child: Text('Create Company'),
           ),
           const SizedBox(height: 16),
-
-          // --- DataTable Section ---
-          Text(
-            l10n.companyListTitle,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text('Company List', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: DataTable(
-                headingRowColor: MaterialStateColor.resolveWith(
-                  (states) => Colors.blueGrey.shade100,
-                ),
                 columns: [
-                  DataColumn(label: Text(l10n.companyIdHeader)),
-                  DataColumn(label: Text(l10n.companyNameHeader)),
-                  DataColumn(label: Text(l10n.actionsHeader)),
+                  DataColumn(label: Text('ID')),
+                  DataColumn(label: Text('Name')),
+                  DataColumn(label: Text('Location')),
+                  DataColumn(label: Text('Actions')),
                 ],
-                // *** Hardcoded Rows for UI Preview ***
-                // Data is static as no Cubit is provided
-                rows:
-                    staticCompanies.map((company) {
-                      return DataRow(
-                        cells: [
-                          DataCell(Text(company['id']!)),
-                          DataCell(Text(company['name']!)),
-                          DataCell(
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.edit,
-                                    size: 18,
-                                    color: Colors.blue,
-                                  ),
-                                  onPressed: () {},
-                                  tooltip: l10n.editActionTooltip,
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    size: 18,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {},
-                                  tooltip: l10n.deleteActionTooltip,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                // *** End Hardcoded Rows ***
+                rows: companies.map((company) {
+                  return DataRow(cells: [
+                    DataCell(Text(company.id?.toString() ?? '-')),
+                    DataCell(Text(company.name)),
+                    DataCell(Text(company.location ?? '-')),
+                    DataCell(Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, size: 18, color: Colors.blue),
+                          onPressed: () {
+                            // TODO: Implement Edit functionality
+                          },
+                          tooltip: l10n.editActionTooltip,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, size: 18, color: Colors.red),
+                          onPressed: () {
+                            // TODO: Implement Delete functionality
+                          },
+                          tooltip: l10n.deleteActionTooltip,
+                        ),
+                      ],
+                    )),
+                  ]);
+                }).toList(),
               ),
             ),
           ),

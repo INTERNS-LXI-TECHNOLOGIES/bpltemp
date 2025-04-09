@@ -23,6 +23,9 @@ class Openapi {
   final Dio dio;
   final Serializers serializers;
 
+  static var jwt =
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0Njc3MzU4NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ0MTgxNTg3fQ.8a4amBs8zIix2Vf-yXZLK_YP7WXWtW6KH1awB4cgzBTPVir0xY0ko9Xbqw30_lJQydrNUyb5pan8DF1elvvkiw";
+
   Openapi({
     Dio? dio,
     Serializers? serializers,
@@ -49,25 +52,36 @@ class Openapi {
 
   void setOAuthToken(String name, String token) {
     if (this.dio.interceptors.any((i) => i is OAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((i) => i is OAuthInterceptor) as OAuthInterceptor).tokens[name] = token;
+      (this.dio.interceptors.firstWhere((i) => i is OAuthInterceptor)
+              as OAuthInterceptor)
+          .tokens[name] = token;
     }
   }
 
   void setBearerAuth(String name, String token) {
     if (this.dio.interceptors.any((i) => i is BearerAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((i) => i is BearerAuthInterceptor) as BearerAuthInterceptor).tokens[name] = token;
+      (this.dio.interceptors.firstWhere((i) => i is BearerAuthInterceptor)
+              as BearerAuthInterceptor)
+          .tokens[name] = token;
     }
   }
 
   void setBasicAuth(String name, String username, String password) {
     if (this.dio.interceptors.any((i) => i is BasicAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((i) => i is BasicAuthInterceptor) as BasicAuthInterceptor).authInfo[name] = BasicAuthInfo(username, password);
+      (this.dio.interceptors.firstWhere((i) => i is BasicAuthInterceptor)
+              as BasicAuthInterceptor)
+          .authInfo[name] = BasicAuthInfo(username, password);
     }
   }
 
   void setApiKey(String name, String apiKey) {
     if (this.dio.interceptors.any((i) => i is ApiKeyAuthInterceptor)) {
-      (this.dio.interceptors.firstWhere((element) => element is ApiKeyAuthInterceptor) as ApiKeyAuthInterceptor).apiKeys[name] = apiKey;
+      (this
+                  .dio
+                  .interceptors
+                  .firstWhere((element) => element is ApiKeyAuthInterceptor)
+              as ApiKeyAuthInterceptor)
+          .apiKeys[name] = apiKey;
     }
   }
 
