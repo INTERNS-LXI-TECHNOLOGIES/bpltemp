@@ -15,6 +15,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   final TextEditingController _idController = TextEditingController();
   final List<TextEditingController> _controllers = List.generate(7, (_) => TextEditingController());
   final _formKey = GlobalKey<FormState>();
+  WayBillDTO? _selectedWayBill;
+
 
   final List<String> currencies = ['SAUDI_RIYAL', 'USD', 'EUR', 'GBP', 'INR', 'AED', 'JPY', 'CNY'];
   String? selectedCurrency = 'SAUDI_RIYAL';
@@ -87,201 +89,389 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     return null;
   }
 
-  Future<void> _handleIdFieldTap() async {
-    if (selectedCurrency == null || selectedCurrency!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a currency first'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    setState(() {
-      _isLoadingIds = true;
-    });
-
-    await _findTheSimilarIdToUom();
-
-    print("Fetched IDs: $_similarIds");
-
-    _showIdModal();
+Future<void> _handleIdFieldTap() async {
+  if (selectedCurrency == null || selectedCurrency!.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please select a currency first'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
   }
 
-  Future<void> _findTheSimilarIdToUom() async {
-    final currentCurrency = selectedCurrency;
+  setState(() {
+    _isLoadingIds = true;
+  });
 
-    if (currentCurrency == null || currentCurrency.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a currency first'),
-          backgroundColor: Colors.red,
-        ),
-      );
+  await _findTheSimilarIdToUom();
+
+  print("Fetched IDs: $_similarIds");
+
+  _showIdModal();
+}
+
+Future<void> _findTheSimilarIdToUom() async {
+  final currentCurrency = selectedCurrency;
+
+  if (currentCurrency == null || currentCurrency.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please select a currency first'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
+
+  setState(() {
+    _isLoadingIds = true;
+    _similarIds = [];
+  });
+
+  try {
+    if (_detailsTakenBasedonCurrencyUom[currentCurrency]?.isNotEmpty ?? false) {
+      setState(() {
+        _similarIds = _detailsTakenBasedonCurrencyUom[currentCurrency]!;
+        _isLoadingIds = false;
+      });
+      print("IDs loaded from cache: $_similarIds");
       return;
     }
 
-    setState(() {
-      _isLoadingIds = true;
-      _similarIds = [];
-    });
+    final response = await openapiInstance.getWayBillResourceApi().getWayBillIdsByCurrency(
+      currency: currentCurrency,
+      headers: {'Authorization': 'Bearer ${widget.token}'},
+    );
 
-    try {
-      if (_detailsTakenBasedonCurrencyUom[currentCurrency]?.isNotEmpty ?? false) {
-        setState(() {
-          _similarIds = _detailsTakenBasedonCurrencyUom[currentCurrency]!;
-          _isLoadingIds = false;
-        });
-        print("IDs loaded from cache: $_similarIds");
-        return;
-      }
+    final wayBills = response.data;
+    final filteredWayBills = wayBills?.toList();
 
-      final response = await openapiInstance.getWayBillResourceApi().getWayBillIdsByCurrency(
-        currency: currentCurrency,
-        headers: {'Authorization': 'Bearer ${widget.token}'},
-      );
-
-      final wayBills = response.data;
-      final filteredWayBills = wayBills?.toList();
-
-      if (filteredWayBills == null || filteredWayBills.isEmpty) {
-        setState(() {
-          _isLoadingIds = false;
-        });
-      } else {
-        setState(() {
-          _detailsTakenBasedonCurrencyUom[currentCurrency] = filteredWayBills.map((e) => e.toString()).toList();
-          _similarIds = filteredWayBills.map((e) => e.toString()).toList();
-          _isLoadingIds = false;
-        });
-        print("IDs fetched from API: $_similarIds");
-      }
-
-      print("IDs added to dropdown: $_similarIds");
-    } catch (e, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to fetch IDs: ${e.toString()}\n$stackTrace'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    if (filteredWayBills == null || filteredWayBills.isEmpty) {
       setState(() {
         _isLoadingIds = false;
       });
+    } else {
+      setState(() {
+        _detailsTakenBasedonCurrencyUom[currentCurrency] = filteredWayBills.map((e) => e.toString()).toList();
+        _similarIds = filteredWayBills.map((e) => e.toString()).toList();
+        _isLoadingIds = false;
+      });
+      print("IDs fetched from API: $_similarIds");
     }
-  }
 
-  void _showIdModal() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Select an ID',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: _similarIds.isEmpty
-              ? Text('No IDs available for the selected currency UOM.')
-              : Container(
-                  width: double.maxFinite,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _similarIds.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_similarIds[index]),
-                        onTap: () {
-                          setState(() {
-                            _idController.text = _similarIds[index];
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    },
-                  ),
-                ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-          ],
-        );
-      },
+    print("IDs added to dropdown: $_similarIds");
+  } catch (e, stackTrace) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Failed to fetch IDs: ${e.toString()}\n$stackTrace'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    setState(() {
+      _isLoadingIds = false;
+    });
+  }
+}
+
+Future<void> _fetchAndDisplayIdDetails(String id) async {
+  try {
+    final response = await openapiInstance.getWayBillResourceApi().getWayBill(
+      id: int.parse(id),
+      headers: {'Authorization': 'Bearer ${widget.token}'},
+    );
+
+    final wayBill = response.data;
+
+    if (wayBill != null) {
+      setState(() {
+        _selectedWayBill = wayBill;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No details found for the selected ID'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Failed to fetch ID details: ${e.toString()}'),
+        backgroundColor: Colors.red,
+      ),
     );
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
-    print('Current locale: ${_currentLocale.languageCode}');
-
-    return Directionality(
-      textDirection: _currentLocale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
-      child: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: colorScheme.primary,
-            title: Text(
-              AppLocalizations.of(context).wayBill,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
+void _showIdDetails(WayBillDTO wayBill) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'ID Details',
+              style: TextStyle(
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            elevation: 2,
-            actions: [
-              DropdownButton<Locale>(
-                underline: const SizedBox(),
-                icon: const Icon(Icons.language, color: Colors.white),
-                value: _currentLocale,
-                items: const [
-                  DropdownMenuItem(value: Locale('en'), child: Text('EN')),
-                  DropdownMenuItem(value: Locale('ar'), child: Text('AR')),
-                  DropdownMenuItem(value: Locale('de'), child: Text('DE')),
-                  DropdownMenuItem(value: Locale('ml'), child: Text('ML')),
-                ],
-                onChanged: (Locale? value) {
-                  if (value != null) {
-                    _changeLanguage(value);
-                  }
-                },
-              ),
-            ],
+            const SizedBox(height: 16),
+            _buildDetailsTable(wayBill),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildDetailsTable(WayBillDTO wayBill) {
+  return DataTable(
+    columns: const [
+      DataColumn(label: Text('Field')),
+      DataColumn(label: Text('Value')),
+    ],
+    rows: [
+      DataRow(cells: [
+        DataCell(Text('ID')),
+        DataCell(Text(wayBill.id.toString())),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Box Limit')),
+        DataCell(Text(wayBill.boxLimit.toString())),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Shipment Type')),
+        DataCell(Text(wayBill.shipmentType ?? '')),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('OPFAC')),
+        DataCell(Text(wayBill.opfac ?? '')),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Delivery Agent')),
+        DataCell(Text(wayBill.deliveryAgent ?? '')),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Estimated Ready Date')),
+        DataCell(Text(wayBill.estimatedReadyDate?.toIso8601String() ?? '')),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Currency UOM')),
+        DataCell(Text(wayBill.currencyUom ?? '')),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Estimated Ship Date')),
+        DataCell(Text(wayBill.estimatedShipDate?.toIso8601String() ?? '')),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Status')),
+        DataCell(Text(wayBill.status ?? '')),
+      ]),
+      DataRow(cells: [
+        DataCell(Text('Reference Number')),
+        DataCell(Text(wayBill.referenceNumber ?? '')),
+      ]),
+    ],
+  );
+}
+
+
+void _showIdModal() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Select an ID',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      _buildTopActionBar(context, theme),
-                      const SizedBox(height: 16),
-                      _buildFormSection(context, theme, colorScheme),
-                    ],
-                  ),
+        ),
+        content: _similarIds.isEmpty
+            ? Text('No IDs available for the selected currency UOM.')
+            : Container(
+                width: double.maxFinite,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _similarIds.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(_similarIds[index]),
+                      onTap: () {
+                        setState(() {
+                          _idController.text = _similarIds[index];
+                        });
+                        Navigator.of(context).pop();
+                        _fetchAndDisplayIdDetails(_similarIds[index]);
+                      },
+                    );
+                  },
+                ),
+              ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+@override
+Widget build(BuildContext context) {
+  final theme = Theme.of(context);
+  final colorScheme = theme.colorScheme;
+
+  print('Current locale: ${_currentLocale.languageCode}');
+
+  return Directionality(
+    textDirection: _currentLocale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+    child: GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: colorScheme.primary,
+          title: Text(
+            AppLocalizations.of(context).wayBill,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          elevation: 2,
+          actions: [
+            DropdownButton<Locale>(
+              underline: const SizedBox(),
+              icon: const Icon(Icons.language, color: Colors.white),
+              value: _currentLocale,
+              items: const [
+                DropdownMenuItem(value: Locale('en'), child: Text('EN')),
+                DropdownMenuItem(value: Locale('ar'), child: Text('AR')),
+                DropdownMenuItem(value: Locale('de'), child: Text('DE')),
+                DropdownMenuItem(value: Locale('ml'), child: Text('ML')),
+              ],
+              onChanged: (Locale? value) {
+                if (value != null) {
+                  _changeLanguage(value);
+                }
+              },
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _buildTopActionBar(context, theme),
+                    const SizedBox(height: 16),
+                    _buildFormSection(context, theme, colorScheme),
+                    if (_selectedWayBill != null)
+                      _buildDetailsSection(context),
+                  ],
                 ),
               ),
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+  Widget _buildDetailsSection(BuildContext context) {
+  final wayBill = _selectedWayBill!;
+
+  return Card(
+    elevation: 2,
+    margin: const EdgeInsets.only(top: 16),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'ID Details',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          DataTable(
+            columns: const [
+              DataColumn(label: Text('Field')),
+              DataColumn(label: Text('Value')),
+            ],
+            rows: [
+              DataRow(cells: [
+                DataCell(Text('ID')),
+                DataCell(Text(wayBill.id.toString())),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Box Limit')),
+                DataCell(Text(wayBill.boxLimit.toString())),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Shipment Type')),
+                DataCell(Text(wayBill.shipmentType ?? '')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('OPFAC')),
+                DataCell(Text(wayBill.opfac ?? '')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Delivery Agent')),
+                DataCell(Text(wayBill.deliveryAgent ?? '')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Estimated Ready Date')),
+                DataCell(Text(wayBill.estimatedReadyDate?.toIso8601String() ?? '')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Currency UOM')),
+                DataCell(Text(wayBill.currencyUom ?? '')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Estimated Ship Date')),
+                DataCell(Text(wayBill.estimatedShipDate?.toIso8601String() ?? '')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Status')),
+                DataCell(Text(wayBill.status ?? '')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Reference Number')),
+                DataCell(Text(wayBill.referenceNumber ?? '')),
+              ]),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
 
   Widget _buildTopActionBar(BuildContext context, ThemeData theme) {
     final actionItems = [
