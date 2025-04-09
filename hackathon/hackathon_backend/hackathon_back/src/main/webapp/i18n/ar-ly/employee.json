@@ -1,0 +1,27 @@
+{
+  "hackathonBackApp": {
+    "employee": {
+      "home": {
+        "title": "Employees",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "إنشاء Employee جديد",
+        "createOrEditLabel": "إنشاء أو تعديل Employee",
+        "notFound": "لم يتم العثور على Employees"
+      },
+      "created": "Employee جديد تم إنشاؤه بالمعرف {{ param }}",
+      "updated": "Employee تم تحديثه بالمعرف {{ param }}",
+      "deleted": "Employee تم حذفه بالمعرف {{ param }}",
+      "delete": {
+        "question": "هل أنت متأكد أنك تريد حذف Employee {{ id }}؟"
+      },
+      "detail": {
+        "title": "Employee"
+      },
+      "id": "ID",
+      "name": "Name",
+      "position": "Position",
+      "email": "Email",
+      "company": "Company"
+    }
+  }
+}

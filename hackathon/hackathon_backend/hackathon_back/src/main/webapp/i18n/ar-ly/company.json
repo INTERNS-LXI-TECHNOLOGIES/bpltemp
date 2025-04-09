@@ -1,0 +1,26 @@
+{
+  "hackathonBackApp": {
+    "company": {
+      "home": {
+        "title": "Companies",
+        "refreshListLabel": "تحديث القائمة",
+        "createLabel": "إنشاء Company جديد",
+        "createOrEditLabel": "إنشاء أو تعديل Company",
+        "notFound": "لم يتم العثور على Companies"
+      },
+      "created": "Company جديد تم إنشاؤه بالمعرف {{ param }}",
+      "updated": "Company تم تحديثه بالمعرف {{ param }}",
+      "deleted": "Company تم حذفه بالمعرف {{ param }}",
+      "delete": {
+        "question": "هل أنت متأكد أنك تريد حذف Company {{ id }}؟"
+      },
+      "detail": {
+        "title": "Company"
+      },
+      "id": "ID",
+      "name": "Name",
+      "location": "Location",
+      "employees": "Employees"
+    }
+  }
+}
