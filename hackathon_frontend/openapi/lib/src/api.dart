@@ -24,8 +24,7 @@ class Openapi {
   final Serializers serializers;
 
   static var jwt =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0Njc3MzU4NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ0MTgxNTg3fQ.8a4amBs8zIix2Vf-yXZLK_YP7WXWtW6KH1awB4cgzBTPVir0xY0ko9Xbqw30_lJQydrNUyb5pan8DF1elvvkiw";
-
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0Njc4Mjk0MCwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ0MTkwOTQwfQ.l5GkxaQroTDhPIrHOegIrs_263VOIwFEJ8ySaawv3BriHsUVrwj8v7EqNwe8we_-VbLsqrD3dVqmfaVcRnJjjA";
   Openapi({
     Dio? dio,
     Serializers? serializers,

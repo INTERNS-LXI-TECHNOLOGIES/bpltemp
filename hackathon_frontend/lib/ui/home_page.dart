@@ -45,6 +45,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         body: TabBarView(children: [CompanyTab(), EmployeeTab()]),
+
       ),
     );
   }

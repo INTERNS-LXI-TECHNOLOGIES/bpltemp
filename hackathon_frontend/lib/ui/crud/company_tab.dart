@@ -22,14 +22,23 @@ class _CompanyTabState extends State<CompanyTab> {
   }
 
   Future<void> fetchCompanies() async {
-    final response = await _openapi.getCompanyResourceApi().getAllCompanies();
+  final response = await _openapi.getCompanyResourceApi().getAllCompanies(
+    headers: {
+      'Authorization': 'Bearer ${Openapi.jwt}',
+    },
+  );
 
-    if (response.statusCode == 200) {
-      setState(() {
-        companies = response.data?.toList() ?? [];
-      });
-    }
+  if (response.statusCode == 200||response.statusCode ==201||response.statusCode ==204) {
+    setState(() {
+      companies = response.data?.toList() ?? [];
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to fetch companies')),
+    );
   }
+}
+
 
   Future<void> createCompany() async {
     final name = _nameController.text.trim();
@@ -37,27 +46,48 @@ class _CompanyTabState extends State<CompanyTab> {
 
     if (name.isEmpty) return;
 
-    final companyBuilder = CompanyDTOBuilder()
-      ..name = name
-      ..location = location;
+    final companyBuilder =
+        CompanyDTOBuilder()
+          ..name = name
+          ..location = location;
 
     final response = await _openapi.getCompanyResourceApi().createCompany(
       companyDTO: companyBuilder.build(),
       headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
     );
 
-    if (response.statusCode == 201 || response.statusCode == 200) {
+    if (response.data != null) {
       _nameController.clear();
       _locationController.clear();
-      fetchCompanies();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Company Created Successfully')),
-      );
+      await fetchCompanies(); // Wait to ensure data is loaded properly
+
+      setState(() {}); // Trigger UI rebuild
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Company Created Successfully')));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create company')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to create company')));
+    }
+  }
+
+  Future<void> deleteCompany(int id) async {
+    final response = await _openapi.getCompanyResourceApi().deleteCompany(
+      id: 0,
+    );
+
+    if (response.statusCode == 204) {
+      fetchCompanies();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Company Deleted')));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to delete')));
     }
   }
 
@@ -90,37 +120,48 @@ class _CompanyTabState extends State<CompanyTab> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: DataTable(
-                columns: [
+                columns: const [
                   DataColumn(label: Text('ID')),
                   DataColumn(label: Text('Name')),
                   DataColumn(label: Text('Location')),
                   DataColumn(label: Text('Actions')),
                 ],
-                rows: companies.map((company) {
-                  return DataRow(cells: [
-                    DataCell(Text(company.id?.toString() ?? '-')),
-                    DataCell(Text(company.name)),
-                    DataCell(Text(company.location ?? '-')),
-                    DataCell(Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit, size: 18, color: Colors.blue),
-                          onPressed: () {
-                            // TODO: Implement Edit functionality
-                          },
-                          tooltip: l10n.editActionTooltip,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete, size: 18, color: Colors.red),
-                          onPressed: () {
-                            // TODO: Implement Delete functionality
-                          },
-                          tooltip: l10n.deleteActionTooltip,
-                        ),
-                      ],
-                    )),
-                  ]);
-                }).toList(),
+                rows:
+                    companies.map((company) {
+                      return DataRow(
+                        cells: [
+                          DataCell(Text(company.id.toString())),
+                          DataCell(Text(company.name)),
+                          DataCell(Text(company.location ?? '')),
+                          DataCell(
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.blue,
+                                    size: 18,
+                                  ),
+                                  onPressed: () {
+                                    // Optional: implement edit logic
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 18,
+                                  ),
+                                  onPressed: () {
+                                    deleteCompany(company.id!);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
               ),
             ),
           ),
