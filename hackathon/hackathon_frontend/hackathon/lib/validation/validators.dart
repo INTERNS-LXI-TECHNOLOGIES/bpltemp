@@ -14,9 +14,14 @@ class Validators {
     if (value == null || value.isEmpty) {
       return 'Email is required';
     }
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value)) {
-      return 'Enter a valid email address';
+    
+    final trimmedValue = value.trim();
+    
+    // Exact match for Java backend pattern: ^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$
+    final emailRegex = RegExp(r'^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+    
+    if (!emailRegex.hasMatch(trimmedValue)) {
+      return 'Enter email in format: user@example.com';
     }
     return null;
   }

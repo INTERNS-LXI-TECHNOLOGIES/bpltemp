@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon/validation/validators.dart';
+import 'package:openapi/openapi.dart';
 
 class EmployeeTab extends StatefulWidget {
   @override
@@ -12,7 +14,6 @@ class _EmployeeTabState extends State<EmployeeTab> {
   final _emailController = TextEditingController();
   bool _isCreatingEmployee = false;
 
-  // Dummy data for demonstration purposes
   final List<Map<String, String>> _employees = [
     {'id': '1', 'name': 'John Doe', 'position': 'Developer', 'email': 'john.doe@example.com'},
     {'id': '2', 'name': 'Jane Smith', 'position': 'Designer', 'email': 'jane.smith@example.com'},
@@ -24,13 +25,9 @@ class _EmployeeTabState extends State<EmployeeTab> {
       children: [
         DropdownButton<String>(
           hint: Text('Select Company'),
-          value: null, // TODO: Bind this to selectedCompany
-          onChanged: (String? newValue) {
-            // TODO: dispatch event to load employees by company
-          },
-          items: [
-            // TODO: Populate from CompanyBloc stream
-          ],
+          value: null,
+          onChanged: (String? newValue) {},
+          items: [],
         ),
         ElevatedButton(
           onPressed: () {
@@ -48,51 +45,47 @@ class _EmployeeTabState extends State<EmployeeTab> {
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(labelText: 'Employee Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 2) {
-                      return 'Please enter a valid employee name';
-                    }
-                    return null;
-                  },
+                  validator: Validators.validateName,
                 ),
                 TextFormField(
                   controller: _positionController,
                   decoration: InputDecoration(labelText: 'Position'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a position';
-                    }
-                    return null;
-                  },
+                  validator: (value) => Validators.validateRequired(value, fieldName: 'Position'),
                 ),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(labelText: 'Email'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty || !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
+                  validator: Validators.validateEmail,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      // TODO: dispatch CreateEmployeeEvent with _nameController.text, _positionController.text, and _emailController.text
-                      setState(() {
-                        _isCreatingEmployee = false;
-                        // Add the new employee to the list
-                        _employees.add({
-                          'id': (_employees.length + 1).toString(),
-                          'name': _nameController.text,
-                          'position': _positionController.text,
-                          'email': _emailController.text,
-                        });
-                        // Clear the form
-                        _nameController.clear();
-                        _positionController.clear();
-                        _emailController.clear();
-                      });
+                      String jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0NDM0ODU5MiwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ0MjYyMTkyfQ.PR0IUZKrmJkZZxxlZp6b3A2uV6OdYC2ILre6Bd13TJCw6ykdAFP4XyPGrucjL6OkehZKvbyfDVOxg-gZYaNtNg";
+                      final employeeDTOBuilder = EmployeeDTOBuilder()
+                        ..name = _nameController.text.trim()
+                        ..position = _positionController.text.trim()
+                        ..email = _emailController.text.trim();
+
+                      try {
+                        final response = await Openapi().getEmployeeResourceApi().createEmployee(
+                          employeeDTO: employeeDTOBuilder.build(),
+                          headers: {'Authorization': 'Bearer $jwtToken'},
+                        );
+
+                        if (response.statusCode == 200) {
+                          setState(() {
+                            _isCreatingEmployee = false;
+                            _nameController.clear();
+                            _positionController.clear();
+                            _emailController.clear();
+                          });
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
+                      }
                     }
                   },
                   child: Text('Save Employee'),
@@ -119,27 +112,9 @@ class _EmployeeTabState extends State<EmployeeTab> {
                   DataCell(
                     Row(
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.visibility),
-                          onPressed: () {
-                            // TODO: Handle read action
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            // TODO: Handle update action
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            // TODO: Handle delete action
-                            setState(() {
-                              _employees.remove(employee);
-                            });
-                          },
-                        ),
+                        IconButton(icon: Icon(Icons.visibility), onPressed: () {}),
+                        IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+                        IconButton(icon: Icon(Icons.delete), onPressed: () {}),
                       ],
                     ),
                   ),

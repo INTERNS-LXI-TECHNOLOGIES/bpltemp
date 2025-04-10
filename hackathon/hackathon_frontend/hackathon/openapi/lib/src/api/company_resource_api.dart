@@ -187,7 +187,7 @@ class CompanyResourceApi {
     Map<String, dynamic>? extra,
     ValidateStatus? validateStatus,
     ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    ProgressCallback? onReceiveProgress, required CompanyDTOBuilder companyDTO,
   }) async {
     final _path = r'/api/companies';
     final _options = Options(
