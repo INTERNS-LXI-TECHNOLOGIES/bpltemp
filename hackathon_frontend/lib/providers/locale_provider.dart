@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // To access supportedLocales
+import 'package:flutter/widgets.dart'; // Ensure context is available for AppLocalizations
 
 class LocaleProvider extends ChangeNotifier {
   // Default to the first supported locale (usually 'en')
@@ -8,7 +9,9 @@ class LocaleProvider extends ChangeNotifier {
   Locale get locale => _locale;
 
   void setLocale(Locale newLocale) {
-    // Check if the locale is supported by the app
+    if (!AppLocalizations.supportedLocales.contains(newLocale)) {
+      throw ArgumentError('Unsupported locale: ${newLocale.languageCode}');
+    }
     if (!AppLocalizations.supportedLocales.contains(newLocale)) return;
 
     // Only update and notify if the locale actually changes

@@ -1,6 +1,9 @@
+import 'package:bpl/cubit/company_cubit.dart';
+import 'package:bpl/cubit/company_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:openapi/openapi.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // To access supportedLocales
 
 class CompanyTab extends StatefulWidget {
   @override
@@ -18,116 +21,149 @@ class _CompanyTabState extends State<CompanyTab> {
   @override
   void initState() {
     super.initState();
-    fetchCompanies();
+
+    // Trigger API call when screen loads
+    context.read<CompanyCubit>().fetchCompanies();
   }
 
-  Future<void> fetchCompanies() async {
-  final response = await _openapi.getCompanyResourceApi().getAllCompanies(
-    headers: {
-      'Authorization': 'Bearer ${Openapi.jwt}',
-    },
+  Future<void> _deleteCompany(int companyId) async {
+  final l10n = AppLocalizations.of(context)!;
+
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(l10n.confirmDeletionTitle),
+      content: Text(l10n.confirmDeletionMessage('company')), // changed employee -> company
+      actions: [
+        TextButton(
+          child: Text(l10n.cancelAction),
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(foregroundColor: Colors.red),
+          child: Text(l10n.deleteAction),
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
+    ),
   );
 
-  if (response.statusCode == 200||response.statusCode ==201||response.statusCode ==204) {
-    setState(() {
-      companies = response.data?.toList() ?? [];
-    });
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to fetch companies')),
+  if (confirmed == true) {
+    context.read<CompanyCubit>().deleteCompany(companyId);
+  }
+}
+
+
+Future<void> _editCompany(int id, String oldName, String oldLocation) async {
+  final l10n = AppLocalizations.of(context)!;
+
+  final nameController = TextEditingController(text: oldName);
+  final locationController = TextEditingController(text: oldLocation);
+
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Edit Company'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(controller: nameController, decoration: InputDecoration(labelText: 'Name')),
+          TextField(controller: locationController, decoration: InputDecoration(labelText: 'Location')),
+        ],
+      ),
+      actions: [
+        TextButton(
+          child: Text(l10n.cancelAction),
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+        TextButton(
+          child: Text('Update'),
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
+    ),
+  );
+
+  if (confirmed == true) {
+    context.read<CompanyCubit>().updateCompany(
+      id,
+      nameController.text.trim(),
+      locationController.text.trim(),
     );
   }
 }
 
 
-  Future<void> createCompany() async {
-    final name = _nameController.text.trim();
-    final location = _locationController.text.trim();
-
-    if (name.isEmpty) return;
-
-    final companyBuilder =
-        CompanyDTOBuilder()
-          ..name = name
-          ..location = location;
-
-    final response = await _openapi.getCompanyResourceApi().createCompany(
-      companyDTO: companyBuilder.build(),
-      headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
-    );
-
-    if (response.data != null) {
-      _nameController.clear();
-      _locationController.clear();
-
-      await fetchCompanies(); // Wait to ensure data is loaded properly
-
-      setState(() {}); // Trigger UI rebuild
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Company Created Successfully')));
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to create company')));
-    }
-  }
-
-  Future<void> deleteCompany(int id) async {
-    final response = await _openapi.getCompanyResourceApi().deleteCompany(
-      id: 0,
-    );
-
-    if (response.statusCode == 204) {
-      fetchCompanies();
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Company Deleted')));
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to delete')));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(labelText: 'Company Name'),
-          ),
-          TextField(
-            controller: _locationController,
-            decoration: InputDecoration(labelText: 'Location (optional)'),
-          ),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: createCompany,
-            child: Text('Create Company'),
-          ),
-          const SizedBox(height: 16),
-          Text('Company List', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('ID')),
-                  DataColumn(label: Text('Name')),
-                  DataColumn(label: Text('Location')),
-                  DataColumn(label: Text('Actions')),
-                ],
-                rows:
-                    companies.map((company) {
+    return BlocBuilder<CompanyCubit, CompanyState>(
+      builder: (context, state) {
+        if (state is CompanyLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state is CompanyError) {
+          return Center(child: Text(state.message));
+        }
+
+        final companies = state is CompanyLoaded ? state.companies : [];
+
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Company Name'),
+              ),
+              TextField(
+                controller: _locationController,
+                decoration: const InputDecoration(
+                  labelText: 'Location (optional)',
+                ),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  final name = _nameController.text.trim();
+                  final location = _locationController.text.trim();
+
+                  if (name.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Company name is required')),
+                    );
+                    return;
+                  }
+
+                  context
+                      .read<CompanyCubit>()
+                      .createCompany(name: name, location: location);
+
+                  _nameController.clear();
+                  _locationController.clear();
+                },
+                child: const Text('Create Company'),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Company List',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('ID')),
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('Location')),
+                      DataColumn(label: Text('Actions')),
+                    ],
+                    rows: companies.map((company) {
                       return DataRow(
                         cells: [
                           DataCell(Text(company.id.toString())),
@@ -137,23 +173,29 @@ class _CompanyTabState extends State<CompanyTab> {
                             Row(
                               children: [
                                 IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.edit,
                                     color: Colors.blue,
                                     size: 18,
                                   ),
                                   onPressed: () {
-                                    // Optional: implement edit logic
+_editCompany(
+                                      company.id!,
+                                      company.name,
+                                      company.location ?? '',
+                                    );
+
+                                    // Your edit logic
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.delete,
                                     color: Colors.red,
                                     size: 18,
                                   ),
                                   onPressed: () {
-                                    deleteCompany(company.id!);
+                                    _deleteCompany(company.id!);
                                   },
                                 ),
                               ],
@@ -162,11 +204,13 @@ class _CompanyTabState extends State<CompanyTab> {
                         ],
                       );
                     }).toList(),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

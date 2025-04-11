@@ -1,33 +1,59 @@
-    {
-      "@@locale": "ml",
-      "appTitle": "Flutter CRUD ആപ്പ്",
-      "companiesTab": "കമ്പനികൾ",
-      "employeesTab": "ജീവനക്കാർ",
-      "createCompanyButton": "കമ്പനി സൃഷ്ടിക്കുക",
-      "companyIdHeader": "ഐഡി",
-      "companyNameHeader": "പേര്",
-      "employeeIdHeader": "ഐഡി",
-      "employeeNameHeader": "പേര്",
-      "employeePositionHeader": "സ്ഥാനം",
-      "selectCompanyHint": "കമ്പനി തിരഞ്ഞെടുക്കുക...",
-      "loadingMessage": "ലോഡ് ചെയ്യുന്നു...",
-      "actionsHeader": "പ്രവർത്തനങ്ങൾ",
-      "editActionTooltip": "എഡിറ്റ് ചെയ്യുക",
-      "deleteActionTooltip": "ഇല്ലാതാക്കുക",
-      "companyListTitle": "കമ്പനി ലിസ്റ്റ്:",
-      "employeeListTitle": "ജീവനക്കാരുടെ ലിസ്റ്റ്:",
-      "noEmployeesFound": "ഈ കമ്പനിക്ക് ജീവനക്കാരില്ല.",
-      "pleaseSelectCompany": "ആദ്യം ഒരു കമ്പനി തിരഞ്ഞെടുക്കുക.",
-      "createActionPending": "കമ്പനി സൃഷ്ടിക്കാനുള്ള പ്രവർത്തനം പുരോഗമിക്കുന്നു.",
-      "errorMessage": "പിശക്: {message}",
-      "@errorMessage": {
-        "description": "പൊതുവായ പിശക് സന്ദേശം",
-        "placeholders": {
-          "message": {
-            "type": "String",
-            "example": "Network failed"
-          }
+{
+    "@@locale": "ml",
+    "appTitle": "Flutter CRUD ആപ്പ്",
+    "confirmDeletion": "നീക്കം സ്ഥിരീകരിക്കുക",
+    "confirmDeletionMessage": "ഈ {item} നീക്കം ചെയ്യണോ?",
+    "cancelAction": "റദ്ദാക്കുക",
+    "deleteAction": "നീക്കം ചെയ്യുക",
+    "deleteSuccess": "{target} വിജയകരമായി നീക്കം ചെയ്തു!",
+    "noCompaniesAvailable": "കമ്പനികൾ ലഭ്യമല്ല.",
+    "validationError": "{field} ആവശ്യമാണ്",
+    "selectCompanyPrompt": "ഒരു കമ്പനി തിരഞ്ഞെടുക്കുക",
+    "createSuccess": "{item} വിജയകരമായി സൃഷ്ടിച്ചു",
+    "createError": "{item} സൃഷ്ടിക്കാൻ കഴിഞ്ഞില്ല: {error}",
+    "confirmDeletionTitle": "ഇത് ഇല്ലാതാക്കാന്‍ ഉറപ്പാണോ?",
+    "employeePositionLabel": "പദവി",
+    "createEmployeeButton": "ഓഫീസർ സൃഷ്ടിക്കുക",
+    "employeeEmailLabel": "ഇമെയിൽ",
+  
+  "@confirmDeletionMessage": {
+    "placeholders": {
+      "item": {
+        "type": "Object"
+      }
+    }
+  }
+  ,
+    "@deleteSuccess": {
+      "placeholders": {
+        "target": {
+          "type": "Object"
+        }
+      }
+    },
+    "@validationError": {
+      "placeholders": {
+        "field": {
+          "type": "Object"
+        }
+      }
+    },
+    "@createSuccess": {
+      "placeholders": {
+        "item": {
+          "type": "Object"
+        }
+      }
+    },
+    "@createError": {
+      "placeholders": {
+        "item": {
+          "type": "Object"
+        },
+        "error": {
+          "type": "Object"
         }
       }
     }
-    
+  }
+  

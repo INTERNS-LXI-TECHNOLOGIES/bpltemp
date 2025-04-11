@@ -1,7 +1,24 @@
 {
   "@@locale": "en",
   "appTitle": "Flutter CRUD App",
+  "confirmDeletion": "Confirm Deletion",
+  "confirmDeletionMessage": "Are you sure you want to delete this {item}?",
+  "cancelAction": "Cancel",
+  "deleteAction": "Delete",
+  "deleteSuccess": "{target} deleted successfully!",
+  "employeeEmailLabel": "Email",
+  "employeeEmailHeader": "Email",
+  "noCompaniesAvailable": "No companies available.",
+  "confirmDeletionTitle": "Confirm Deletion",
+  "employeePositionLabel": "Position",
+  "createEmployeeButton": "Create Employee",
+  "validationError": "{field} is required",
+  "selectCompanyPrompt": "Please select a company",
+  "createSuccess": "{item} created successfully",
+  "createError": "Failed to create {item}: {error}",
   "companiesTab": "Companies",
+  "createEmployeeTitle": "Create New Employee",
+  "employeeNameLabel": "Employee Name",
   "employeesTab": "Employees",
   "createCompanyButton": "Create Company",
   "companyIdHeader": "ID",
@@ -11,22 +28,10 @@
   "employeePositionHeader": "Position",
   "selectCompanyHint": "Select Company...",
   "loadingMessage": "Loading...",
-  "actionsHeader": "Actions",
   "editActionTooltip": "Edit",
   "deleteActionTooltip": "Delete",
-  "companyListTitle": "Company List:",
-  "employeeListTitle": "Employee List:",
-  "noEmployeesFound": "No employees found for this company.",
-  "pleaseSelectCompany": "Please select a company first.",
-  "createActionPending": "Create Company action pending implementation.",
-  "errorMessage": "Error: {message}",
-  "@errorMessage": {
-    "description": "Generic error message",
-    "placeholders": {
-      "message": {
-        "type": "String",
-        "example": "Network failed"
-      }
-    }
-  }
+  "pleaseSelectCompany": "Please select a company",
+  "noEmployeesFound": "No employees found",
+  "employeeListTitle": "Employee List",
+  "actionsHeader": "Actions"
 }

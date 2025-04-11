@@ -1,124 +1,261 @@
+import 'package:bpl/cubit/company_cubit.dart';
+import 'package:bpl/cubit/company_state.dart';
+import 'package:bpl/cubit/employee_cubit.dart';
+import 'package:bpl/cubit/employee_state.dart';
 import 'package:flutter/material.dart';
-// Import the generated localization file
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// No longer imports Cubits
+import 'package:openapi/openapi.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // To access supportedLocales
 
-// Reverted to StatelessWidget as interaction relied on data from Cubits
-class EmployeeTab extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:openapi/openapi.dart';
+
+class EmployeeTab extends StatefulWidget {
+  @override
+  _EmployeeTabState createState() => _EmployeeTabState();
+}
+
+class _EmployeeTabState extends State<EmployeeTab> {
+  final Openapi _openapi = Openapi();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _positionController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  String? _selectedCompanyId;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CompanyCubit>().fetchCompanies();
+    context.read<EmployeeCubit>().fetchEmployees(companyId: 0);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _positionController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Get the localizations instance. The '!' assumes setup is correct.
-    final l10n = AppLocalizations.of(context)!;
-
-    // Hardcoded data for UI preview
-    final List<Map<String, String>> staticCompaniesDropdown = [
-      {'id': 'C001', 'name': 'Tech Solutions'},
-      {'id': 'C002', 'name': 'Global Health'},
-      {'id': 'C003', 'name': 'Finance Hub'},
-    ];
-
-    // Only showing one set of employees as dropdown is not interactive without state/data
-    final List<Map<String, String>> staticEmployees = [
-      {'id': 'E101', 'name': 'Alice Smith', 'position': 'Developer'},
-      {'id': 'E102', 'name': 'Bob Johnson', 'position': 'Designer'},
-    ];
-
-    // Fixed dropdown value for preview
-    String? selectedCompanyPreviewId =
-        staticCompaniesDropdown.isNotEmpty
-            ? staticCompaniesDropdown[0]['id']
-            : null;
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          // --- Dropdown Section ---
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              labelText: l10n.selectCompanyHint,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-            value: selectedCompanyPreviewId, // Fixed value
-            isExpanded: true,
-            // onChanged does nothing without state management for selection
-            onChanged: null, // Disabled or does nothing
-            items:
-                staticCompaniesDropdown.map<DropdownMenuItem<String>>((
-                  company,
-                ) {
-                  return DropdownMenuItem<String>(
-                    value: company['id']!,
-                    child: Text(company['name']!),
-                  );
-                }).toList(),
-          ),
-          const SizedBox(height: 16),
-
-          // --- DataTable Section ---
-          Text(
-            l10n.employeeListTitle,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: DataTable(
-                headingRowColor: MaterialStateColor.resolveWith(
-                  (states) => Colors.blueGrey.shade100,
-                ),
-                columns: [
-                  DataColumn(label: Text(l10n.employeeIdHeader)),
-                  DataColumn(label: Text(l10n.employeeNameHeader)),
-                  DataColumn(label: Text(l10n.employeePositionHeader)),
-                  DataColumn(label: Text(l10n.actionsHeader)),
-                ],
-                // *** Hardcoded Rows for UI Preview ***
-                // Data is static as no Cubit is provided
-                rows:
-                    staticEmployees.map((employee) {
-                      return DataRow(
-                        cells: [
-                          DataCell(Text(employee['id']!)),
-                          DataCell(Text(employee['name']!)),
-                          DataCell(Text(employee['position']!)),
-                          DataCell(
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.edit,
-                                    size: 18,
-                                    color: Colors.blue,
-                                  ),
-                                  onPressed: () {},
-                                  tooltip: l10n.editActionTooltip,
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    size: 18,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {},
-                                  tooltip: l10n.deleteActionTooltip,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<CompanyCubit, CompanyState>(
+          listener: (context, state) {
+            if (state is CompanyError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
+        ),
+        BlocListener<EmployeeCubit, EmployeeState>(
+          listener: (context, state) {
+            if (state is EmployeeLoaded) {
+              _nameController.clear();
+              _positionController.clear();
+              _emailController.clear();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Employee created successfully')),
+              );
+            } else if (state is EmployeeError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
+        ),
+      ],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Company Dropdown
+            BlocBuilder<CompanyCubit, CompanyState>(
+              builder: (context, state) {
+                if (state is CompanyLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is CompanyLoaded) {
+                  return DropdownButtonFormField<String>(
+                    value: _selectedCompanyId,
+                    decoration: InputDecoration(
+                      labelText: 'Select Company',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: state.companies.map((company) {
+                      return DropdownMenuItem<String>(
+                        value: company.id.toString(),
+                        child: Text(company.name),
                       );
                     }).toList(),
-                // *** End Hardcoded Rows ***
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCompanyId = value;
+                      });
+                      if (value != null) {
+                        context.read<EmployeeCubit>().fetchEmployees(companyId: int.parse(value));
+                      }
+                    },
+                  );
+                } else if (state is CompanyError) {
+                  return Text(state.message);
+                }
+                return const SizedBox();
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            // Create Employee Form
+            Text('Create Employee', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
               ),
             ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _positionController,
+              decoration: InputDecoration(
+                labelText: 'Position',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () {
+                if (_nameController.text.isEmpty || 
+                    _positionController.text.isEmpty || 
+                    _emailController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please fill all fields')),
+                  );
+                  return;
+                }
+
+                if (_selectedCompanyId == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please select a company')),
+                  );
+                  return;
+                }
+
+                context.read<EmployeeCubit>().createEmployee(
+                  name: _nameController.text,
+                  position: _positionController.text,
+                  email: _emailController.text,
+                  companyId: int.parse(_selectedCompanyId!),
+                );
+              },
+              child: const Text('Create Employee'),
+            ),
+
+            const SizedBox(height: 20),
+            const Divider(),
+            const SizedBox(height: 10),
+
+            // Employee List
+            Text('Employee List', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Expanded(
+              child: BlocBuilder<EmployeeCubit, EmployeeState>(
+                builder: (context, state) {
+                  if (state is EmployeeLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is EmployeeLoaded) {
+                    if (state.employees.isEmpty) {
+                      return const Center(child: Text('No employees found'));
+                    }
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: DataTable(
+                        columns: const [
+                          DataColumn(label: Text('ID')),
+                          DataColumn(label: Text('Name')),
+                          DataColumn(label: Text('Position')),
+                          DataColumn(label: Text('Email')),
+                          DataColumn(label: Text('Actions')),
+                        ],
+                        rows: state.employees.map((employee) {
+                          return DataRow(
+                            cells: [
+                              DataCell(Text(employee.id.toString())),
+                              DataCell(Text(employee.name)),
+                              DataCell(Text(employee.position ?? '-')),
+                              DataCell(Text(employee.email)),
+                              DataCell(
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit, color: Colors.blue),
+                                      onPressed: () => _editEmployee(employee),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red),
+                                      onPressed: () => _deleteEmployee(employee.id!),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  } else if (state is EmployeeError) {
+                    return Center(child: Text(state.message));
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _editEmployee(EmployeeDTO employee) {
+    // Implement edit functionality
+  }
+
+  Future<void> _deleteEmployee(int employeeId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Deletion'),
+        content: const Text('Are you sure you want to delete this employee?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
     );
+
+    if (confirmed == true) {
+     // context.read<EmployeeCubit>().deleteEmployee(employeeId);
+    }
   }
 }
