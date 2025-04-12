@@ -4,13 +4,8 @@ import 'package:bpl/cubit/employee_cubit.dart';
 import 'package:bpl/cubit/employee_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:openapi/openapi.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // To access supportedLocales
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:openapi/openapi.dart';
 
 class EmployeeTab extends StatefulWidget {
@@ -19,17 +14,16 @@ class EmployeeTab extends StatefulWidget {
 }
 
 class _EmployeeTabState extends State<EmployeeTab> {
-  final Openapi _openapi = Openapi();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _positionController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   String? _selectedCompanyId;
-
+  List<CompanyDTO> companies = [];
   @override
   void initState() {
     super.initState();
     context.read<CompanyCubit>().fetchCompanies();
-    context.read<EmployeeCubit>().fetchEmployees(companyId: 0);
+    context.read<EmployeeCubit>().fetchEmployees();
   }
 
   @override
@@ -62,6 +56,11 @@ class _EmployeeTabState extends State<EmployeeTab> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Employee created successfully')),
               );
+              if (state is EmployeeDeleted) {
+                     ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Employee Deleted successfully')),
+              );
+              }
             } else if (state is EmployeeError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
@@ -83,7 +82,7 @@ class _EmployeeTabState extends State<EmployeeTab> {
                 } else if (state is CompanyLoaded) {
                   return DropdownButtonFormField<String>(
                     value: _selectedCompanyId,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Select Company',
                       border: OutlineInputBorder(),
                     ),
@@ -98,7 +97,7 @@ class _EmployeeTabState extends State<EmployeeTab> {
                         _selectedCompanyId = value;
                       });
                       if (value != null) {
-                        context.read<EmployeeCubit>().fetchEmployees(companyId: int.parse(value));
+                        context.read<EmployeeCubit>().fetchEmployees();
                       }
                     },
                   );
@@ -112,11 +111,12 @@ class _EmployeeTabState extends State<EmployeeTab> {
             const SizedBox(height: 20),
 
             // Create Employee Form
-            Text('Create Employee', style: Theme.of(context).textTheme.titleMedium),
+            Text('Create Employee',
+                style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Name',
                 border: OutlineInputBorder(),
               ),
@@ -124,7 +124,7 @@ class _EmployeeTabState extends State<EmployeeTab> {
             const SizedBox(height: 8),
             TextField(
               controller: _positionController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Position',
                 border: OutlineInputBorder(),
               ),
@@ -132,7 +132,7 @@ class _EmployeeTabState extends State<EmployeeTab> {
             const SizedBox(height: 8),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
@@ -140,8 +140,8 @@ class _EmployeeTabState extends State<EmployeeTab> {
             const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
-                if (_nameController.text.isEmpty || 
-                    _positionController.text.isEmpty || 
+                if (_nameController.text.isEmpty ||
+                    _positionController.text.isEmpty ||
                     _emailController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please fill all fields')),
@@ -157,11 +157,11 @@ class _EmployeeTabState extends State<EmployeeTab> {
                 }
 
                 context.read<EmployeeCubit>().createEmployee(
-                  name: _nameController.text,
-                  position: _positionController.text,
-                  email: _emailController.text,
-                  companyId: int.parse(_selectedCompanyId!),
-                );
+                      name: _nameController.text,
+                      position: _positionController.text,
+                      email: _emailController.text,
+                    //  company: int.parse(_selectedCompanyId!),
+                    );
               },
               child: const Text('Create Employee'),
             ),
@@ -171,7 +171,8 @@ class _EmployeeTabState extends State<EmployeeTab> {
             const SizedBox(height: 10),
 
             // Employee List
-            Text('Employee List', style: Theme.of(context).textTheme.titleMedium),
+            Text('Employee List',
+                style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Expanded(
               child: BlocBuilder<EmployeeCubit, EmployeeState>(
@@ -190,6 +191,7 @@ class _EmployeeTabState extends State<EmployeeTab> {
                           DataColumn(label: Text('Name')),
                           DataColumn(label: Text('Position')),
                           DataColumn(label: Text('Email')),
+                          DataColumn(label: Text('Company')),
                           DataColumn(label: Text('Actions')),
                         ],
                         rows: state.employees.map((employee) {
@@ -199,16 +201,20 @@ class _EmployeeTabState extends State<EmployeeTab> {
                               DataCell(Text(employee.name)),
                               DataCell(Text(employee.position ?? '-')),
                               DataCell(Text(employee.email)),
+                              DataCell(Text(employee.company?.name ?? 'N/A')),
                               DataCell(
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit, color: Colors.blue),
+                                      icon: const Icon(Icons.edit,
+                                          color: Colors.blue),
                                       onPressed: () => _editEmployee(employee),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () => _deleteEmployee(employee.id!),
+                                      icon: const Icon(Icons.delete,
+                                          color: Colors.red),
+                                      onPressed: () =>
+                                          _deleteEmployee(employee.id!),
                                     ),
                                   ],
                                 ),
@@ -255,7 +261,7 @@ class _EmployeeTabState extends State<EmployeeTab> {
     );
 
     if (confirmed == true) {
-     // context.read<EmployeeCubit>().deleteEmployee(employeeId);
+      context.read<EmployeeCubit>().deleteEmployee(employeeId);
     }
   }
 }
