@@ -14,7 +14,7 @@ class _CompanyTabState extends State<CompanyTab> {
   bool _isCreatingCompany = false;
   final _editNameController = TextEditingController();
   final _editLocationController = TextEditingController();
-  String jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0NDM0ODU5MiwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ0MjYyMTkyfQ.PR0IUZKrmJkZZxxlZp6b3A2uV6OdYC2ILre6Bd13TJCw6ykdAFP4XyPGrucjL6OkehZKvbyfDVOxg-gZYaNtNg";
+  String jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0NDYyMjc2OCwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ0NTM2MzY4fQ.hn0OF1HooqYUB1Wo4s_XHVUpr0PgbtuPBkOK0m5DgQmLIPZ4dQ5KTknIDP8xD0UVA6IQbWmTclxJjCfWrqpWLQ";
 
   @override
   void dispose() {

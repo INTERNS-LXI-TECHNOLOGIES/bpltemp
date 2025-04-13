@@ -16,8 +16,7 @@ class Validators {
     }
     
     final trimmedValue = value.trim();
-    
-    // Exact match for Java backend pattern: ^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$
+
     final emailRegex = RegExp(r'^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
     
     if (!emailRegex.hasMatch(trimmedValue)) {

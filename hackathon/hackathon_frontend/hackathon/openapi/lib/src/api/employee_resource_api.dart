@@ -187,7 +187,7 @@ class EmployeeResourceApi {
     Map<String, dynamic>? extra,
     ValidateStatus? validateStatus,
     ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    ProgressCallback? onReceiveProgress, required EmployeeDTOBuilder employeeDTO,
   }) async {
     final _path = r'/api/employees';
     final _options = Options(
