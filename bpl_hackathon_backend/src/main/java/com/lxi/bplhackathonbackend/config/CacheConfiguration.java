@@ -50,6 +50,9 @@ public class CacheConfiguration {
             createCache(cm, com.lxi.bplhackathonbackend.domain.User.class.getName());
             createCache(cm, com.lxi.bplhackathonbackend.domain.Authority.class.getName());
             createCache(cm, com.lxi.bplhackathonbackend.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.lxi.bplhackathonbackend.domain.Company.class.getName());
+            createCache(cm, com.lxi.bplhackathonbackend.domain.Company.class.getName() + ".employees");
+            createCache(cm, com.lxi.bplhackathonbackend.domain.Employee.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
