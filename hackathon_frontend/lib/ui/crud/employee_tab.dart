@@ -17,7 +17,7 @@ class _EmployeeTabState extends State<EmployeeTab> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _positionController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  String? _selectedCompanyId;
+CompanyDTO? _selectedCompany;
   List<CompanyDTO> companies = [];
   @override
   void initState() {
@@ -49,18 +49,17 @@ class _EmployeeTabState extends State<EmployeeTab> {
         ),
         BlocListener<EmployeeCubit, EmployeeState>(
           listener: (context, state) {
-            if (state is EmployeeLoaded) {
+            if (state is EmployeeDeleted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Employee Deleted successfully')),
+              );
+            } else if (state is EmployeeLoaded) {
               _nameController.clear();
               _positionController.clear();
               _emailController.clear();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Employee created successfully')),
               );
-              if (state is EmployeeDeleted) {
-                     ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Employee Deleted successfully')),
-              );
-              }
             } else if (state is EmployeeError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
@@ -80,27 +79,25 @@ class _EmployeeTabState extends State<EmployeeTab> {
                 if (state is CompanyLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is CompanyLoaded) {
-                  return DropdownButtonFormField<String>(
-                    value: _selectedCompanyId,
-                    decoration: const InputDecoration(
-                      labelText: 'Select Company',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: state.companies.map((company) {
-                      return DropdownMenuItem<String>(
-                        value: company.id.toString(),
-                        child: Text(company.name),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCompanyId = value;
-                      });
-                      if (value != null) {
-                        context.read<EmployeeCubit>().fetchEmployees();
-                      }
-                    },
-                  );
+                  return DropdownButtonFormField<CompanyDTO>(
+  value: _selectedCompany,
+  decoration: const InputDecoration(
+    labelText: 'Select Company',
+    border: OutlineInputBorder(),
+  ),
+  items: state.companies.map((company) {
+    return DropdownMenuItem<CompanyDTO>(
+      value: company,
+      child: Text(company.name ?? 'Unknown Company'),
+    );
+  }).toList(),
+  onChanged: (value) {
+    setState(() {
+      _selectedCompany = value;
+    });
+  },
+);
+
                 } else if (state is CompanyError) {
                   return Text(state.message);
                 }
@@ -149,18 +146,18 @@ class _EmployeeTabState extends State<EmployeeTab> {
                   return;
                 }
 
-                if (_selectedCompanyId == null) {
+                if (_selectedCompany == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Please select a company')),
                   );
                   return;
                 }
 
-                context.read<EmployeeCubit>().createEmployee(
-                      name: _nameController.text,
+                context.read<EmployeeCubit>().createEmployeeWithNewCompany(
+                      employeeName: _nameController.text,
                       position: _positionController.text,
                       email: _emailController.text,
-                    //  company: int.parse(_selectedCompanyId!),
+companyName: _selectedCompany!.name ?? '', // this is now correct                      
                     );
               },
               child: const Text('Create Employee'),

@@ -1,10 +1,18 @@
 import 'package:openapi/openapi.dart';
 
-abstract class EmployeeState {}
+abstract class EmployeeState {
+   final List<CompanyDTO> companies;
 
-class EmployeeInitial extends EmployeeState {}
+  EmployeeState({this.companies = const []});
+}
 
-class EmployeeLoading extends EmployeeState {}
+class EmployeeInitial extends EmployeeState {
+   EmployeeInitial() : super();
+}
+
+class EmployeeLoading extends EmployeeState {
+  EmployeeLoading() : super();
+}
 
 class EmployeeSuccess extends EmployeeState {
   final String message;
@@ -18,11 +26,11 @@ class EmployeeDeleted extends EmployeeState {
 }
 
 class EmployeeLoaded extends EmployeeState {
-  final List<EmployeeDTO> employees;
-  EmployeeLoaded(this.employees);
+ final List<EmployeeDTO> employees;
+  EmployeeLoaded(this.employees, {super.companies});
 }
 
 class EmployeeError extends EmployeeState {
-  final String message;
-  EmployeeError(this.message);
+   final String message;
+  EmployeeError(this.message) : super();
 }
