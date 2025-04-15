@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bpl/cubit/employee_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,69 +9,99 @@ class EmployeeCubit extends Cubit<EmployeeState> {
   final Openapi _openapi = Openapi(); // Initialize OpenAPI client
   EmployeeCubit(Openapi openapi) : super(EmployeeInitial()); // Initial state
   String? _selectedCompanyId;
+  
 
-  Future<void> fetchEmployees() async {
-    emit(EmployeeLoading());
-    try {
-      final response = await _openapi.getEmployeeResourceApi().getAllEmployees(
-        headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
-      );
-      if (response.data != null) {
-        emit(EmployeeLoaded(response.data!.toList())); // Emit loaded state
-      } else {
-        emit(EmployeeError("No data found")); // Emit error if data null
-      }
-    } catch (e) {
-      emit(EmployeeError(e.toString()));
+ Future<void> fetchEmployees() async {
+  emit(EmployeeLoading());
+  try {
+    final response = await _openapi.getEmployeeResourceApi().getAllEmployees(
+      headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
+    );
+    print('Raw response: ${response.data}');
+print('Status code: ${response.statusCode}');
+    
+    if (response.data != null) {
+      // Ensure we have a List<EmployeeDTO>
+      final employees = response.data! is List 
+          ? response.data! as List<EmployeeDTO>
+          : [response.data! as EmployeeDTO];
+          
+      emit(EmployeeLoaded(employees));
+    } else {
+      emit(EmployeeError("No data found"));
     }
+  } catch (e) {
+    emit(EmployeeError("Failed to fetch employees: ${e.toString()}"));
   }
+}
 
- Future<void> createEmployeeWithNewCompany({
+Future<void> createEmployeeWithNewCompany({
   required String employeeName,
   required String position,
   required String email,
   required String companyName,
+  int? companyId, // Add this parameter
 }) async {
+  emit(EmployeeLoading());
+  
   try {
-    emit(EmployeeLoading());
-
-    // Step 1: Create Company
-    final companyBuilder = CompanyDTOBuilder()..name = companyName;
-
-    final companyResponse = await _openapi.getCompanyResourceApi().createCompany(
-      companyDTO: companyBuilder.build(),
-      headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
-    );
-
-    if (companyResponse.statusCode != 201 || companyResponse.data == null) {
-      throw Exception('Failed to create company');
+    CompanyDTO company;
+    
+    // If companyId is provided, use existing company
+    if (companyId != null) {
+      final companyResponse = await _openapi.getCompanyResourceApi().getCompany(
+        id: companyId ,
+        headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
+      );
+      
+      if (companyResponse.data == null) {
+        throw Exception('Company not found');
+      }
+      company = companyResponse.data!;
+    } 
+    // Otherwise create new company
+    else {
+      final companyBuilder = CompanyDTOBuilder()..name = companyName;
+      
+      final companyResponse = await _openapi.getCompanyResourceApi().createCompany(
+        companyDTO: companyBuilder.build(),
+        headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
+      );
+      
+      if (companyResponse.data == null) {
+        throw Exception('Failed to create company');
+      }
+      company = companyResponse.data!;
     }
 
-    final companyDTO = companyResponse.data!;
-
-    // Step 2: Create Employee with returned Company (contains the ID)
+    // Create employee with the company
     final employeeBuilder = EmployeeDTOBuilder()
       ..name = employeeName
       ..position = position
       ..email = email
-      ..company = companyDTO.toBuilder();
+      ..company = company.toBuilder();
 
     final employeeResponse = await _openapi.getEmployeeResourceApi().createEmployee(
       employeeDTO: employeeBuilder.build(),
       headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
     );
 
+final Map<String, dynamic> parsedJson = jsonDecode(employeeResponse.data!.toString());
+if (parsedJson['name'] == null) {
+  debugPrint('Warning: Employee ${parsedJson['id']} has null name');
+
+  
+}
     if (employeeResponse.statusCode == 201) {
-      emit(EmployeeLoaded(employeeResponse.data! as List<EmployeeDTO>));
-      await fetchEmployees();
+      await fetchEmployees(); // Refresh the list
     } else {
       throw Exception('Failed to create employee');
     }
   } catch (e) {
-    emit(EmployeeError('Creation failed: ${e.toString()}'));
+    emit(EmployeeError(e.toString()));
+    rethrow;
   }
 }
-
 
   Future<void> deleteEmployee(int employeeId) async {
     try {

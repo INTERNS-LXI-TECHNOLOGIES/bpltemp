@@ -18,13 +18,14 @@ class _EmployeeTabState extends State<EmployeeTab> {
   final TextEditingController _positionController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 CompanyDTO? _selectedCompany;
+
   List<CompanyDTO> companies = [];
-  @override
-  void initState() {
-    super.initState();
-    context.read<CompanyCubit>().fetchCompanies();
-    context.read<EmployeeCubit>().fetchEmployees();
-  }
+ @override
+void initState() {
+  super.initState();
+  context.read<CompanyCubit>().fetchCompanies();
+  context.read<EmployeeCubit>().fetchEmployees();
+}
 
   @override
   void dispose() {
@@ -135,34 +136,34 @@ CompanyDTO? _selectedCompany;
               ),
             ),
             const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () {
-                if (_nameController.text.isEmpty ||
-                    _positionController.text.isEmpty ||
-                    _emailController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please fill all fields')),
-                  );
-                  return;
-                }
+           ElevatedButton(
+  onPressed: () {
+    if (_nameController.text.isEmpty ||
+        _positionController.text.isEmpty ||
+        _emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
 
-                if (_selectedCompany == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please select a company')),
-                  );
-                  return;
-                }
+    if (_selectedCompany == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a company')),
+      );
+      return;
+    }
 
-                context.read<EmployeeCubit>().createEmployeeWithNewCompany(
-                      employeeName: _nameController.text,
-                      position: _positionController.text,
-                      email: _emailController.text,
-companyName: _selectedCompany!.name ?? '', // this is now correct                      
-                    );
-              },
-              child: const Text('Create Employee'),
-            ),
-
+    context.read<EmployeeCubit>().createEmployeeWithNewCompany(
+      employeeName: _nameController.text,
+      position: _positionController.text,
+      email: _emailController.text,
+      companyName: _selectedCompany!.name ?? 'unknown company',
+      companyId: _selectedCompany!.id, // Pass the existing company ID
+    );
+  },
+  child: const Text('Create Employee'),
+),
             const SizedBox(height: 20),
             const Divider(),
             const SizedBox(height: 10),
@@ -182,44 +183,43 @@ companyName: _selectedCompany!.name ?? '', // this is now correct
                     }
                     return SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: DataTable(
-                        columns: const [
-                          DataColumn(label: Text('ID')),
-                          DataColumn(label: Text('Name')),
-                          DataColumn(label: Text('Position')),
-                          DataColumn(label: Text('Email')),
-                          DataColumn(label: Text('Company')),
-                          DataColumn(label: Text('Actions')),
-                        ],
-                        rows: state.employees.map((employee) {
-                          return DataRow(
-                            cells: [
-                              DataCell(Text(employee.id.toString())),
-                              DataCell(Text(employee.name)),
-                              DataCell(Text(employee.position ?? '-')),
-                              DataCell(Text(employee.email)),
-                              DataCell(Text(employee.company?.name ?? 'N/A')),
-                              DataCell(
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit,
-                                          color: Colors.blue),
-                                      onPressed: () => _editEmployee(employee),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.red),
-                                      onPressed: () =>
-                                          _deleteEmployee(employee.id!),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
+                      child:DataTable(
+  columns: const [
+    DataColumn(label: Text('ID')),
+    DataColumn(label: Text('Name')),
+    DataColumn(label: Text('Position')),
+    DataColumn(label: Text('Email')),
+    DataColumn(label: Text('Company')),
+    DataColumn(label: Text('Actions')),
+  ],
+  rows: state.employees.map((employee) {
+    return DataRow(
+      cells: [
+        DataCell(Text(employee.id?.toString() ?? 'N/A')),
+        DataCell(Text(employee.name ?? 'N/A')),
+        DataCell(Text(employee.position ?? '-')),
+        DataCell(Text(employee.email ?? '-')),
+        DataCell(Text(employee.company?.name ?? 'N/A')),
+        DataCell(
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit, color: Colors.blue),
+                onPressed: () => _editEmployee(employee),
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: () => employee.id != null 
+                    ? _deleteEmployee(employee.id!)
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }).toList(),
+),
                     );
                   } else if (state is EmployeeError) {
                     return Center(child: Text(state.message));
