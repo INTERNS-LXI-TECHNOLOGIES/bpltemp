@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:openapi/openapi.dart';
 
 class EmployeeCubit extends Cubit<EmployeeState> {
-  final Openapi _openapi = Openapi(); // Initialize OpenAPI client
-  EmployeeCubit(Openapi openapi) : super(EmployeeInitial()); // Initial state
+  final Openapi _openapi = Openapi(); 
+  EmployeeCubit(Openapi openapi) : super(EmployeeInitial()); 
   String? _selectedCompanyId;
   
 
@@ -21,7 +21,6 @@ class EmployeeCubit extends Cubit<EmployeeState> {
 print('Status code: ${response.statusCode}');
     
     if (response.data != null) {
-      // Ensure we have a List<EmployeeDTO>
       final employees = response.data! is List 
           ? response.data! as List<EmployeeDTO>
           : [response.data! as EmployeeDTO];
@@ -40,14 +39,14 @@ Future<void> createEmployeeWithNewCompany({
   required String position,
   required String email,
    String? companyName,
-  int? companyId, // Add this parameter
+  int? companyId, 
 }) async {
   emit(EmployeeLoading());
   
   try {
     CompanyDTO company;
     
-    // If companyId is provided, use existing company
+   
     if (companyId != null) {
       final companyResponse = await _openapi.getCompanyResourceApi().getCompany(
         id: companyId ,
@@ -59,7 +58,7 @@ Future<void> createEmployeeWithNewCompany({
       }
       company = companyResponse.data!;
     } 
-    // Otherwise create new company
+    
     else {
       final companyBuilder = CompanyDTOBuilder()..name = companyName;
       
@@ -74,7 +73,7 @@ Future<void> createEmployeeWithNewCompany({
       company = companyResponse.data!;
     }
 
-    // Create employee with the company
+   
     final employeeBuilder = EmployeeDTOBuilder()
       ..name = employeeName
       ..position = position
@@ -93,7 +92,7 @@ if (parsedJson['name'] == null) {
   
 }
     if (employeeResponse.statusCode == 201) {
-      await fetchEmployees(); // Refresh the list
+      await fetchEmployees(); 
     } else {
       throw Exception('Failed to create employee');
     }
@@ -114,7 +113,7 @@ if (parsedJson['name'] == null) {
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         emit(EmployeeDeleted(""));
-        await fetchEmployees(); // Refresh the list after deletion
+        await fetchEmployees();
       } else {
         throw Exception(
             'Failed to delete employee (Status code: ${response.statusCode})');

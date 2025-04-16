@@ -22,7 +22,7 @@ class _CompanyTabState extends State<CompanyTab> {
   void initState() {
     super.initState();
 
-    // Trigger API call when screen loads
+  
     context.read<CompanyCubit>().fetchCompanies();
   }
 

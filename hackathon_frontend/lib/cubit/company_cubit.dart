@@ -3,29 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:openapi/openapi.dart';
 
 class CompanyCubit extends Cubit<CompanyState> {
-  final Openapi _openapi = Openapi(); // Initialize OpenAPI client
+  final Openapi _openapi = Openapi(); 
 
-  CompanyCubit(Openapi openapi) : super(CompanyInitial()); // Initial state
+  CompanyCubit(Openapi openapi) : super(CompanyInitial()); 
 
-  // Method to fetch companies from the API
+ 
 
   Future<void> fetchCompanies() async {
-    // Emit loading state
+   
     emit(CompanyLoading());
     try {
-      // Initialize OpenAPI client
+      
       final response = await _openapi.getCompanyResourceApi().getAllCompanies(
         headers: {'Authorization': 'Bearer ${Openapi.jwt}'},
       );
 
-      // Check if response has data
       if (response.data != null) {
-        emit(CompanyLoaded(response.data!.toList())); // Emit loaded state
+        emit(CompanyLoaded(response.data!.toList())); 
       } else {
-        emit(CompanyError("No data found")); // Emit error if data null
+        emit(CompanyError("No data found")); 
       }
     } catch (e) {
-      emit(CompanyError(e.toString())); // Emit error state on exception
+      emit(CompanyError(e.toString())); 
     }
   }
 
