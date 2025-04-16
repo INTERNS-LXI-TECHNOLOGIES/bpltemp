@@ -110,106 +110,106 @@ Future<void> _editCompany(int id, String oldName, String oldLocation) async {
 
         final companies = state is CompanyLoaded ? state.companies : [];
 
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Company Name'),
-              ),
-              TextField(
-                controller: _locationController,
-                decoration: const InputDecoration(
-                  labelText: 'Location (optional)',
-                ),
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () {
-                  final name = _nameController.text.trim();
-                  final location = _locationController.text.trim();
+       return Padding(
+  padding: const EdgeInsets.all(16.0),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      TextField(
+        controller: _nameController,
+        decoration: InputDecoration(
+          labelText: AppLocalizations.of(context)!.companyNameHeader,
+        ),
+      ),
+      TextField(
+        controller: _locationController,
+        decoration: InputDecoration(
+          labelText: '${AppLocalizations.of(context)!.employeePositionLabel} (${AppLocalizations.of(context)!.cancelAction.toLowerCase()})',
+        ),
+      ),
+      const SizedBox(height: 8),
+      ElevatedButton(
+        onPressed: () {
+          final name = _nameController.text.trim();
+          final location = _locationController.text.trim();
 
-                  if (name.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Company name is required')),
-                    );
-                    return;
-                  }
+          if (name.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(AppLocalizations.of(context)!.validationError(AppLocalizations.of(context)!.companyNameHeader)
+              )),
+            );
+            return;
+          }
 
-                  context
-                      .read<CompanyCubit>()
-                      .createCompany(name: name, location: location);
+          context.read<CompanyCubit>().createCompany(name: name, location: location);
 
-                  _nameController.clear();
-                  _locationController.clear();
-                },
-                child: const Text('Create Company'),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Company List',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: DataTable(
-                    columns: const [
-                      DataColumn(label: Text('ID')),
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('Location')),
-                      DataColumn(label: Text('Actions')),
-                    ],
-                    rows: companies.map((company) {
-                      return DataRow(
-                        cells: [
-                          DataCell(Text(company.id.toString())),
-                          DataCell(Text(company.name)),
-                          DataCell(Text(company.location ?? '')),
-                          DataCell(
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: Colors.blue,
-                                    size: 18,
-                                  ),
-                                  onPressed: () {
-_editCompany(
-                                      company.id!,
-                                      company.name,
-                                      company.location ?? '',
-                                    );
-
-                                    // Your edit logic
-                                  },
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 18,
-                                  ),
-                                  onPressed: () {
-                                    _deleteCompany(company.id!);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
+          _nameController.clear();
+          _locationController.clear();
+        },
+        child: Text(AppLocalizations.of(context)!.createCompanyButton),
+      ),
+      const SizedBox(height: 16),
+      Text(
+        AppLocalizations.of(context)!.companiesTab,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      const SizedBox(height: 8),
+      Expanded(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: DataTable(
+            columns: [
+              DataColumn(label: Text(AppLocalizations.of(context)!.companyIdHeader)),
+              DataColumn(label: Text(AppLocalizations.of(context)!.companyNameHeader)),
+              DataColumn(label: Text(AppLocalizations.of(context)!.employeePositionLabel)),
+              DataColumn(label: Text(AppLocalizations.of(context)!.actionsHeader)),
             ],
+            rows: companies.map((company) {
+              return DataRow(
+                cells: [
+                  DataCell(Text(company.id.toString())),
+                  DataCell(Text(company.name)),
+                  DataCell(Text(company.location ?? '')),
+                  DataCell(
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.blue,
+                            size: 18,
+                          ),
+                          onPressed: () {
+                            _editCompany(
+                              company.id!,
+                              company.name,
+                              company.location ?? '',
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 18,
+                          ),
+                          onPressed: () {
+                            _deleteCompany(company.id!);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
           ),
-        );
+        ),
+      ),
+    ],
+  ),
+);
+
       },
     );
   }

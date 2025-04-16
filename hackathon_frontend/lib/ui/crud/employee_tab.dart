@@ -5,8 +5,8 @@ import 'package:bpl/cubit/employee_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:openapi/openapi.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // To access supportedLocales
 
-import 'package:openapi/openapi.dart';
 
 class EmployeeTab extends StatefulWidget {
   @override
@@ -35,207 +35,213 @@ void initState() {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<CompanyCubit, CompanyState>(
-          listener: (context, state) {
-            if (state is CompanyError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            }
-          },
-        ),
-        BlocListener<EmployeeCubit, EmployeeState>(
-          listener: (context, state) {
-            if (state is EmployeeDeleted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Employee Deleted successfully')),
-              );
-            } else if (state is EmployeeLoaded) {
-              _nameController.clear();
-              _positionController.clear();
-              _emailController.clear();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Employee created successfully')),
-              );
-            } else if (state is EmployeeError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            }
-          },
-        ),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Company Dropdown
-            BlocBuilder<CompanyCubit, CompanyState>(
-              builder: (context, state) {
-                if (state is CompanyLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is CompanyLoaded) {
-                  return DropdownButtonFormField<CompanyDTO>(
-  value: _selectedCompany,
-  decoration: const InputDecoration(
-    labelText: 'Select Company',
-    border: OutlineInputBorder(),
-  ),
-  items: state.companies.map((company) {
-    return DropdownMenuItem<CompanyDTO>(
-      value: company,
-      child: Text(company.name ?? 'Unknown Company'),
-    );
-  }).toList(),
-  onChanged: (value) {
-    setState(() {
-      _selectedCompany = value;
-    });
-  },
-);
+ @override
+Widget build(BuildContext context) {
+  return MultiBlocListener(
+    listeners: [
+      BlocListener<CompanyCubit, CompanyState>(
+        listener: (context, state) {
+          if (state is CompanyError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+      ),
+      BlocListener<EmployeeCubit, EmployeeState>(
+        listener: (context, state) {
+          if (state is EmployeeDeleted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(AppLocalizations.of(context)!.deleteSuccess(AppLocalizations.of(context)!.employeesTab))),
+            );
+          } else if (state is EmployeeLoaded) {
+            _nameController.clear();
+            _positionController.clear();
+            _emailController.clear();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(AppLocalizations.of(context)!.createSuccess(AppLocalizations.of(context)!.employeesTab))),
+            );
+          } else if (state is EmployeeError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+      ),
+    ],
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Company Dropdown
+          BlocBuilder<CompanyCubit, CompanyState>(
+            builder: (context, state) {
+              if (state is CompanyLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is CompanyLoaded) {
+                return DropdownButtonFormField<CompanyDTO>(
+                  value: _selectedCompany,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.selectCompanyPrompt,
+                    border: const OutlineInputBorder(),
+                  ),
+                  items: state.companies.map((company) {
+                    return DropdownMenuItem<CompanyDTO>(
+                      value: company,
+                      child: Text(company.name ?? 'Unknown Company'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCompany = value;
+                    });
+                  },
+                );
+              } else if (state is CompanyError) {
+                return Text(state.message);
+              }
+              return const SizedBox();
+            },
+          ),
 
-                } else if (state is CompanyError) {
-                  return Text(state.message);
+          const SizedBox(height: 20),
+          Text(
+            AppLocalizations.of(context)!.createEmployeeTitle,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.employeeNameLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _positionController,
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.employeePositionLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.employeeEmailLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_nameController.text.isEmpty ||
+                  _positionController.text.isEmpty ||
+                  _emailController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!.validationError(AppLocalizations.of(context)!.employeeNameLabel),
+                    ),
+                  ),
+                );
+                return;
+              }
+
+              if (_selectedCompany == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)!.pleaseSelectCompany),
+                  ),
+                );
+                return;
+              }
+
+              context.read<EmployeeCubit>().createEmployeeWithNewCompany(
+                employeeName: _nameController.text,
+                position: _positionController.text,
+                email: _emailController.text,
+                companyId: _selectedCompany!.id,
+              );
+            },
+            child: Text(AppLocalizations.of(context)!.createEmployeeButton),
+          ),
+
+          const SizedBox(height: 20),
+          const Divider(),
+          const SizedBox(height: 10),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => context.read<EmployeeCubit>().fetchEmployees(),
+          ),
+          Text(
+            AppLocalizations.of(context)!.employeeListTitle,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+
+          const SizedBox(height: 8),
+          Expanded(
+            child: BlocBuilder<EmployeeCubit, EmployeeState>(
+              builder: (context, state) {
+                if (state is EmployeeLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is EmployeeLoaded) {
+                  if (state.employees.isEmpty) {
+                    return Center(child: Text(AppLocalizations.of(context)!.noEmployeesFound));
+                  }
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: DataTable(
+                      columns: const [
+                        DataColumn(label: Text('ID')),
+                        DataColumn(label: Text('Name')),
+                        DataColumn(label: Text('Position')),
+                        DataColumn(label: Text('Email')),
+                        DataColumn(label: Text('Company')),
+                        DataColumn(label: Text('Actions')),
+                      ],
+                      rows: state.employees.map((employee) {
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(employee.id?.toString() ?? 'N/A')),
+                            DataCell(Text(employee.name ?? 'N/A')),
+                            DataCell(Text(employee.position ?? '-')),
+                            DataCell(Text(employee.email ?? '-')),
+                            DataCell(Text(employee.company?.name ?? 'N/A')),
+                            DataCell(
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, color: Colors.blue),
+                                    onPressed: () => _editEmployee(employee),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () => employee.id != null 
+                                        ? _deleteEmployee(employee.id!)
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  );
+                } else if (state is EmployeeError) {
+                  return Center(child: Text(state.message));
                 }
                 return const SizedBox();
               },
             ),
-
-            const SizedBox(height: 20),
-
-            // Create Employee Form
-            Text('Create Employee',
-                style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _positionController,
-              decoration: const InputDecoration(
-                labelText: 'Position',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 12),
-           ElevatedButton(
-  onPressed: () {
-    if (_nameController.text.isEmpty ||
-        _positionController.text.isEmpty ||
-        _emailController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
-      return;
-    }
-
-    if (_selectedCompany == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a company')),
-      );
-      return;
-    }
-
-    context.read<EmployeeCubit>().createEmployeeWithNewCompany(
-      employeeName: _nameController.text,
-      position: _positionController.text,
-      email: _emailController.text,
-    //  companyName: _selectedCompany!.name ?? 'unknown company',
-      companyId: _selectedCompany!.id, // Pass the existing company ID
-    );
-  },
-  child: const Text('Create Employee'),
-),
-            const SizedBox(height: 20),
-            const Divider(),
-            const SizedBox(height: 10),
-IconButton(
-  icon: const Icon(Icons.refresh),
-  onPressed: () => context.read<EmployeeCubit>().fetchEmployees(),
-),
-            // Employee List
-            Text('Employee List',
-                style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Expanded(
-              child: BlocBuilder<EmployeeCubit, EmployeeState>(
-                builder: (context, state) {
-                  if (state is EmployeeLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is EmployeeLoaded) {
-                    if (state.employees.isEmpty) {
-                      return const Center(child: Text('No employees found'));
-                    }
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child:DataTable(
-  columns: const [
-    DataColumn(label: Text('ID')),
-    DataColumn(label: Text('Name')),
-    DataColumn(label: Text('Position')),
-    DataColumn(label: Text('Email')),
-    DataColumn(label: Text('Company')),
-    DataColumn(label: Text('Actions')),
-  ],
-  rows: state.employees.map((employee) {
-    return DataRow(
-      cells: [
-        DataCell(Text(employee.id?.toString() ?? 'N/A')),
-        DataCell(Text(employee.name ?? 'N/A')),
-        DataCell(Text(employee.position ?? '-')),
-        DataCell(Text(employee.email ?? '-')),
-        DataCell(Text(employee.company?.name ?? 'N/A')),
-        DataCell(
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit, color: Colors.blue),
-                onPressed: () => _editEmployee(employee),
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () => employee.id != null 
-                    ? _deleteEmployee(employee.id!)
-                    : null,
-              ),
-            ],
           ),
-        ),
-      ],
-    );
-  }).toList(),
-),
-                    );
-                  } else if (state is EmployeeError) {
-                    return Center(child: Text(state.message));
-                  }
-                  return const SizedBox();
-                },
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   void _editEmployee(EmployeeDTO employee) {
     // Implement edit functionality

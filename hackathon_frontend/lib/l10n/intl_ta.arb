@@ -1,59 +1,37 @@
 {
-    "@@locale": "ta",
-    "appTitle": "Flutter CRUD செயலி",
-    "confirmDeletion": "நீக்குவதைக் உறுதிப்படுத்தவும்",
-    "confirmDeletionMessage": "இந்த {item} நீக்க விரும்புகிறீர்களா?",
-    "cancelAction": "ரத்து",
-    "deleteAction": "நீக்கு",
-    "deleteSuccess": "{target} வெற்றிகரமாக நீக்கப்பட்டது!",
-    "noCompaniesAvailable": "நிறுவனங்கள் இல்லை.",
-    "validationError": "{field} தேவை",
-    "selectCompanyPrompt": "ஒரு நிறுவனை தேர்ந்தெடுக்கவும்",
-    "createSuccess": "{item} வெற்றிகரமாக உருவாக்கப்பட்டது",
-    "createError": "{item} உருவாக்க இயலவில்லை: {error}",
-    "confirmDeletionTitle": "அழிப்பதை உறுதி செய்யவும்",
-   "employeePositionLabel": "பதவி",
-   "createEmployeeButton": "ஊழியரை உருவாக்கு",
-   "employeeEmailLabel": "மின்னஞ்சல்",
-  
-  
-    "@confirmDeletionMessage": {
-      "placeholders": {
-        "item": {
-          "type": "Object"
-        }
-      }
-    },
-    "@deleteSuccess": {
-      "placeholders": {
-        "target": {
-          "type": "Object"
-        }
-      }
-    },
-    "@validationError": {
-      "placeholders": {
-        "field": {
-          "type": "Object"
-        }
-      }
-    },
-    "@createSuccess": {
-      "placeholders": {
-        "item": {
-          "type": "Object"
-        }
-      }
-    },
-    "@createError": {
-      "placeholders": {
-        "item": {
-          "type": "Object"
-        },
-        "error": {
-          "type": "Object"
-        }
-      }
-    }
-  }
-  
+  "@@locale": "ta",
+  "appTitle": "Flutter CRUD செயலி",
+  "confirmDeletion": "நீக்கலை உறுதிப்படுத்தவும்",
+  "confirmDeletionMessage": "இந்த {item} ஐ நீக்க விரும்புகிறீர்களா?",
+  "cancelAction": "ரத்து செய்",
+  "deleteAction": "நீக்கு",
+  "deleteSuccess": "{target} வெற்றிகரமாக நீக்கப்பட்டது!",
+  "employeeEmailLabel": "மின்னஞ்சல்",
+  "employeeEmailHeader": "மின்னஞ்சல்",
+  "noCompaniesAvailable": "நிறுவனங்கள் இல்லை.",
+  "confirmDeletionTitle": "நீக்கலை உறுதிப்படுத்தவும்",
+  "employeePositionLabel": "பதவி",
+  "createEmployeeButton": "பணியாளரை உருவாக்கு",
+  "validationError": "{field} தேவைப்படுகிறது",
+  "selectCompanyPrompt": "தயவுசெய்து ஒரு நிறுவனத்தை தேர்ந்தெடுக்கவும்",
+  "createSuccess": "{item} வெற்றிகரமாக உருவாக்கப்பட்டது",
+  "createError": "{item} உருவாக்க முடியவில்லை: {error}",
+  "companiesTab": "நிறுவனங்கள்",
+  "createEmployeeTitle": "புதிய பணியாளரை உருவாக்கு",
+  "employeeNameLabel": "பணியாளர் பெயர்",
+  "employeesTab": "பணியாளர்கள்",
+  "createCompanyButton": "நிறுவனத்தை உருவாக்கு",
+  "companyIdHeader": "அடையாள எண்",
+  "companyNameHeader": "பெயர்",
+  "employeeIdHeader": "அடையாள எண்",
+  "employeeNameHeader": "பெயர்",
+  "employeePositionHeader": "பதவி",
+  "selectCompanyHint": "நிறுவனத்தை தேர்ந்தெடுக்கவும்...",
+  "loadingMessage": "ஏற்றுகிறது...",
+  "editActionTooltip": "தொகு",
+  "deleteActionTooltip": "நீக்கு",
+  "pleaseSelectCompany": "தயவுசெய்து ஒரு நிறுவனத்தை தேர்ந்தெடுக்கவும்",
+  "noEmployeesFound": "பணியாளர்கள் கிடைக்கவில்லை",
+  "employeeListTitle": "பணியாளர் பட்டியல்",
+  "actionsHeader": "செயல்கள்"
+}
