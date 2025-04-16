@@ -39,7 +39,7 @@ Future<void> createEmployeeWithNewCompany({
   required String employeeName,
   required String position,
   required String email,
-  required String companyName,
+   String? companyName,
   int? companyId, // Add this parameter
 }) async {
   emit(EmployeeLoading());

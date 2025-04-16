@@ -158,7 +158,7 @@ void initState() {
       employeeName: _nameController.text,
       position: _positionController.text,
       email: _emailController.text,
-      companyName: _selectedCompany!.name ?? 'unknown company',
+    //  companyName: _selectedCompany!.name ?? 'unknown company',
       companyId: _selectedCompany!.id, // Pass the existing company ID
     );
   },
@@ -167,7 +167,10 @@ void initState() {
             const SizedBox(height: 20),
             const Divider(),
             const SizedBox(height: 10),
-
+IconButton(
+  icon: const Icon(Icons.refresh),
+  onPressed: () => context.read<EmployeeCubit>().fetchEmployees(),
+),
             // Employee List
             Text('Employee List',
                 style: Theme.of(context).textTheme.titleMedium),
