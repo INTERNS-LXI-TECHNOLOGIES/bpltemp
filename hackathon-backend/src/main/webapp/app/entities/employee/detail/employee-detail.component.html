@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (employee(); as employeeRef) {
+      <div>
+        <h2 data-cy="employeeDetailsHeading"><span jhiTranslate="bplHackathonApp.employee.detail.title">Employee</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ employeeRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="bplHackathonApp.employee.name">Name</span></dt>
+          <dd>
+            <span>{{ employeeRef.name }}</span>
+          </dd>
+          <dt><span jhiTranslate="bplHackathonApp.employee.position">Position</span></dt>
+          <dd>
+            <span>{{ employeeRef.position }}</span>
+          </dd>
+          <dt><span jhiTranslate="bplHackathonApp.employee.email">Email</span></dt>
+          <dd>
+            <span>{{ employeeRef.email }}</span>
+          </dd>
+          <dt><span jhiTranslate="bplHackathonApp.employee.company">Company</span></dt>
+          <dd>
+            @if (employee()!.company) {
+              <div>
+                <a [routerLink]="['/company', employee()!.company?.id, 'view']">{{ employeeRef.company?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/employee', employeeRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
