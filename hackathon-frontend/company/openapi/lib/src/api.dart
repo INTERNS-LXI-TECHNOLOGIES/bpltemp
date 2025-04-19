@@ -22,7 +22,7 @@ class Openapi {
 
   final Dio dio;
   final Serializers serializers;
-   static String jwt = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0NDkxNTI1NSwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ0ODI4ODU1fQ._BN3VFK-hUr-9QC4r0PtYYjHruQYT4oyNJWTcwji5l-31HLAojjRVH4qjsO1TywzFHcAu8TzoPnRsDNrigZhjw';
+   static String jwt = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0NTEzMDg2NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzQ1MDQ0NDY3fQ.UbYaaRFeN6LYXaMsDTP4fJH2kVH93i3yyieK0lD-tJBbxqt0347FQ0Ll6rddKU36IdLkhlU7f4MGhgEL0uEPWg';
   Openapi({
     Dio? dio,
     Serializers? serializers,
