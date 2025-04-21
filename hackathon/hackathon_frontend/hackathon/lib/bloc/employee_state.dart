@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:openapi/openapi.dart';
+part of 'employee_cubit.dart';
 
 abstract class EmployeeState extends Equatable {
   const EmployeeState();
@@ -10,15 +9,31 @@ abstract class EmployeeState extends Equatable {
 
 class EmployeeInitial extends EmployeeState {}
 
-class EmployeeLoadInProgress extends EmployeeState {}
+class EmployeeLoading extends EmployeeState {}
 
-class EmployeeLoadSuccess extends EmployeeState {
-  final List<EmployeeDTO> employees;
+class EmployeeLoaded extends EmployeeState {
+  final List<Map<String, String?>> employees;
 
-  const EmployeeLoadSuccess(this.employees);
+  EmployeeLoaded(this.employees);
 
   @override
   List<Object> get props => [employees];
 }
 
-class EmployeeLoadFailure extends EmployeeState {}
+class CompaniesLoaded extends EmployeeState {
+  final List<CompanyDTO> companies;
+
+  CompaniesLoaded(this.companies);
+
+  @override
+  List<Object> get props => [companies];
+}
+
+class EmployeeError extends EmployeeState {
+  final String message;
+
+  EmployeeError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
