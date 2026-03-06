@@ -1,0 +1,42 @@
+name: bpl
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  # Use the standard Flutter SDK constraint format
+  sdk: '>=3.3.0 <4.0.0' # Adjust lower bound if needed
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations: # Correct placement
+    sdk: flutter
+
+  # BLoC dependencies - Upgraded for compatibility
+  bloc: ^9.0.0
+  flutter_bloc: ^9.0.0 # Match major version with bloc
+
+  # Other dependencies
+  rxdart: ^0.27.7
+  provider: ^6.0.0 # Keep only one entry
+  openapi:
+    path: ./openapi
+  equatable: ^2.0.5
+  cupertino_icons: ^1.0.8
+  # intl: ^0.19.0 # Usually brought in by flutter_localizations/gen_l10n, but add if you get specific errors
+
+  # REMOVED flutter_gen: ^5.10.0 - Not needed for standard localization
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Using a standard version
+  flutter_lints: ^3.0.0 # Or ^4.0.0
+
+flutter:
+  uses-material-design: true
+  # generate: true enables automatic running of gen-l10n using l10n.yaml
+  generate: true
+  # REMOVED localizations block from here
